@@ -10,8 +10,6 @@ import tn.esprit.pi.usermanagement.suermanagementmicroservice.Entities.User;
 @Mapper(componentModel = "spring") // "spring" = auto-register as bean
 public interface UserMapper {
 
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-
     User userRequestDTOToUser(UserRequestDTO userRequestDTO);
     User userResposneDTOToUser(UserResponseDTO userResponseDTO);
     UserResponseDTO userToUserResponseDTO(User user);

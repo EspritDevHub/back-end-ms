@@ -1,4 +1,5 @@
 package tn.esprit.pi.usermanagement.suermanagementmicroservice.controllers;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,16 +15,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@AllArgsConstructor
 public class UserController {
 
-    @Autowired
     private UserService userService;
-    @Autowired
     private final UserMapper userMapper;
 
-    public UserController(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
+
 
     @GetMapping("GetAllUsers")
     public List<User> getAllUsers() {
