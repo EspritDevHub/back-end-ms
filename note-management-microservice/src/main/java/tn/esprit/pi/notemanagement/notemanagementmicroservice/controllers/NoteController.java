@@ -1,12 +1,16 @@
 package tn.esprit.pi.notemanagement.notemanagementmicroservice.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.NoteDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities.Note;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities.Seance;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Enum.TypeNote;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Mappers.NoteMapper;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.repository.ISeanceRepository;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.services.NoteService;
 
 import java.util.List;
@@ -17,7 +21,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NoteController {
     private final NoteService service;
-
+    @Autowired
+    private ISeanceRepository seanceRepository;
     // Enseignant (Teacher) : peut noter un étudiant
     @PreAuthorize("hasRole('TEACHER')")
     @PostMapping
@@ -76,29 +81,48 @@ public class NoteController {
         return ResponseEntity.ok(service.calculerMoyenneSprint(id));
     }
 
-    // Enseignant : peut noter un étudiant de manière individuelle
     @PreAuthorize("hasRole('TEACHER')")
     @PostMapping("/individuelle")
     public ResponseEntity<NoteDTO> noterIndividuelle(@RequestBody NoteDTO noteDTO) {
         Note note = NoteMapper.toEntity(noteDTO);
-        Note savedNote = service.noterEtudiant(note); // Sauvegarder la note via le service
-        NoteDTO savedNoteDTO = NoteMapper.toDto(savedNote); // Mapper l'entité en DTO pour la réponse
-        return ResponseEntity.status(201).body(savedNoteDTO); // Retourner la note enregistrée
+
+        // Vérifier si la séance est bien de type "INDIVIDUELLE" via seanceId
+        Seance seance = seanceRepository.findById(note.getSeanceId())
+                .orElseThrow(() -> new IllegalArgumentException("Séance non trouvée avec l'ID: " + note.getSeanceId()));
+
+        if (seance.getTypeNote() != TypeNote.INDIVIDUELLE) {
+            return ResponseEntity.badRequest().body(null); // Retourner une erreur si ce n'est pas le bon type
+        }
+
+        Note savedNote = service.noterEtudiant(note);
+        NoteDTO savedNoteDTO = NoteMapper.toDto(savedNote);
+        return ResponseEntity.status(201).body(savedNoteDTO);
     }
 
-    // Enseignant : peut noter un groupe d'étudiants
     @PreAuthorize("hasRole('TEACHER')")
     @PostMapping("/groupe")
     public ResponseEntity<List<NoteDTO>> noterGroupe(@RequestBody List<NoteDTO> notesDTO) {
         List<Note> notes = notesDTO.stream()
-                .map(NoteMapper::toEntity) // Mapper chaque DTO en entité
+                .map(NoteMapper::toEntity)
                 .collect(Collectors.toList());
 
-        List<Note> savedNotes = service.noterGroupe(notes); // Sauvegarder les notes via le service pour chaque étudiant dans le groupe
+        // Vérifier que toutes les séances sont bien de type "GROUPE" via seanceId
+        for (Note note : notes) {
+            Seance seance = seanceRepository.findById(note.getSeanceId())
+                    .orElseThrow(() -> new IllegalArgumentException("Séance non trouvée avec l'ID: " + note.getSeanceId()));
+
+            if (seance.getTypeNote() != TypeNote.GROUPE) {
+                return ResponseEntity.badRequest().body(null); // Retourner une erreur si ce n'est pas le bon type
+            }
+        }
+
+        List<Note> savedNotes = service.noterGroupe(notes);
         List<NoteDTO> savedNotesDTO = savedNotes.stream()
                 .map(NoteMapper::toDto)
                 .collect(Collectors.toList());
-
-        return ResponseEntity.status(201).body(savedNotesDTO); // Retourner les notes enregistrées
+        return ResponseEntity.status(201).body(savedNotesDTO);
     }
+
+
+
 }

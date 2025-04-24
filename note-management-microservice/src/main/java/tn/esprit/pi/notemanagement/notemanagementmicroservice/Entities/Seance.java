@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Enum.TypeNote;
 
 import java.util.Date;
 import java.util.List;
@@ -29,5 +30,5 @@ public class Seance {
     private String sprintId; // ID du sprint
     private List<String> critereIds; // Liste des critères d’évaluation
     private Date date;
-    private String typeNote; // "groupe" ou "individuel"
+    private TypeNote typeNote; // "groupe" ou "individuel"
 }

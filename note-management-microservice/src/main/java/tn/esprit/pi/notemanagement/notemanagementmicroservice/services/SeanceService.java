@@ -70,6 +70,8 @@ public class SeanceService {
         seance.setCritereIds(critereIds);
         return seanceRepository.save(seance); // Sauvegarde la séance mise à jour
     }
+
+
     public class SeanceNotFoundException extends RuntimeException {
         public SeanceNotFoundException(String id) {
             super("Seance not found with id: " + id);

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Enum.TypeNote;
 
 import java.util.Date;
 import java.util.List;
@@ -28,5 +29,5 @@ public class SeanceDTO {
     private String sprintId;
     private List<String> critereIds;
     private Date date;
-    private String typeNote;
+    private TypeNote typeNote;
 }
