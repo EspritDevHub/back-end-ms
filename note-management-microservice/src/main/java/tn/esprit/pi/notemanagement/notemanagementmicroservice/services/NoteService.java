@@ -27,6 +27,9 @@ public class NoteService {
     public List<Note> getNotesParSeance(String seanceId) {
         return noteRepo.findBySeanceId(seanceId);
     }
+    public List<Note> noterGroupe(List<Note> notes) {
+        return noteRepo.saveAll(notes); // Sauvegarde de toutes les notes
+    }
 
     public Double calculerMoyenneEtudiant(String etudiantId) {
         List<Note> notes = noteRepo.findByEtudiantId(etudiantId);
