@@ -12,5 +12,6 @@ import java.util.List;
 public interface ICritereEvaluationRepository extends MongoRepository<CritereEvaluation, String> {
     // Méthode pour trouver tous les critères par Sprint
     List<CritereEvaluation> findByNomIn(List<String> noms);
+    List<CritereEvaluation> findBySprintId(String sprintId);
 
 }
