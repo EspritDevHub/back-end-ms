@@ -1,14 +1,17 @@
 package tn.esprit.pi.notemanagement.notemanagementmicroservice.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.CritereEvaluationRequestDTO;
-import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.CritereEvaluationResponseDTO;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.CritereEvaluationDTO;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Mappers.CritereEvaluationMapper;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.services.CritereEvaluationService;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/criteres")
@@ -17,36 +20,25 @@ public class CritereEvaluationController {
 
     private final CritereEvaluationService service;
 
-    @GetMapping("/sprint/{sprintId}")
-    public List<CritereEvaluationResponseDTO> getBySprint(@PathVariable String sprintId) {
-        return service.getBySprintId(sprintId);
-    }
-
     @PostMapping
-    public CritereEvaluationResponseDTO create(@RequestBody CritereEvaluationRequestDTO dto) {
-        return service.create(dto);
+    public CritereEvaluationDTO create(@RequestBody CritereEvaluationDTO dto) {
+        return CritereEvaluationMapper.toDto(
+                service.create(CritereEvaluationMapper.toEntity(dto))
+        );
     }
 
     @GetMapping
-    public List<CritereEvaluationResponseDTO> all() {
-        return service.getAll();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CritereEvaluationResponseDTO> get(@PathVariable String id) {
-        return service.get(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public List<CritereEvaluationDTO> all() {
+        return service.getAll().stream()
+                .map(CritereEvaluationMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @PutMapping("/{id}")
-    public CritereEvaluationResponseDTO update(@PathVariable String id, @RequestBody CritereEvaluationRequestDTO dto) {
-        return service.update(id, dto);
-    }
-
-    @DeleteMapping("/all")
-    public void deleteAll() {
-        service.deleteAll();
+    public CritereEvaluationDTO update(@PathVariable String id, @RequestBody CritereEvaluationDTO dto) {
+        return CritereEvaluationMapper.toDto(
+                service.update(id, CritereEvaluationMapper.toEntity(dto))
+        );
     }
 
     @DeleteMapping("/{id}")
