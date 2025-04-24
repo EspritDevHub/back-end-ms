@@ -35,8 +35,10 @@ public class SeanceService {
 
     // Récupérer une séance par son ID
     public Optional<Seance> getSeanceById(String id) {
-        return seanceRepository.findById(id);
+        return Optional.ofNullable(seanceRepository.findById(id).orElseThrow(() -> new SeanceNotFoundException(id)));
+
     }
+
 
     // Modifier une séance
     public Seance updateSeance(String id, Seance seanceDetails) {
@@ -67,6 +69,11 @@ public class SeanceService {
         List<String> critereIds = criteres.stream().map(CritereEvaluation::getId).collect(Collectors.toList());
         seance.setCritereIds(critereIds);
         return seanceRepository.save(seance); // Sauvegarde la séance mise à jour
+    }
+    public class SeanceNotFoundException extends RuntimeException {
+        public SeanceNotFoundException(String id) {
+            super("Seance not found with id: " + id);
+        }
     }
 
     // Supprimer une séance

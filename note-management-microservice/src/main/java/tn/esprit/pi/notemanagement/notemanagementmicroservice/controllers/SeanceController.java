@@ -1,6 +1,7 @@
 package tn.esprit.pi.notemanagement.notemanagementmicroservice.controllers;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,15 @@ public class SeanceController {
     private final SeanceService service;
 
     @PostMapping
-    public ResponseEntity<SeanceDTO> create(@RequestBody SeanceDTO s) {
+    public ResponseEntity<SeanceDTO> create(@RequestBody  @Valid SeanceDTO s) {
         Seance created = service.createSeance(SeanceMapper.toEntity(s));
         return ResponseEntity.ok(SeanceMapper.toDto(created));
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<SeanceDTO> getById(@PathVariable String id) {
+        Optional<Seance> seanceOpt = service.getSeanceById(id);
+        return seanceOpt.map(seance -> ResponseEntity.ok(SeanceMapper.toDto(seance)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
