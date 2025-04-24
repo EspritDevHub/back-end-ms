@@ -1,33 +1,26 @@
 package tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Date;
-import java.util.List;
-
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document("seances")
-public class Seance {
+@Document("notes")
+public class Note {
     @Id
     private String id;
-    private String titre;
-    private String description;
-    private Number Numero ;
-    private Number Note ;
+    private String seanceId;
+    private String sprintId;
+    private String critereId;
+    private String etudiantId; // ou groupeId si note de groupe
+    private String groupeId;
+    private double valeur;
 
-
-    private String sprintId; // ID du sprint
-    private List<String> critereIds; // Liste des critères d’évaluation
-    private Date date;
-    private String typeNote; // "groupe" ou "individuel"
 }

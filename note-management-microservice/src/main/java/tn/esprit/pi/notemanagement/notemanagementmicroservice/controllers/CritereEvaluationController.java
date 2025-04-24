@@ -1,6 +1,7 @@
 package tn.esprit.pi.notemanagement.notemanagementmicroservice.controllers;
 
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,44 +12,28 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/criteres-evaluation")
+@RequestMapping("/api/criteres")
+@RequiredArgsConstructor
 public class CritereEvaluationController {
+    private final CritereEvaluationService service;
 
-    @Autowired
-    private CritereEvaluationService critereEvaluationService;
-
-    // Récupérer tous les critères d'évaluation
-    @GetMapping
-    public List<CritereEvaluation> getAllCritereEvaluations() {
-        return critereEvaluationService.getAllCritereEvaluations();
-    }
-
-    // Récupérer les critères d'un sprint par ID
-    @GetMapping("/sprint/{sprintId}")
-    public List<CritereEvaluation> getCritereEvaluationsBySprintId(@PathVariable String sprintId) {
-        return critereEvaluationService.getCritereEvaluationsBySprintId(sprintId);
-    }
-
-    // Créer un critère d'évaluation
     @PostMapping
-    public ResponseEntity<CritereEvaluation> createCritereEvaluation(@RequestBody CritereEvaluation critereEvaluation) {
-        CritereEvaluation createdCritereEvaluation = critereEvaluationService.createCritereEvaluation(critereEvaluation);
-        return ResponseEntity.ok(createdCritereEvaluation);
+    public CritereEvaluation create(@RequestBody CritereEvaluation c) {
+        return service.create(c);
     }
 
-    // Mettre à jour un critère d'évaluation
+    @GetMapping
+    public List<CritereEvaluation> all() {
+        return service.getAll();
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<CritereEvaluation> updateCritereEvaluation(@PathVariable String id, @RequestBody CritereEvaluation critereEvaluation) {
-        critereEvaluation.setId(id);
-        CritereEvaluation updatedCritereEvaluation = critereEvaluationService.updateCritereEvaluation(critereEvaluation);
-        return ResponseEntity.ok(updatedCritereEvaluation);
+    public CritereEvaluation update(@PathVariable String id, @RequestBody CritereEvaluation c) {
+        return service.update(id, c);
     }
 
-    // Supprimer un critère d'évaluation
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCritereEvaluation(@PathVariable String id) {
-        critereEvaluationService.deleteCritereEvaluation(id);
-        return ResponseEntity.noContent().build();
+    public void delete(@PathVariable String id) {
+        service.delete(id);
     }
 }
-

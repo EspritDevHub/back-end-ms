@@ -1,57 +1,57 @@
 package tn.esprit.pi.notemanagement.notemanagementmicroservice.controllers;
 
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities.CritereEvaluation;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities.Seance;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.repository.ICritereEvaluationRepository;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.repository.ISeanceRepository;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.services.SeanceService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/seances")
+@RequiredArgsConstructor
 public class SeanceController {
-
+    private final SeanceService service;
     @Autowired
     private SeanceService seanceService;
 
-    // Créer une nouvelle séance
     @PostMapping
-    public ResponseEntity<Seance> createSeance(@RequestBody Seance seance) {
-        Seance createdSeance = seanceService.createSeance(seance);
-        return new ResponseEntity<>(createdSeance, HttpStatus.CREATED);
+    public Seance create(@RequestBody Seance s) {
+        return service.createSeance(s);
     }
 
-    // Obtenir toutes les séances d'un sprint
-    @GetMapping("/sprint/{sprintId}")
-    public ResponseEntity<List<Seance>> getSeancesBySprintId(@PathVariable String sprintId) {
-        List<Seance> seances = seanceService.getSeancesBySprintId(sprintId);
-        return new ResponseEntity<>(seances, HttpStatus.OK);
+    @GetMapping
+    public List<Seance> all() {
+        return service.getAll();
     }
 
-    // Obtenir une séance par son ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Seance> getSeanceById(@PathVariable String id) {
-        Optional<Seance> seance = seanceService.getSeanceById(id);
-        return seance.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    // Mettre à jour une séance
     @PutMapping("/{id}")
-    public ResponseEntity<Seance> updateSeance(@PathVariable String id, @RequestBody Seance seance) {
-        Seance updatedSeance = seanceService.updateSeance(id, seance);
-        return updatedSeance != null ? new ResponseEntity<>(updatedSeance, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public Seance update(@PathVariable String id, @RequestBody Seance s) {
+        return service.updateSeance(id, s);
     }
 
-    // Supprimer une séance
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSeance(@PathVariable String id) {
-        seanceService.deleteSeance(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public void delete(@PathVariable String id) {
+        service.deleteSeance(id);
     }
+
+    @PutMapping("/{id}/affecter-criteres-par-nom")
+    public Seance affecterCriteresParNom(@PathVariable String id, @RequestBody List<String> critereNoms) {
+        return seanceService.affecterCriteresParNom(id, critereNoms);
+    }
+    @PutMapping("/{seanceId}/affecter-sprint/{sprintId}")
+    public Seance affecterSprint(@PathVariable String seanceId, @PathVariable String sprintId) {
+        return seanceService.affecterSprint(seanceId, sprintId);
+    }
+
 }
