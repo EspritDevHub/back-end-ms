@@ -10,6 +10,7 @@ import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.SeanceDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.SprintDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities.CritereEvaluation;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Feign.SeanceClient;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Feign.SprintClient;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Feign.SprintClientFallback;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Mappers.CritereEvaluationMapper;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.services.CritereEvaluationService;
@@ -27,6 +28,8 @@ public class CritereEvaluationController {
     private final CritereEvaluationService CritereEvaluationService;
     UserClient userClient; // Injection du UserClient
 SeanceClient seanceClient;
+    SprintClient sprintClient;
+
     @Autowired
     private SprintClientFallback SprintClientFallback;
 
@@ -89,12 +92,16 @@ SeanceClient seanceClient;
 
     @GetMapping("/sprints/{sprintId}")
     public List<CritereEvaluationDTO> getCriteriaBySprint(@PathVariable String sprintId) {
-        // Appel au service pour récupérer les critères associés au sprint
         List<CritereEvaluation> criteres = CritereEvaluationService.getCriteriaBySprint(sprintId);
         return criteres.stream()
                 .map(CritereEvaluationMapper::toDto)
                 .collect(Collectors.toList());
     }
+    @GetMapping("/sprints/sprint/{id}")
+    public SprintDTO getSprintById(@PathVariable Long id) {
+        return SprintClientFallback.getSprintById(id);
+    }
+
 
 
     @GetMapping("/sprints")

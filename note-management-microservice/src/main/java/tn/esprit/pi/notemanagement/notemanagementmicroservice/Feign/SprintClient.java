@@ -3,6 +3,7 @@ package tn.esprit.pi.notemanagement.notemanagementmicroservice.Feign;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.SprintDTO;
 
 import java.util.List;
@@ -13,4 +14,8 @@ public interface SprintClient {
 
     @GetMapping("/sprints")
     List<SprintDTO> getSprints();
+
+
+    @GetMapping("/{id}")
+    SprintDTO getSprintById(@PathVariable("id") Long id);
 }

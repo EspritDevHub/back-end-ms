@@ -21,5 +21,11 @@ public class SprintClientFallback implements SprintClient {
 
         return fallbackSprints;
     }
+
+    @Override
+    public SprintDTO getSprintById(Long id) {
+       return new SprintDTO(id, "Sprint 1", "Premier sprint du projet", "2025-01-01", "2025-01-15");
+    }
+
 }
 

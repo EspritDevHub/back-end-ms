@@ -21,7 +21,7 @@ public class SeanceClientFallback implements SeanceClient {
                 .description("Séance par défaut car service indisponible")
                 .Numero(0)
                 .Note(0)
-                .sprintId(null)
+                .sprintId("1")
                 .critereIds(Collections.emptyList())
                 .date(new Date())
                 .typeNote(TypeNote.INDIVIDUELLE)
