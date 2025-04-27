@@ -1,8 +1,7 @@
-package tn.esprit.pi.notemanagement.notemanagementmicroservice.security;
+package tn.esprit.pi.documentmanagement.documentmanagementmicroservice.security;
 
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

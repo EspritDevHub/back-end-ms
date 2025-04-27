@@ -8,11 +8,11 @@
         <version>3.4.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>tn.esprit.pi.noteManagement</groupId>
-    <artifactId>note-management-microservice</artifactId>
+    <groupId>tn.esprit.pi.documentManagement</groupId>
+    <artifactId>document-management-microservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>note-management-microservice</name>
-    <description>note-management-microservice</description>
+    <name>document-management-microservice</name>
+    <description>document-management-microservice</description>
     <url/>
     <licenses>
         <license/>

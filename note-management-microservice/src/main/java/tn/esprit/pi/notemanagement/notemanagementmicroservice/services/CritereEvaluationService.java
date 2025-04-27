@@ -35,5 +35,9 @@ public class CritereEvaluationService {
     public void delete(String id) {
         critereRepo.deleteById(id);
     }
+
+    public void deleteAll() {
+        critereRepo.deleteAll();
+    }
 }
 

@@ -1,10 +1,9 @@
-package tn.esprit.pi.notemanagement.notemanagementmicroservice;
-
+package tn.esprit.pi.documentmanagement.documentmanagementmicroservice;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class NoteManagementMicroserviceApplicationTests {
+class DocumentManagementMicroserviceApplicationTests {
 
     @Test
     void contextLoads() {

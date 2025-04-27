@@ -1,12 +1,12 @@
-package tn.esprit.pi.notemanagement.notemanagementmicroservice;
+package tn.esprit.pi.documentmanagement.documentmanagementmicroservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class NoteManagementMicroserviceApplication {
+public class DocumentManagementMicroserviceApplication {
 
-    public static void main(String[] args) {SpringApplication.run(NoteManagementMicroserviceApplication.class, args);
+    public static void main(String[] args) {SpringApplication.run(DocumentManagementMicroserviceApplication.class, args);
     }
 
 }

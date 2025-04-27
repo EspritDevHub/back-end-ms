@@ -1,4 +1,4 @@
-package tn.esprit.pi.notemanagement.notemanagementmicroservice.security;
+package tn.esprit.pi.documentmanagement.documentmanagementmicroservice.security;
 
 import java.util.HashSet;
 import java.util.Set;

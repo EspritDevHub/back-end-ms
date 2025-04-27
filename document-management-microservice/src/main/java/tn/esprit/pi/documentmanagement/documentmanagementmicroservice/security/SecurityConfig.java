@@ -1,4 +1,4 @@
-package tn.esprit.pi.notemanagement.notemanagementmicroservice.security;
+package tn.esprit.pi.documentmanagement.documentmanagementmicroservice.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
