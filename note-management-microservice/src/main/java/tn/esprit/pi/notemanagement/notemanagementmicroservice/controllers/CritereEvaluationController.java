@@ -42,12 +42,12 @@ public class CritereEvaluationController {
     // Récupérer tous les critères (Admin uniquement)
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public List<CritereEvaluationDTO> all(@RequestHeader("userId") String userId) {
+    public List<CritereEvaluationDTO> all() {
         // Vérification du rôle utilisateur via UserClient
-        String role = getUserRole(userId);
-        if (!"ADMIN".equals(role)) {
-            throw new IllegalArgumentException("Accès refusé : utilisateur non autorisé.");
-        }
+     //   String role = getUserRole(userId);
+       // if (!"ADMIN".equals(role)) {
+         //   throw new IllegalArgumentException("Accès refusé : utilisateur non autorisé.");
+        //}
 
         return service.getAll().stream()
                 .map(CritereEvaluationMapper::toDto)
