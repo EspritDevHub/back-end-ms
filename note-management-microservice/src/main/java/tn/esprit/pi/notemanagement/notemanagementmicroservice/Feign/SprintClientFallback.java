@@ -1,0 +1,25 @@
+package tn.esprit.pi.notemanagement.notemanagementmicroservice.Feign;
+
+import org.springframework.stereotype.Component;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.SprintDTO;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Component
+public class SprintClientFallback implements SprintClient {
+
+    @Override
+    public List<SprintDTO> getSprints() {
+        List<SprintDTO> fallbackSprints = new ArrayList<>();
+
+        // Example of fallback SprintDTO data
+        fallbackSprints.add(new SprintDTO(1L, "Sprint 1", "Premier sprint du projet", "2025-01-01", "2025-01-15"));
+        fallbackSprints.add(new SprintDTO(2L, "Sprint 2", "Deuxième sprint du projet", "2025-02-01", "2025-02-15"));
+        fallbackSprints.add(new SprintDTO(3L, "Sprint 3", "Troisième sprint du projet", "2025-03-01", "2025-03-15"));
+        fallbackSprints.add(new SprintDTO(4L, "Sprint 4", "Quatrième sprint du projet", "2025-04-01", "2025-04-15"));
+
+        return fallbackSprints;
+    }
+}
+

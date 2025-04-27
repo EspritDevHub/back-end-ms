@@ -30,7 +30,12 @@ public class SeanceClientFallback implements SeanceClient {
 
     @Override
     public List<SeanceDTO> getSeancesBySprint(String sprintId) {
-        return List.of();
+        return List.of  ();
+    }
+
+    @Override
+    public SeanceDTO updateSeance(String id, SeanceDTO seance) {
+        return null;
     }
 }
 

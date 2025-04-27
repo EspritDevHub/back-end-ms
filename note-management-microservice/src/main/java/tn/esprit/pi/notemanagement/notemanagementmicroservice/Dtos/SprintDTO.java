@@ -11,10 +11,12 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class SprintDTO {
-    private String id; // ID du sprint
-    private String nom; // Nom du sprint
-    private Date dateDebut;
-    private Date dateFin;
+    private Long id;
+    private String titre;
+    private String description;
+    private String dateDebut;
+    private String dateFin;
 
 }
+
 

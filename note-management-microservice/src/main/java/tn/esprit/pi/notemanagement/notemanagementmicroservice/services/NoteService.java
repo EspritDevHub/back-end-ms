@@ -2,20 +2,24 @@ package tn.esprit.pi.notemanagement.notemanagementmicroservice.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.CritereEvaluationDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.SeanceDTO;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities.CritereEvaluation;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities.Note;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Enum.TypeNote;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Feign.SeanceClient;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Mappers.CritereEvaluationMapper;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.repository.INoteRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
 @RequiredArgsConstructor
 public class NoteService {
     private final INoteRepository noteRepo;
-    private final SeanceClient seanceClient; // Injection du FeignClient
+     SeanceClient seanceClient; // Injection du FeignClient
 
     // Récupère les notes d'un étudiant par ID
     public List<Note> getNotesParEtudiant(String etudiantId) {
@@ -82,4 +86,7 @@ public class NoteService {
                 .average()
                 .orElse(0.0);
     }
+
+
+
 }

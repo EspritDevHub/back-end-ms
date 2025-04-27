@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.CritereEvaluationDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.NoteDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.SeanceDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities.Note;
@@ -145,4 +146,8 @@ public class NoteController {
     public ResponseEntity<Double> moyenneSprint(@PathVariable String id) {
         return ResponseEntity.ok(service.calculerMoyenneSprint(id));
     }
+
+
+
+
 }
