@@ -133,7 +133,15 @@ public class CritereEvaluationController {
         return ResponseEntity.ok().build();
     }
 
-
+    // Endpoint pour désaffecter les critères
+    @PreAuthorize("hasRole('TEACHER')")
+    @PostMapping("/desaffecter-criteres/{seanceId}")
+    public ResponseEntity<Void> desaffecterCriteres(
+            @PathVariable String seanceId,
+            @RequestBody List<String> critereNoms) {
+        critereEvaluationService.desaffecterCriteresDeSeance(seanceId, critereNoms);
+        return ResponseEntity.ok().build();
+    }
 
 
 }
