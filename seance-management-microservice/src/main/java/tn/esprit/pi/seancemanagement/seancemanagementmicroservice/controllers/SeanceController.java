@@ -49,7 +49,6 @@ public class SeanceController {
     }
 
     // Seul l'enseignant peut mettre à jour une séance
-    @PreAuthorize("hasAuthority('TEACHER')")
     @PutMapping("/{id}")
     public ResponseEntity<SeanceDTO> update(@PathVariable String id, @RequestBody SeanceDTO s) {
         Seance updated = service.updateSeance(id, SeanceMapper.toEntity(s));

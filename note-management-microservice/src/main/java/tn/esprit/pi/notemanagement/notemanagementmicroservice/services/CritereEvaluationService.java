@@ -3,6 +3,7 @@ package tn.esprit.pi.notemanagement.notemanagementmicroservice.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.CritereEvaluationDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.SeanceDTO;
@@ -17,31 +18,43 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class CritereEvaluationService {
-    private final ICritereEvaluationRepository critereRepo;
-    SeanceClient seanceClient;
+
+    @Autowired
+    private ICritereEvaluationRepository critereRepo;
+
+    @Qualifier("seanceClient")
+    @Autowired
+    private SeanceClient seanceClient;
+    @Qualifier("sprintClient")
+    @Autowired
+    private SprintClient sprintClient;
 
     public CritereEvaluation create(CritereEvaluation critere) {
         return critereRepo.save(critere);
     }
 
+    public Optional<CritereEvaluation> getCritereByName(String name) {
+        return critereRepo.findByNom(name);
+    }
 
-    public void affecterCriteresASeance(String seanceId, List<CritereEvaluationDTO> criteres) {
-        // Récupérer la séance via le SeanceClient
+
+
+    public void affecterCriteresASeance(String seanceId, List<String> critereNoms) {
         SeanceDTO seance = seanceClient.getSeanceById(seanceId);
 
-        // Convertir les critères en entités CritereEvaluation et ajouter leurs IDs à la séance
-        List<String> critereIds = criteres.stream()
-                .map(CritereEvaluationDTO::getId)  // Récupérer l'ID de chaque critère
+        List<String> critereIds = critereNoms.stream()
+                .map(nom -> critereRepo.findByNom(nom).orElseThrow(() ->
+                        new RuntimeException("Critère non trouvé: " + nom)))
+                .map(CritereEvaluation::getId)
                 .collect(Collectors.toList());
 
-        // Affecter les critères à la séance
         seance.setCritereIds(critereIds);
-
-        // Mettre à jour la séance via le client Feign
         seanceClient.updateSeance(seanceId, seance);
     }
+
+
+
     public List<CritereEvaluation> getAll() {
         return critereRepo.findAll();
     }
@@ -62,7 +75,6 @@ public class CritereEvaluationService {
     public void deleteAll() {
         critereRepo.deleteAll();
     }
-     SprintClient sprintClient;
 
     public List<SprintDTO> getAllSprints() {
         return sprintClient.getSprints();

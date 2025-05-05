@@ -2,6 +2,7 @@ package tn.esprit.pi.notemanagement.notemanagementmicroservice.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,7 @@ import tn.esprit.pi.notemanagement.notemanagementmicroservice.services.CritereEv
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Feign.UserClient;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,8 +29,15 @@ public class CritereEvaluationController {
 
     private final CritereEvaluationService CritereEvaluationService;
     UserClient userClient; // Injection du UserClient
-SeanceClient seanceClient;
-    SprintClient sprintClient;
+
+    @Qualifier("seanceClient")
+    @Autowired
+    private SeanceClient seanceClient;
+
+    @Qualifier("sprintClient")
+    @Autowired
+    private SprintClient sprintClient;
+
 
     @Autowired
     private SprintClientFallback SprintClientFallback;
@@ -108,21 +117,23 @@ SeanceClient seanceClient;
     public List<SprintDTO> getAllSprints() {
         return SprintClientFallback.getSprints();
     }
+    private final CritereEvaluationService critereEvaluationService;
 
 
-    @PreAuthorize("hasRole('TEACHER')")
+// Request Body: {
+//     "seanceId": "seance_id",
+//     "criteres": ["Critere1", "Critere2", "Critere3"]
+// }
+   // @PreAuthorize("hasRole('TEACHER')")
     @PostMapping("/affecter-criteres/{seanceId}")
-    public ResponseEntity<Void> affecterCriteresASeance(@PathVariable String seanceId, @RequestBody List<CritereEvaluationDTO> criteres) {
-        // Récupérer la séance par ID via SeanceClient
-        SeanceDTO seance = seanceClient.getSeanceById(seanceId);
-        if (seance == null) {
-            return ResponseEntity.notFound().build(); // Retourner une réponse Not Found si la séance n'existe pas
-        }
-
-        // Affecter les critères à la séance
-        CritereEvaluationService.affecterCriteresASeance(seanceId, criteres);
-
-        return ResponseEntity.ok().build(); // Retourner un statut OK une fois l'affectation effectuée
+    public ResponseEntity<Void> affecterCriteres(
+            @PathVariable String seanceId,
+            @RequestBody List<String> critereNoms) {
+        critereEvaluationService.affecterCriteresASeance(seanceId, critereNoms);
+        return ResponseEntity.ok().build();
     }
+
+
+
 
 }

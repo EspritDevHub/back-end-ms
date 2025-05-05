@@ -1,6 +1,7 @@
 package tn.esprit.pi.notemanagement.notemanagementmicroservice.Feign;
 
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.SeanceDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Enum.TypeNote;
@@ -12,11 +13,13 @@ import java.util.List;
 @Component
 public class SeanceClientFallback implements SeanceClient {
 
+    private static final Logger logger = LoggerFactory.getLogger(SeanceClientFallback.class);
+
     @Override
     public SeanceDTO getSeanceById(String id) {
-        // Ici tu retournes un SeanceDTO par défaut (existant)
+        logger.error("Fallback triggered: Unable to retrieve Seance with ID " + id);
         return SeanceDTO.builder()
-                .id(id)
+                .id("2") // default ID for fallback
                 .titre("Séance fallback")
                 .description("Séance par défaut car service indisponible")
                 .Numero(0)
@@ -30,12 +33,13 @@ public class SeanceClientFallback implements SeanceClient {
 
     @Override
     public List<SeanceDTO> getSeancesBySprint(String sprintId) {
-        return List.of  ();
+        logger.error("Fallback triggered: Unable to retrieve Seances for Sprint ID " + sprintId);
+        return Collections.emptyList(); // Return an empty list as a fallback
     }
 
     @Override
     public SeanceDTO updateSeance(String id, SeanceDTO seance) {
-        return null;
+        logger.error("Fallback triggered: Unable to update Seance with ID " + id);
+        return null; // Return null or any appropriate default value
     }
 }
-

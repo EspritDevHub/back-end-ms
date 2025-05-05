@@ -16,4 +16,5 @@ public class CritereEvaluationDTO {
     private String description;
     private double coefficient;
     private String sprintId;
+
 }

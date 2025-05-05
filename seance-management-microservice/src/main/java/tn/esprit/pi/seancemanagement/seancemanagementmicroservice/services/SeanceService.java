@@ -48,6 +48,7 @@ public class SeanceService {
             updatedSeance.setNumero(seanceDetails.getNumero());
             updatedSeance.setNote(seanceDetails.getNote());
             updatedSeance.setSprintId(seanceDetails.getSprintId());
+            updatedSeance.setCritereIds(seanceDetails.getCritereIds());
             return seanceRepository.save(updatedSeance);
         }
         return null;
