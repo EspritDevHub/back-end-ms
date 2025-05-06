@@ -44,18 +44,21 @@ public class NoteService {
 
     // Note l'étudiant en fonction de la séance et du type de note
     public Note noterEtudiant(Note note, SeanceDTO seance) {
-        // Vérification si la note existe déjà pour le même étudiant, groupe et séance
-        Optional<Note> existingNote = noteRepo.findByEtudiantIdAndGroupeIdAndSeanceId(
+        // Récupérer la note existante pour la même combinaison
+        Optional<Note> existingNoteOpt = noteRepo.findByEtudiantIdAndGroupeIdAndSeanceId(
                 note.getEtudiantId(), note.getGroupeId(), note.getSeanceId());
 
-        if (existingNote.isPresent()) {
-            // Si la note existe déjà, on ne l'insère pas et on peut retourner l'ancienne note ou gérer l'exception
-            return existingNote.get();
+        if (existingNoteOpt.isPresent()) {
+            // Si la note existe déjà, on met à jour la valeur de la note
+            Note existingNote = existingNoteOpt.get();
+            existingNote.setValeur(note.getValeur()); // Mise à jour de la valeur de la note
+            return noteRepo.save(existingNote); // Enregistrement de la note mise à jour
         }
 
-        // Sinon, on sauvegarde la nouvelle note
+        // Si aucune note n'existe, on insère la nouvelle note
         return noteRepo.save(note);
     }
+
 
 
     // Note un groupe d'étudiants

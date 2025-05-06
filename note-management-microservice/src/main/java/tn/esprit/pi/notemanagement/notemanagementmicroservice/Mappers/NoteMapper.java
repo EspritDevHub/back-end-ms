@@ -17,6 +17,7 @@ public class NoteMapper {
                 .etudiantId(note.getEtudiantId())
                 .groupeId(note.getGroupeId())
                 .valeur(note.getValeur())
+                .typeNote(note.getTypeNote())
                 .build();
     }
 
