@@ -12,6 +12,7 @@ import tn.esprit.pi.notemanagement.notemanagementmicroservice.Mappers.CritereEva
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.repository.INoteRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -43,14 +44,19 @@ public class NoteService {
 
     // Note l'étudiant en fonction de la séance et du type de note
     public Note noterEtudiant(Note note, SeanceDTO seance) {
-        if (seance.getTypeNote() == TypeNote.INDIVIDUELLE) {
-            return noteRepo.save(note); // Traitement de la note individuelle
-        } else if (seance.getTypeNote() == TypeNote.GROUPE) {
-            return noteRepo.save(note); // Traitement de la note de groupe
-        } else {
-            throw new IllegalArgumentException("Le type de note de la séance est inconnu.");
+        // Vérification si la note existe déjà pour le même étudiant, groupe et séance
+        Optional<Note> existingNote = noteRepo.findByEtudiantIdAndGroupeIdAndSeanceId(
+                note.getEtudiantId(), note.getGroupeId(), note.getSeanceId());
+
+        if (existingNote.isPresent()) {
+            // Si la note existe déjà, on ne l'insère pas et on peut retourner l'ancienne note ou gérer l'exception
+            return existingNote.get();
         }
+
+        // Sinon, on sauvegarde la nouvelle note
+        return noteRepo.save(note);
     }
+
 
     // Note un groupe d'étudiants
     public List<Note> noterGroupe(List<Note> notes, List<SeanceDTO> seances) {
