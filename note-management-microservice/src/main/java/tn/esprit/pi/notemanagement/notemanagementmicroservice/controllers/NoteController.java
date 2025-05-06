@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.CritereEvaluationDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.NoteDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.SeanceDTO;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.UserResponseDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities.Note;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Enum.TypeNote;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Feign.SeanceClient;
@@ -25,10 +26,13 @@ import java.util.stream.Collectors;
 public class NoteController {
 
     private final NoteService service;
-
+    @Qualifier("seanceClient")
+    @Autowired
       SeanceClient seanceClient;
-
+    @Qualifier("userClient")
+    @Autowired
             UserClient userClient; // Injection du UserClient
+
 
     // Fonction pour récupérer le rôle d'un utilisateur via UserClient
     private String getUserRole(String userId) {
@@ -40,8 +44,9 @@ public class NoteController {
         }
     }
 
+
+
     // Enseignant (Teacher) : peut noter un étudiant
-    @PreAuthorize("hasRole('TEACHER')")
     @PostMapping
     public NoteDTO noter(@RequestBody NoteDTO noteDTO) {
         Note note = NoteMapper.toEntity(noteDTO);
@@ -146,7 +151,11 @@ public class NoteController {
     public ResponseEntity<Double> moyenneSprint(@PathVariable String id) {
         return ResponseEntity.ok(service.calculerMoyenneSprint(id));
     }
+    @GetMapping("/users/{id}")
+    private UserResponseDTO getUserById(String userId) {
+            return userClient.getUserById(userId);
 
+    }
 
 
 

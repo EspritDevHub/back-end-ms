@@ -8,9 +8,7 @@ import tn.esprit.pi.notemanagement.notemanagementmicroservice.Enum.Roles;
 public class UserResponseDTO {
     private String id;
     private String name;
-    private String email;
-    private Roles role;
+    private String Groupe;
     private String phone;
-    private Boolean is2FAEnabled;
-    private String token;
+
 }

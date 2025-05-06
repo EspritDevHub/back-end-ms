@@ -11,13 +11,11 @@ public class UserClientFallback implements UserClient {
     public UserResponseDTO getUserById(String id) {
         // Ici, vous pouvez définir un comportement par défaut en cas de défaillance
         UserResponseDTO fallbackResponse = new UserResponseDTO();
-        fallbackResponse.setId(id);
+        fallbackResponse.setId("1");
         fallbackResponse.setName("Sana");
-        fallbackResponse.setEmail("unknown@fallback.com");
-        fallbackResponse.setRole(Roles.STUDENT); // Par exemple, retourner un rôle par défaut
+        fallbackResponse.setGroupe("Groupe 1");
         fallbackResponse.setPhone("0000000000");
-        fallbackResponse.setIs2FAEnabled(false);
-        fallbackResponse.setToken("");
+
 
         return fallbackResponse;
     }

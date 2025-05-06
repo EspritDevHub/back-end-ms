@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Enum.TypeNote;
+
 import java.util.Date;
 @Data
 @NoArgsConstructor
@@ -21,5 +23,6 @@ public class Note {
     private String etudiantId; // ou groupeId si note de groupe
     private String groupeId;
     private double valeur;
+    private TypeNote typeNote;
 
 }

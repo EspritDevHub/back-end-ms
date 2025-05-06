@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Enum.TypeNote;
 
 @Data
 @NoArgsConstructor
@@ -18,4 +19,5 @@ public class NoteDTO {
     private String etudiantId;
     private String groupeId;
     private double valeur;
+    private TypeNote typeNote;
 }

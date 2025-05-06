@@ -24,4 +24,5 @@ public class CritereEvaluation {
     private String description;
     private double coefficient;
     private String sprintId;
+
 }
