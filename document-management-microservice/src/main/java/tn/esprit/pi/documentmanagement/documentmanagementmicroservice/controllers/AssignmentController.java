@@ -1,15 +1,16 @@
 package tn.esprit.pi.documentmanagement.documentmanagementmicroservice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Dtos.AssignmentDto;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Entities.Assignment;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.services.AssignmentService;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/assignments")
 public class AssignmentController {
@@ -17,40 +18,38 @@ public class AssignmentController {
     @Autowired
     private AssignmentService assignmentService;
 
-    // Créer un nouvel assignment
-    @PreAuthorize("hasAnyRole('TEACHER')")
     @PostMapping
-    public AssignmentDto createAssignment(@RequestBody AssignmentDto assignmentDTO, @RequestParam String userId) {
-        // Créer l'assignement en appelant le service
-        Assignment savedAssignment = assignmentService.createAssignment(assignmentDTO, userId);
-
-        // Retourner le DTO de l'assignement créé
-        return new AssignmentDto(
-                savedAssignment.getId(),
-                savedAssignment.getSeanceId(),
-                savedAssignment.getEnseignantId(),
-                savedAssignment.getType(),
-                savedAssignment.getDescription(),
-                savedAssignment.getDateLimite(),
-                savedAssignment.getStatut()
-        );
+    public Assignment createAssignment(@RequestBody AssignmentDto dto,
+                                       @RequestHeader("X-User-ID") String enseignantId) {
+        return assignmentService.createAssignment(dto, enseignantId);
     }
 
-    // Soumettre un assignment (pour les étudiants)
-    @PreAuthorize("hasAnyRole('TEACHER')")
-    @PutMapping("/{assignmentId}/submit")
-    public AssignmentDto submitAssignment(@PathVariable String assignmentId, @RequestParam String userId) {
-        Assignment savedAssignment = assignmentService.submitAssignment(assignmentId, userId);
+    @GetMapping("/{id}")
+    public ResponseEntity<Assignment> getAssignment(@PathVariable String id) {
+        Optional<Assignment> assignment = assignmentService.getAssignmentById(id);
+        return assignment.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
-        // Retourner le DTO de l'assignement mis à jour
-        return new AssignmentDto(
-                savedAssignment.getId(),
-                savedAssignment.getSeanceId(),
-                savedAssignment.getEnseignantId(),
-                savedAssignment.getType(),
-                savedAssignment.getDescription(),
-                savedAssignment.getDateLimite(),
-                savedAssignment.getStatut()
-        );
+    @GetMapping
+    public List<Assignment> getAllAssignments() {
+        return assignmentService.getAllAssignments();
+    }
+
+    @GetMapping("/seance/{seanceId}")
+    public List<Assignment> getAssignmentsBySeance(@PathVariable String seanceId) {
+        return assignmentService.getAssignmentsBySeance(seanceId);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ENSEIGNANT')")
+    public Assignment updateAssignment(@PathVariable String id, @RequestBody AssignmentDto dto) {
+        return assignmentService.updateAssignment(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ENSEIGNANT')")
+    public void deleteAssignment(@PathVariable String id) {
+        assignmentService.deleteAssignment(id);
     }
 }

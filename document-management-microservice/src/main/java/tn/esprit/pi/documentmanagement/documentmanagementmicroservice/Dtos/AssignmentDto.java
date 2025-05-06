@@ -9,13 +9,9 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class AssignmentDto {
-
-    private String id;
-    private String seanceId;
-    private String enseignantId;
-    private String type;
+    private String titre;
     private String description;
+    private String seanceId;
+    private String typeRendu;
     private Date dateLimite;
-    private String statut;
 }
-

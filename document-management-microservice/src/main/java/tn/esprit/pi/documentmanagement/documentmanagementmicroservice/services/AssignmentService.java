@@ -9,40 +9,67 @@ import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.repository
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class AssignmentService {
 
     @Autowired
     private IAssignmentRepository assignmentRepository;
-
-    // Créer un nouvel assignment
-    public Assignment createAssignment(AssignmentDto assignmentDTO, String userId) {
-        // Créer l'entité Assignment à partir du DTO
-        Assignment assignment = new Assignment();
-        assignment.setSeanceId(assignmentDTO.getSeanceId());
-        assignment.setEnseignantId(assignmentDTO.getEnseignantId());
-        assignment.setType(assignmentDTO.getType());
-        assignment.setDescription(assignmentDTO.getDescription());
-        assignment.setDateLimite(assignmentDTO.getDateLimite());
-        assignment.setStatut("à faire"); // Statut initial
-        assignment.setCreatedAt(new Date()); // Date de création
-        assignment.setCreatedBy(userId);    // Utilisateur qui crée le travail (enseignant ou étudiant)
-
-        // Sauvegarder et retourner l'assignement
-        return assignmentRepository.save(assignment);
-    }
-
-    // Méthode pour le dépôt de travail par un étudiant
-    public Assignment submitAssignment(String assignmentId, String userId) {
-        // On récupère l'assignement existant
+    // Dans AssignmentService.java
+    public void validateAssignmentSubmission(String assignmentId) {
         Assignment assignment = assignmentRepository.findById(assignmentId)
                 .orElseThrow(() -> new RuntimeException("Assignment not found"));
 
-        // On définit les informations liées au dépôt
-        assignment.setStatut("terminé"); // Par exemple, le statut peut être mis à "terminé" lors du dépôt
-        assignment.setCreatedAt(new Date()); // Mise à jour de la date de dépôt
+        if(new Date().after(assignment.getDateLimite())) {
+            throw new RuntimeException("La date limite pour cet assignment est dépassée");
+        }
+    }
+    // CREATE
+    public Assignment createAssignment(AssignmentDto dto, String enseignantId) {
+        Assignment assignment = new Assignment();
+        assignment.setTitre(dto.getTitre());
+        assignment.setDescription(dto.getDescription());
+        assignment.setSeanceId(dto.getSeanceId());
+        assignment.setEnseignantId(enseignantId);
+        assignment.setType(dto.getTypeRendu());
+        assignment.setDateLimite(dto.getDateLimite());
+        assignment.setStatut("A_FAIRE");
+        assignment.setCreatedAt(new Date());
 
-        // On enregistre le travail soumis
         return assignmentRepository.save(assignment);
+    }
+
+    // READ (single)
+    public Optional<Assignment> getAssignmentById(String id) {
+        return assignmentRepository.findById(id);
+    }
+
+    // READ (all)
+    public List<Assignment> getAllAssignments() {
+        return assignmentRepository.findAll();
+    }
+
+    // READ (by seance)
+    public List<Assignment> getAssignmentsBySeance(String seanceId) {
+        return assignmentRepository.findBySeanceId(seanceId);
+    }
+
+    // UPDATE
+    public Assignment updateAssignment(String id, AssignmentDto dto) {
+        return assignmentRepository.findById(id)
+                .map(existing -> {
+                    existing.setTitre(dto.getTitre());
+                    existing.setDescription(dto.getDescription());
+                    existing.setType(dto.getTypeRendu());
+                    existing.setDateLimite(dto.getDateLimite());
+                    existing.setCreatedAt(new Date());
+                    return assignmentRepository.save(existing);
+                })
+                .orElseThrow(() -> new RuntimeException("Assignment not found"));
+    }
+
+    // DELETE
+    public void deleteAssignment(String id) {
+        assignmentRepository.deleteById(id);
     }
 }

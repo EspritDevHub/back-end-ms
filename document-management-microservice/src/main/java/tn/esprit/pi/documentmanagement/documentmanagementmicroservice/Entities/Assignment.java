@@ -3,22 +3,26 @@ package tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Entities;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Id;
 import java.util.Date;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document("assignments")
+@Document(collection = "assignments")
+@Data
 public class Assignment {
+    @Id
+    private String id;
+    private String seanceId;
+    private String enseignantId;
+    private String type; // 'FICHIER', 'LIEN' ou 'TEXTE'
+    private String description;
+    private Date dateLimite;
+    private String statut; // 'À_RENDRE', 'RENDU', 'EN_RETARD'
+    private Date createdAt;
+    private String createdBy;
 
-    private String id;                // Identifiant unique de l'Assignment
-    private String seanceId;          // ID de la séance à laquelle le travail est assigné
-    private String enseignantId;      // ID du professeur qui a créé l'Assignment
-    private String type;              // Type du travail (lien, fichier, etc.)
-    private String description;       // Description du travail à rendre
-    private Date dateLimite;          // Date limite de dépôt du travail
-    private String statut;            // Statut (à faire, en cours, terminé)
-    private Date createdAt;           // Date de création
-    private String createdBy;         // ID de l'utilisateur qui a créé l'Assignment (professeur)
+    private String titre;
+    private boolean actif = true;
 }

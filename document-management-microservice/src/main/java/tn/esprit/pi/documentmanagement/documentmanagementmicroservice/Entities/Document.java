@@ -19,15 +19,16 @@ public class Document {
 
     @Id
     private String id;
-
+    private String assignmentId;  // Référence à l'assignment
     private String seanceId;      // Référence à la séance
     private String etudiantId;    // Référence à l'étudiant
-    private String enseignantId;  // Référence à l'enseignant
-    private FileType type;        // Type de fichier (PDF, Image, Lien, etc.)
-    private String fichier;       // Lien ou chemin du fichier
-    private String commentaire;   // Commentaire ajouté par l'étudiant
-    private String statut;        // Statut (Soumis, En cours, Terminé)
-    private Date createdAt;       // Date de création
-    private String createdBy;     // ID de l'utilisateur qui a créé ce travail (enseignant ou étudiant)
-
+    private FileType type;        // Type de rendu (FICHIER, LIEN, TEXTE)
+    private String contenu;       // URL ou texte selon le type
+    private String nomFichier;    // Nom original du fichier (si type=FICHIER)
+    private String commentaire;
+    private String statut;        // BROUILLON, SOUMIS, CORRIGE
+    private Date dateSoumission;
+    private Date dateLimite;      // Copie de la date limite de l'assignment
+    private Date createdAt;
+    private Date updatedAt;
 }

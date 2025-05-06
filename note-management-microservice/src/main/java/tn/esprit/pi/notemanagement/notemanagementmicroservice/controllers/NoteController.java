@@ -60,15 +60,9 @@ public class NoteController {
     }
 
     // Étudiant : peut voir ses notes
-    @PreAuthorize("hasRole('STUDENT')")
+    //@PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/etudiant/{id}")
     public List<NoteDTO> notesParEtudiant(@PathVariable String id) {
-        // Vérification du rôle utilisateur avec UserClient
-        String role = getUserRole(id);
-        if (!"STUDENT".equals(role)) {
-            throw new IllegalArgumentException("L'utilisateur n'a pas le rôle 'STUDENT'.");
-        }
-
         return service.getNotesParEtudiant(id)
                 .stream()
                 .map(NoteMapper::toDto)
