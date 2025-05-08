@@ -23,8 +23,8 @@ public class Seance {
     private String id;
     private String titre;
     private String description;
-    private Number Numero ;
-    private Number Note ;
+    private Long numero ;
+    private Double note ;
 
 
     private String sprintId; // ID du sprint

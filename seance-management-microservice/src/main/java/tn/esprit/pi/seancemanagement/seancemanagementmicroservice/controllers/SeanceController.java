@@ -44,7 +44,7 @@ public class SeanceController {
         List<SeanceDTO> dtos = service.getAll()
                 .stream()
                 .map(SeanceMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dtos);
     }
 

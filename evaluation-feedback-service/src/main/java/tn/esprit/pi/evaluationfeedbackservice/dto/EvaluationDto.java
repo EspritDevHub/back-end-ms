@@ -1,21 +1,15 @@
-package tn.esprit.pi.evaluationfeedbackservice.entity;
+package tn.esprit.pi.evaluationfeedbackservice.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
+import tn.esprit.pi.evaluationfeedbackservice.entity.Critere;
 
-@Getter
-@Setter
+@Data
 @ToString
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@Document(collection = "evaluation")
-public class Evaluation {
+public class EvaluationDto {
 
-    @Id
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String id; // changed from Long to String for MongoDB
 
     private String description;
@@ -23,6 +17,14 @@ public class Evaluation {
     private Critere critere;
     private Long projet;
     private Long user;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getDescription() {
         return description;

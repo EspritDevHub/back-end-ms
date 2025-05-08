@@ -10,8 +10,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import tn.esprit.pi.evaluationfeedbackservice.dto.EvaluationDto;
 import tn.esprit.pi.evaluationfeedbackservice.entity.Critere;
 import tn.esprit.pi.evaluationfeedbackservice.entity.Evaluation;
+import tn.esprit.pi.evaluationfeedbackservice.mapper.EvaluationMapper;
 import tn.esprit.pi.evaluationfeedbackservice.repository.EvaluationRepository;
 
 
@@ -21,17 +23,23 @@ import java.util.*;
 public class EvaluationService {
     private final EvaluationRepository repository;
     private final MongoTemplate mongoTemplate;
+    private final EvaluationMapper evaluationMapper;
 
-    public EvaluationService(EvaluationRepository repository, MongoTemplate mongoTemplate) {
+    public EvaluationService(EvaluationRepository repository, MongoTemplate mongoTemplate, EvaluationMapper evaluationMapper) {
         this.repository = repository;
         this.mongoTemplate = mongoTemplate;
+        this.evaluationMapper = evaluationMapper;
     }
 
-    public List<Evaluation> getAll() {
-        return repository.findAll();
+    public List<EvaluationDto> getAll(Long id) {
+        return repository.findByProjet(id).stream().map(
+                EvaluationMapper::toDto).toList() ;
     }
 
-    public Evaluation addOrUpdateEvaluation(Evaluation newEvaluation) {
+
+
+
+    public EvaluationDto addOrUpdateEvaluation(Evaluation newEvaluation) {
         // 1. Validate note
         if (newEvaluation.getNote() == null || newEvaluation.getNote() < 1 || newEvaluation.getNote() > 5) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Note must be between 1 and 5.");
@@ -48,11 +56,11 @@ public class EvaluationService {
             Evaluation existing = existingEvalOpt.get();
             existing.setNote(newEvaluation.getNote());
             existing.setDescription(newEvaluation.getDescription());
-            return repository.save(existing);
+            return EvaluationMapper.toDto(repository.save(existing));
         }
 
         // 3. Else, create a new evaluation
-        return repository.save(newEvaluation);
+        return  EvaluationMapper.toDto(repository.save(newEvaluation));
     }
 
 
@@ -60,7 +68,8 @@ public class EvaluationService {
         repository.deleteById(id);
     }
 
-    public List<Evaluation> getEvaluationsByProject(String projectId, Critere critere) {
+
+    public List<EvaluationDto> getEvaluationsByProject(String projectId, Critere critere) {
         Long projetId;
 
         try {
@@ -74,9 +83,9 @@ public class EvaluationService {
         }
 
         if (critere != null) {
-            return repository.findByProjetAndCritere(projetId, critere);
+            return repository.findByProjetAndCritere(projetId, critere).stream().map(EvaluationMapper::toDto).toList();
         } else {
-            return repository.findByProjet(projetId);
+            return repository.findByProjet(projetId).stream().map(EvaluationMapper::toDto).toList();
         }
     }
 
