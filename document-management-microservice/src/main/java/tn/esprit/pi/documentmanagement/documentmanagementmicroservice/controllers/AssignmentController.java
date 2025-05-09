@@ -19,9 +19,9 @@ public class AssignmentController {
     private AssignmentService assignmentService;
 
     @PostMapping
-    public Assignment createAssignment(@RequestBody AssignmentDto dto,
-                                       @RequestHeader("X-User-ID") String enseignantId) {
-        return assignmentService.createAssignment(dto, enseignantId);
+    public Assignment createAssignment(@RequestBody AssignmentDto dto)
+    {
+        return assignmentService.createAssignment(dto);
     }
 
     @GetMapping("/{id}")
@@ -51,5 +51,11 @@ public class AssignmentController {
     @PreAuthorize("hasRole('ENSEIGNANT')")
     public void deleteAssignment(@PathVariable String id) {
         assignmentService.deleteAssignment(id);
+    }
+
+    @DeleteMapping("")
+    @PreAuthorize("hasRole('ENSEIGNANT')")
+    public void deleteall() {
+        assignmentService.deleteAll();
     }
 }

@@ -25,12 +25,12 @@ public class AssignmentService {
         }
     }
     // CREATE
-    public Assignment createAssignment(AssignmentDto dto, String enseignantId) {
+    public Assignment createAssignment(AssignmentDto dto) {
         Assignment assignment = new Assignment();
         assignment.setTitre(dto.getTitre());
         assignment.setDescription(dto.getDescription());
         assignment.setSeanceId(dto.getSeanceId());
-        assignment.setEnseignantId(enseignantId);
+        assignment.setEnseignantId("ENS0001");
         assignment.setType(dto.getTypeRendu());
         assignment.setDateLimite(dto.getDateLimite());
         assignment.setStatut("A_FAIRE");
@@ -71,5 +71,10 @@ public class AssignmentService {
     // DELETE
     public void deleteAssignment(String id) {
         assignmentRepository.deleteById(id);
+    }
+
+    // DELETE
+    public void deleteAll() {
+        assignmentRepository.deleteAll();
     }
 }

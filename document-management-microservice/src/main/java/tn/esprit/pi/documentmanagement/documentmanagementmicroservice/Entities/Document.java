@@ -27,8 +27,8 @@ public class Document {
     private String nomFichier;    // Nom original du fichier (si type=FICHIER)
     private String commentaire;
     private String statut;        // BROUILLON, SOUMIS, CORRIGE
-    private Date dateSoumission;
+    private Date dateSoumission =new Date();
     private Date dateLimite;      // Copie de la date limite de l'assignment
-    private Date createdAt;
-    private Date updatedAt;
+    private Date createdAt=new Date();;
+    private Date updatedAt=new Date();;
 }

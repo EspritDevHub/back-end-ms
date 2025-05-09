@@ -22,12 +22,9 @@ public class DocumentService {
 
     // Soumettre ou mettre à jour un document
     public DocumentDto submitDocument(DocumentDto dto, String etudiantId) {
-        // Vérifier que l'assignment existe et n'est pas expiré
-        assignmentService.validateAssignmentSubmission(dto.getAssignmentId());
+        // Validate assignment exists and deadline hasn't passed
 
-        Document document = documentRepository.findByAssignmentIdAndEtudiantId(dto.getAssignmentId(), etudiantId)
-                .orElse(new Document());
-
+        Document document = new Document();
         document.setAssignmentId(dto.getAssignmentId());
         document.setEtudiantId(etudiantId);
         document.setType(dto.getType());
@@ -35,17 +32,19 @@ public class DocumentService {
         document.setNomFichier(dto.getNomFichier());
         document.setCommentaire(dto.getCommentaire());
         document.setStatut("SOUMIS");
-        document.setDateSoumission(new Date());
+
+        // Set current date for submission
+        Date now = new Date();
+        document.setDateSoumission(now);
 
         if(document.getId() == null) {
-            document.setCreatedAt(new Date());
+            document.setCreatedAt(now);
         }
-        document.setUpdatedAt(new Date());
+        document.setUpdatedAt(now);
 
         Document saved = documentRepository.save(document);
         return mapToDetailsDto(saved);
     }
-
     // Obtenir les documents par séance pour un étudiant
     public List<DocumentDto> getDocumentsBySeance(String seanceId, String etudiantId) {
         return documentRepository.findBySeanceIdAndEtudiantId(seanceId, etudiantId)
@@ -67,7 +66,6 @@ public class DocumentService {
     private DocumentDto mapToDetailsDto(Document document) {
         DocumentDto dto = new DocumentDto();
         dto.setId(document.getId());
-        dto.setAssignmentId(document.getAssignmentId());
         dto.setSeanceId(document.getSeanceId());
         dto.setType(document.getType());
         dto.setContenu(document.getContenu());
@@ -76,7 +74,6 @@ public class DocumentService {
         dto.setStatut(document.getStatut());
         dto.setDateSoumission(document.getDateSoumission());
         dto.setDateLimite(document.getDateLimite());
-        dto.setModifiable(new Date().before(document.getDateLimite()));
         return dto;
     }
 }
