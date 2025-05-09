@@ -1,0 +1,17 @@
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\services\UserService.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\repository\IUseRepository.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\security\PassWordSalter.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\security\TokenBlacklistService.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\Entities\User.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\Tools\Swagger.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\security\QRCodeGenerator.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\security\JwtAuthenticationFilter.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\mappers\UserMapper.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\security\AuthenticatorService.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\security\SecurityConfig.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\SuerManagementMicroserviceApplication.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\controllers\UserController.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\security\JwtUtil.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\Entities\Roles.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\Dtos\UserResponseDTO.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\Dtos\UserRequestDTO.java

@@ -9,4 +9,5 @@ public interface IUseRepository extends MongoRepository<User, String> {
     Optional<User> findByEmail(String email);
 
     User getUserByEmail(String email);
+    User getUserByEspritId(String espritId);
 }

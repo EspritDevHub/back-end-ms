@@ -45,6 +45,15 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        var exsistingUser = getUserByEmail(user.getEmail());
+        var existingUserByEspritId = getStudentByEspritId(user.getEspritId());
+        if(user.getEspritId().isEmpty() && existingUserByEspritId.isPresent()){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "This email already exists");
+        }
+        if(exsistingUser != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "This email already exists");
+        }
+
         user.setSalt(PassWordSalter.generateSalt());
         String passWordAfterApplyingSalt = passWordSalter.saltPassWord(user.getPassword(), user.getSalt());
         String hasedPassWordAfterSalt = securityConfig.passwordEncoder().encode(passWordAfterApplyingSalt);
@@ -62,18 +71,43 @@ public class UserService {
     public boolean verifyOtp(String email, int otp) {
         User user = userRepository.getUserByEmail(email);
         String secretKey = user.getSecretKey();
+        user.setIs2FAEnabled(true);
+        userRepository.save(user);
         return authenticatorService.verifySecretKey(secretKey, otp);
     }
     public User updateUser(String id, User userDetails) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
-            user.setName(userDetails.getName());
-            user.setEmail(userDetails.getEmail());
+            if (userDetails.getName() != null) {
+                user.setName(userDetails.getName());
+            }
+            if (userDetails.getEmail() != null) {
+                var exsistingUser = getUserByEmail(userDetails.getEmail());
+                if(exsistingUser != null) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "This email already exists");
+                }
+                user.setEmail(userDetails.getEmail());
+            }
+            if (userDetails.getPhone() != null) {
+                user.setPhone(userDetails.getPhone());
+            }
             return userRepository.save(user);
         }
         return null;
     }
 
+
+    public boolean ResetPassWord(String email, String newPassword){
+        User user = userRepository.getUserByEmail(email);
+        if(user == null){
+            return false;
+        }
+        String passWordAfterApplyingSalt = passWordSalter.saltPassWord(newPassword, user.getSalt());
+        String hasedPassWordAfterSalt = securityConfig.passwordEncoder().encode(passWordAfterApplyingSalt);
+        user.setPassword(hasedPassWordAfterSalt);
+        userRepository.save(user);
+        return true;
+    }
     public User updateUser(User user){
         return userRepository.save(user);
     }
@@ -110,6 +144,15 @@ public class UserService {
         catch (Exception e) {
             return false;
         }
+    }
+
+    public Optional<User> getStudentByEspritId(String espritId) {
+        return Optional.ofNullable(userRepository.getUserByEspritId(espritId))
+                .filter(user -> user.getRole() == Roles.STUDENT);
+    }
+    public String GetUserRole(String token) {
+        Claims claims = jwtUtil.getClaims(token);
+        return claims.get("roles", String.class);
     }
 
 }

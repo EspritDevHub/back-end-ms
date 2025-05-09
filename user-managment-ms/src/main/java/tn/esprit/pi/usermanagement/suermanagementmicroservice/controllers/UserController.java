@@ -11,7 +11,9 @@ import tn.esprit.pi.usermanagement.suermanagementmicroservice.mappers.UserMapper
 import tn.esprit.pi.usermanagement.suermanagementmicroservice.security.JwtUtil;
 import tn.esprit.pi.usermanagement.suermanagementmicroservice.services.UserService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -24,8 +26,9 @@ public class UserController {
 
 
     @GetMapping("GetAllUsers")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<UserResponseDTO> getAllUsers() {
+        var response = userService.getAllUsers();
+        return userMapper.usersListToUserResponseDTO(response);
     }
 
     @GetMapping("/{id}")
@@ -49,14 +52,20 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable String id, @RequestBody User userDetails) {
-        return userService.updateUser(id, userDetails);
+    public UserResponseDTO updateUser(@PathVariable String id, @RequestBody UserRequestDTO userDetailsRequest) {
+        var userDetails = userMapper.userRequestDTOToUser(userDetailsRequest);
+        var response = userService.updateUser(id, userDetails);
+        return userMapper.userToUserResponseDTO(response);
     }
     @GetMapping("/{id}/qr")
-    public ResponseEntity<String> getUserQRCode(@PathVariable String id, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<Map<String, String>> getUserQRCode(@PathVariable String id, @RequestHeader("Authorization") String authHeader) {
         String token = authHeader.replace("Bearer ", "");
         String qrCodeBase64 = userService.getUserQrCodeFor2FA(id, token);
-        return ResponseEntity.ok(qrCodeBase64);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("qrCode", qrCodeBase64);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/verify-otp")
@@ -69,10 +78,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
+    public ResponseEntity<?> login(@RequestBody UserRequestDTO user) {
         User loggedInUser = userService.login(user.getEmail(), user.getPassword());
         if (loggedInUser != null) {
-            return ResponseEntity.ok(loggedInUser); // Return user details
+            var loggedInUserDTO = userMapper.userToUserResponseDTO(loggedInUser);
+            return ResponseEntity.ok(loggedInUserDTO); // Return user details
         }
         return ResponseEntity.status(401).body("Invalid email or password");
     }
@@ -87,5 +97,17 @@ public class UserController {
         //based on the code of this response we should know the token is good "200 OK" or "403, 401"
         //this should be called before any endpoint execution in the gateway
         //to add in the middleware of the gateway or to be called manually your choice
+    }
+    @GetMapping("/espritid/{id}")
+    public UserResponseDTO getUserByEspritId(@PathVariable String id) throws Exception {
+        var user = userService.getStudentByEspritId(id);
+        if(user.isPresent()) {
+            return userMapper.userToUserResponseDTO(user.get());
+        }
+        throw new Exception();
+    }
+    @GetMapping("/getUserRole")
+    public String getUserRole(@RequestParam String token) {
+        return userService.GetUserRole(token);
     }
 }
