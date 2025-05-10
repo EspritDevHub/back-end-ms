@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Dtos.DocumentDto;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Entities.Document;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.repository.IDocumentRepository;
-import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.services.AssignmentService;
 
 import java.util.Date;
 import java.util.List;
@@ -51,6 +50,11 @@ public class DocumentService {
                 .stream()
                 .map(this::mapToDetailsDto)
                 .collect(Collectors.toList());
+    }
+
+    public List<Document> getAllDocuments( ) {
+        return documentRepository.findAll();
+
     }
 
     // Supprimer un document (si avant date limite)

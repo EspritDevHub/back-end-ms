@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Dtos.DocumentDto;
+import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Entities.Document;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.services.DocumentService;
 
 import java.util.List;
@@ -34,7 +35,14 @@ public class DocumentController {
             @RequestHeader("X-User-ID") String userId) {
         return documentService.getDocumentsBySeance(seanceId, userId);
     }
- 
+
+    // Obtenir les documents par séance
+    @GetMapping("/documents")
+    public List<Document> getAllDocuments(){
+         return documentService.getAllDocuments();
+    }
+
+
     // Supprimer un document
     @DeleteMapping("/{documentId}")
     @PreAuthorize("hasRole('ETUDIANT')")
