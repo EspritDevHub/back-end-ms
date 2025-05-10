@@ -10,6 +10,7 @@ import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.services.D
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/documents")
 public class DocumentController {
 
@@ -33,7 +34,7 @@ public class DocumentController {
             @RequestHeader("X-User-ID") String userId) {
         return documentService.getDocumentsBySeance(seanceId, userId);
     }
-
+ 
     // Supprimer un document
     @DeleteMapping("/{documentId}")
     @PreAuthorize("hasRole('ETUDIANT')")

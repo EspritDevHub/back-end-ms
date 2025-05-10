@@ -31,7 +31,7 @@ public class AssignmentService {
         assignment.setDescription(dto.getDescription());
         assignment.setSeanceId(dto.getSeanceId());
         assignment.setEnseignantId("ENS0001");
-        assignment.setType(dto.getTypeRendu());
+        assignment.setType(dto.getType());
         assignment.setDateLimite(dto.getDateLimite());
         assignment.setStatut("A_FAIRE");
         assignment.setCreatedAt(new Date());
@@ -60,7 +60,7 @@ public class AssignmentService {
                 .map(existing -> {
                     existing.setTitre(dto.getTitre());
                     existing.setDescription(dto.getDescription());
-                    existing.setType(dto.getTypeRendu());
+                    existing.setType(dto.getType());
                     existing.setDateLimite(dto.getDateLimite());
                     existing.setCreatedAt(new Date());
                     return assignmentRepository.save(existing);

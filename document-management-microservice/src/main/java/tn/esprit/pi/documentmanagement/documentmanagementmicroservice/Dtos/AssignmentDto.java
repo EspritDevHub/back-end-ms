@@ -12,6 +12,6 @@ public class AssignmentDto {
     private String titre;
     private String description;
     private String seanceId;
-    private String typeRendu;
+    private String type;
     private Date dateLimite;
 }
