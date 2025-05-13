@@ -9,7 +9,6 @@ import tn.esprit.pi.seancemanagement.seancemanagementmicroservice.repository.ISe
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class SeanceService {
@@ -19,6 +18,7 @@ public class SeanceService {
 
     // Créer une nouvelle séance
     public Seance createSeance(Seance seance) {
+        seance.setId(null);
         return seanceRepository.save(seance);
     }
 
@@ -41,6 +41,7 @@ public class SeanceService {
     // Modifier une séance
     public Seance updateSeance(String id, Seance seanceDetails) {
         Optional<Seance> seance = seanceRepository.findById(id);
+        System.err.println("update"+seance.isPresent());
         if (seance.isPresent()) {
             Seance updatedSeance = seance.get();
             updatedSeance.setTitre(seanceDetails.getTitre());
@@ -68,7 +69,6 @@ public class SeanceService {
     }
 
     // Supprimer une séance
-    public void deleteSeance(String id) {
-        seanceRepository.deleteById(id);
+    public void deleteSeance(String id) { seanceRepository.deleteById(id);
     }
 }

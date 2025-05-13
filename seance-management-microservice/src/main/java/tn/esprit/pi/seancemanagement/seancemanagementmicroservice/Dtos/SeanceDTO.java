@@ -2,7 +2,6 @@ package tn.esprit.pi.seancemanagement.seancemanagementmicroservice.Dtos;
 
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,9 +21,8 @@ public class SeanceDTO {
     private String titre;
     @Size(max = 500)
     private String description;
-    @NotNull
-    private Number Numero;
-    private Number Note;
+    private Long numero;
+    private Double note;
     private String sprintId;
     private List<String> critereIds;
     private Date date;
