@@ -11,8 +11,10 @@ import tn.esprit.pi.usermanagement.suermanagementmicroservice.Entities.User;
 import tn.esprit.pi.usermanagement.suermanagementmicroservice.repository.IUseRepository;
 import tn.esprit.pi.usermanagement.suermanagementmicroservice.security.*;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class UserService {
@@ -29,6 +31,8 @@ public class UserService {
     private QRCodeGenerator qrCodeGenerator;
     @Autowired
     private AuthenticatorService authenticatorService;
+    @Autowired
+    private EmailService mailer;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -55,11 +59,14 @@ public class UserService {
         }
 
         user.setSalt(PassWordSalter.generateSalt());
+        var passwordWithoutHash = user.getPassword();
         String passWordAfterApplyingSalt = passWordSalter.saltPassWord(user.getPassword(), user.getSalt());
         String hasedPassWordAfterSalt = securityConfig.passwordEncoder().encode(passWordAfterApplyingSalt);
         user.setPassword(hasedPassWordAfterSalt);
         String secretKey = authenticatorService.generateSecretKey();
         user.setSecretKey(secretKey);
+        mailer.sendWelcomeEmail(user.getEmail(), user.getName(), user.getEspritId() ,passwordWithoutHash);
+        user.setActive(false);
         return userRepository.save(user);
     }
 
@@ -97,16 +104,51 @@ public class UserService {
     }
 
 
-    public boolean ResetPassWord(String email, String newPassword){
+    public boolean ResetPassWord(String email, String newPassword, int otp){
         User user = userRepository.getUserByEmail(email);
         if(user == null){
             return false;
         }
+        if(user.getIs2FAEnabled()){
+            String secretKey = user.getSecretKey();
+            user.setIs2FAEnabled(true);
+            userRepository.save(user);
+             if(!authenticatorService.verifySecretKey(secretKey, otp)){
+                 return false;
+             }
+        }
+        if(!user.getIs2FAEnabled()){
+            if(!(user.getTempPasswordCode() == otp) && !(user.get_2faExpiryDate().getTime() > System.currentTimeMillis())){
+                return false;
+            }
+        }
         String passWordAfterApplyingSalt = passWordSalter.saltPassWord(newPassword, user.getSalt());
         String hasedPassWordAfterSalt = securityConfig.passwordEncoder().encode(passWordAfterApplyingSalt);
         user.setPassword(hasedPassWordAfterSalt);
+        user.setActive(true);
         userRepository.save(user);
         return true;
+    }
+    public boolean sendForgetPasswordEmailIf2faIsDisabled(String email) {
+        User user = userRepository.getUserByEmail(email);
+        if(user == null){
+            return false;
+        }
+        if(user.getIs2FAEnabled()){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "This User Must use 2FA to change password");
+        }
+        user.setTempPasswordCode(1000 + new Random().nextInt(9000));
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, 10);
+        user.set_2faExpiryDate(calendar.getTime());
+        userRepository.save(user);
+        try{
+            mailer.sendForgotPasswordEmail(user.getEmail(),user.getName(), user.getTempPasswordCode());
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
     public User updateUser(User user){
         return userRepository.save(user);

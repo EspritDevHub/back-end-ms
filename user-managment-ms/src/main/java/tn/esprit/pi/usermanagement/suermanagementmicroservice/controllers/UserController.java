@@ -110,4 +110,26 @@ public class UserController {
     public String getUserRole(@RequestParam String token) {
         return userService.GetUserRole(token);
     }
+
+    @GetMapping("/SendforgetPasswordMail")
+    public ResponseEntity<?> sendForgetPasswordMail(@RequestParam String email) {
+        try{
+            userService.sendForgetPasswordEmailIf2faIsDisabled(email);
+            return ResponseEntity.status(200).body("mail sent");
+        }
+        catch (Exception e){
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/resetPassword")
+    public ResponseEntity<?> ResetPassWord(@RequestParam String email, @RequestParam String password, @RequestParam int otp) {
+        try{
+            userService.ResetPassWord(email, password, otp);
+            return ResponseEntity.status(200).body("password changed successfully");
+        }
+        catch (Exception e){
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
 }

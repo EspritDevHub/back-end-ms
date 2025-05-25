@@ -10,7 +10,7 @@ import tn.esprit.pi.usermanagement.suermanagementmicroservice.Entities.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-09T19:23:06+0100",
+    date = "2025-05-25T13:23:52+0100",
     comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.14 (Amazon.com Inc.)"
 )
 @Component

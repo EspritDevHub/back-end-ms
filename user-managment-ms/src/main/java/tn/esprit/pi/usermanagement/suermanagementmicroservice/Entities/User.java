@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.PrePersist;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,7 +47,11 @@ public class User {
     private String espritId;
 
     private String className;
-
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnore
+    private int TempPasswordCode;
+    private Date _2faExpiryDate;
+    private boolean active;
     @PrePersist
     public void prePersist() {
         if (id == null) {
