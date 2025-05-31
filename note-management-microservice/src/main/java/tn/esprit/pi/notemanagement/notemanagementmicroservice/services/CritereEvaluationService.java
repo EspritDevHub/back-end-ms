@@ -88,22 +88,18 @@ public class CritereEvaluationService {
     public void desaffecterCriteresDeSeance(String seanceId, List<String> critereNoms) {
         SeanceDTO seance = seanceClient.getSeanceById(seanceId);
 
-        // Obtenir la liste des IDs de critères à supprimer
         List<String> critereIdsASupprimer = critereNoms.stream()
                 .map(nom -> critereRepo.findByNom(nom).orElseThrow(() ->
                         new RuntimeException("Critère non trouvé: " + nom)))
                 .map(CritereEvaluation::getId)
                 .collect(Collectors.toList());
 
-        // Filtrer les critères déjà affectés à la séance
         List<String> critereIdsRestants = seance.getCritereIds().stream()
                 .filter(id -> !critereIdsASupprimer.contains(id))  // Enlever les critères à supprimer
                 .collect(Collectors.toList());
 
-        // Mettre à jour la liste des critères affectés à la séance
         seance.setCritereIds(critereIdsRestants);
 
-        // Mettre à jour la séance dans le système
         seanceClient.updateSeance(seanceId, seance);
     }
 

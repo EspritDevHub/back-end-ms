@@ -2,12 +2,20 @@ package tn.esprit.pi.documentmanagement.documentmanagementmicroservice.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Dtos.DocumentDto;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Entities.Document;
+import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Entities.Evaluation;
+import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.repository.EvaluationRepository;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.repository.IDocumentRepository;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +26,8 @@ public class DocumentService {
 
     @Autowired
     private AssignmentService assignmentService;
+    @Autowired
+    private EvaluationRepository evaluationRepository;
 
     // Soumettre ou mettre à jour un document
     public DocumentDto submitDocument(DocumentDto dto, String etudiantId) {
@@ -80,4 +90,33 @@ public class DocumentService {
         dto.setDateLimite(document.getDateLimite());
         return dto;
     }
+
+
+    public void uploadEvaluationFile(String documentId, MultipartFile file, String enseignantId) {
+        Document document = documentRepository.findById(documentId)
+                .orElseThrow(() -> new RuntimeException("Document non trouvé"));
+
+        // Enregistrer fichier
+        String folder = "uploads/evaluations/";
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        Path path = Paths.get(folder + fileName);
+
+        try {
+            Files.createDirectories(path.getParent());
+            file.transferTo(path);
+        } catch (IOException e) {
+            throw new RuntimeException("Erreur upload fichier évaluation", e);
+        }
+
+        // Mise à jour ou création d’évaluation
+        Evaluation evaluation = (Evaluation) evaluationRepository.findByDocumentId(documentId);
+
+        evaluation.setDocumentId(documentId);
+        evaluation.setEnseignantId(enseignantId);
+        evaluation.setDateEvaluation(new Date());
+        evaluation.setFichierEvaluationUrl(path.toString());
+
+        evaluationRepository.save(evaluation);
+    }
+
 }
