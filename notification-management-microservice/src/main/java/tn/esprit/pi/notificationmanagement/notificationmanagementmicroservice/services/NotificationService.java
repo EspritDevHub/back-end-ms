@@ -3,6 +3,7 @@ package tn.esprit.pi.notificationmanagement.notificationmanagementmicroservice.s
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tn.esprit.pi.notificationmanagement.notificationmanagementmicroservice.Dto.NotificationDTO;
 import tn.esprit.pi.notificationmanagement.notificationmanagementmicroservice.Dto.NotificationRequestDTO;
 import tn.esprit.pi.notificationmanagement.notificationmanagementmicroservice.Dto.NotificationResponseDTO;
@@ -51,9 +52,16 @@ public class NotificationService {
         return mapper.toDto(updated);
     }
 
-    public void deleteNotification(String id) {
+    @Transactional
+    public NotificationDTO deleteNotification(String id) {
+        Notification notification = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Notification not found with ID: " + id));
+
         repository.deleteById(id);
+
+        return mapper.toDto(notification);
     }
+
     public List<NotificationDTO> getAllNotifications() {
         return repository.findAll()
                 .stream()

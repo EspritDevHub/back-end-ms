@@ -20,14 +20,26 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ReclamationService {
 
+public class ReclamationService {
     private final IReclamationRepository reclamrepository;
-    @Autowired
     private final NotificationClient notificationClient;
+    private final JiraService jiraService;
 
     public ReclamationResponseDTO createReclamation(String userId, ReclamationRequestDTO dto) {
         Reclamation reclamation = ReclamationMapper.toEntity(dto, userId);
+
+        // Save to DB to get the ID (in case Jira needs it)
+        reclamation = reclamrepository.save(reclamation);
+
+        // Create Jira ticket
+        String jiraKey = jiraService.createIssueFromReclamation(reclamation);
+        if (jiraKey != null) {
+            reclamation.setJiraTicketId(jiraKey);
+            reclamrepository.save(reclamation); // Save Jira key
+        }
+
+        // Send notification
         NotificationRequestDTO notification = NotificationRequestDTO.builder()
                 .title("Reclamation " + reclamation.getTitle() + " Created")
                 .message("Your reclamation has been submitted successfully.")
@@ -36,8 +48,9 @@ public class ReclamationService {
                 .build();
 
         notificationClient.createNotification(notification);
-        notificationClient.sendWebSocketNotification(notification);  // Feign Client call to send WebSocket notification
-        return ReclamationMapper.toDTO(reclamrepository.save(reclamation));
+        notificationClient.sendWebSocketNotification(notification);
+
+        return ReclamationMapper.toDTO(reclamation);
     }
 
     public void deleteReclamation(String id, String userId) {
@@ -94,4 +107,16 @@ public class ReclamationService {
         // Save and return
         return ReclamationMapper.toDTO(reclamrepository.save(existing));
     }
+    public void saveJiraTicketId(String reclamationId, String jiraTicketId) {
+        Optional<Reclamation> optional = reclamrepository.findById(reclamationId);
+        if (optional.isPresent()) {
+            Reclamation reclamation = optional.get();
+            reclamation.setJiraTicketId(jiraTicketId);
+            reclamation.setModifiedAt(LocalDateTime.now());
+            reclamrepository.save(reclamation);
+        } else {
+            throw new RuntimeException("Reclamation not found with id: " + reclamationId);
+        }
+    }
+
 }

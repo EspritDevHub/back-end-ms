@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @Document(collection = "notifications")
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Notification {
     @Id
     private String id;

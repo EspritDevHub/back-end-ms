@@ -7,6 +7,8 @@ import tn.esprit.pi.reclamationmanagement.reclamationmanagementmicroservice.Enum
 
 import java.time.format.DateTimeFormatter;
 
+import static org.json.XMLTokener.entity;
+
 public class ReclamationMapper {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -18,6 +20,7 @@ public class ReclamationMapper {
                 .userId(userId)
                 .createdAt(java.time.LocalDateTime.now())
                 .image(dto.getImage())
+                //.jiraTicketId(dto.getJiraTicketId())
                 .build();
     }
 
@@ -31,6 +34,7 @@ public class ReclamationMapper {
                 .createdAt(entity.getCreatedAt().format(formatter))
                 .modifiedAt(entity.getModifiedAt() != null ? entity.getModifiedAt().format(formatter) : null)
                 .image(entity.getImage())
+                .jiraTicketId(entity.getJiraTicketId())
                 .build();
     }
 }

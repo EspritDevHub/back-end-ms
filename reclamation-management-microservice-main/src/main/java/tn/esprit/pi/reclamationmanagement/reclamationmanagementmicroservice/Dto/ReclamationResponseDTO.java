@@ -14,4 +14,5 @@ public class ReclamationResponseDTO {
     private String createdAt;
     private String modifiedAt;
     private String image;
+    private String jiraTicketId;
 }

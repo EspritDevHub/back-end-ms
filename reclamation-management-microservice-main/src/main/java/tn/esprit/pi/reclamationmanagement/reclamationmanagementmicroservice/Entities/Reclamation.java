@@ -13,6 +13,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import tn.esprit.pi.reclamationmanagement.reclamationmanagementmicroservice.Enums.SentimentType;
+
 @Getter
 @Setter
 @Data
@@ -33,5 +35,6 @@ public class Reclamation {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private String image;
+    private String jiraTicketId;
 
 }
