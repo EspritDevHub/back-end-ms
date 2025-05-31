@@ -55,6 +55,7 @@ public class EvaluationService  {
         dto.setEnseignantId(e.getEnseignantId());
         dto.setNote(e.getNote());
         dto.setCommentaire(e.getCommentaire());
+        dto.setSuggestion(e.getSuggestion());
         dto.setFichierEvaluationUrl(e.getFichierEvaluationUrl());
         dto.setDateEvaluation(e.getDateEvaluation());
         return dto;
@@ -170,7 +171,7 @@ public class EvaluationService  {
             suggestion.append("Ajoutez au moins 5 besoins fonctionnels clairement numérotés. ");
         }
 
-        if (besoinsNonFonctionnelsCount >= ) {
+        if (besoinsNonFonctionnelsCount >=5 ) {
             note += 8;
             commentaire.append("Au moins 5 besoins non fonctionnels sont listés. ");
         } else {
@@ -201,7 +202,8 @@ public class EvaluationService  {
                 .documentId(dto.getDocumentId())
                 .enseignantId(dto.getEnseignantId())
                 .note(result.note)
-                .commentaire(result.commentaire + "\nSuggestion: " + result.suggestion)
+                .commentaire(result.commentaire + "\n ")
+                .suggestion(result.suggestion + "\n ")
                 .fichierEvaluationUrl(dto.getFichierEvaluationUrl())
                 .dateEvaluation(new Date())
                 .build();

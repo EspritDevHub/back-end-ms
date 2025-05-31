@@ -11,6 +11,7 @@ public class EvaluationDto {
     private String enseignantId;
     private Double note;
     private String commentaire;
+    private String suggestion;
     private Date dateEvaluation;
     private String fichierEvaluationUrl;
 }
