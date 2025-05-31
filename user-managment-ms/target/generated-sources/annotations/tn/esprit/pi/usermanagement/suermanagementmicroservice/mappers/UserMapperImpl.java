@@ -10,7 +10,7 @@ import tn.esprit.pi.usermanagement.suermanagementmicroservice.Entities.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-25T13:23:52+0100",
+    date = "2025-05-31T17:20:10+0100",
     comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.14 (Amazon.com Inc.)"
 )
 @Component
@@ -32,6 +32,9 @@ public class UserMapperImpl implements UserMapper {
         user.setPhone( userRequestDTO.getPhone() );
         user.setEspritId( userRequestDTO.getEspritId() );
         user.setClassName( userRequestDTO.getClassName() );
+        if ( userRequestDTO.getActive() != null ) {
+            user.setActive( Boolean.parseBoolean( userRequestDTO.getActive() ) );
+        }
 
         return user;
     }
@@ -53,6 +56,7 @@ public class UserMapperImpl implements UserMapper {
         user.setToken( userResponseDTO.getToken() );
         user.setEspritId( userResponseDTO.getEspritId() );
         user.setClassName( userResponseDTO.getClassName() );
+        user.setActive( userResponseDTO.isActive() );
 
         return user;
     }
@@ -74,6 +78,7 @@ public class UserMapperImpl implements UserMapper {
         userResponseDTO.setIs2FAEnabled( user.getIs2FAEnabled() );
         userResponseDTO.setToken( user.getToken() );
         userResponseDTO.setEspritId( user.getEspritId() );
+        userResponseDTO.setActive( user.isActive() );
 
         return userResponseDTO;
     }

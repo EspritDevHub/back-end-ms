@@ -14,5 +14,6 @@ public class UserResponseDTO {
     private Boolean is2FAEnabled;
     private String token;
     private String espritId;
+    private boolean active;
 
 }

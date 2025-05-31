@@ -39,6 +39,9 @@ public class SecurityConfig {
                                 "/users",
                                 "/users/",
                                 "/users/**",
+                                "/uploadImage/**",
+                                "/verify-faces/**",
+                                "/uploadImageCopy/**",
                                 "/users/login",
                                 "/users/verify-otp"
                         ).permitAll() // Allow Swagger UI without login

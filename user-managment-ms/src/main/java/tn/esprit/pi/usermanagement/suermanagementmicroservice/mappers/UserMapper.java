@@ -21,6 +21,7 @@ public interface UserMapper {
     @Mapping(source = "phone", target = "phone")
     @Mapping(source = "espritId", target = "espritId")
     @Mapping(source = "className", target = "className")
+    @Mapping(source = "active", target = "active")
     User userRequestDTOToUser(UserRequestDTO userRequestDTO);
     User userResposneDTOToUser(UserResponseDTO userResponseDTO);
     UserResponseDTO userToUserResponseDTO(User user);

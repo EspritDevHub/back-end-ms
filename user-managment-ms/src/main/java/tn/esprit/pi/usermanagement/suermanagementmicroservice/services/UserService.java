@@ -104,6 +104,10 @@ public class UserService {
     }
 
 
+    public void activateUser(User user) {
+        user.setActive(true);
+        userRepository.save(user);
+    }
     public boolean ResetPassWord(String email, String newPassword, int otp){
         User user = userRepository.getUserByEmail(email);
         if(user == null){
@@ -118,14 +122,16 @@ public class UserService {
              }
         }
         if(!user.getIs2FAEnabled()){
-            if(!(user.getTempPasswordCode() == otp) && !(user.get_2faExpiryDate().getTime() > System.currentTimeMillis())){
+            if(!(user.getTempPasswordCode() == otp)){
+                return false;
+            }
+            if(!(user.get_2faExpiryDate().getTime() > System.currentTimeMillis())){
                 return false;
             }
         }
-        String passWordAfterApplyingSalt = passWordSalter.saltPassWord(newPassword, user.getSalt());
+            String passWordAfterApplyingSalt = passWordSalter.saltPassWord(newPassword, user.getSalt());
         String hasedPassWordAfterSalt = securityConfig.passwordEncoder().encode(passWordAfterApplyingSalt);
         user.setPassword(hasedPassWordAfterSalt);
-        user.setActive(true);
         userRepository.save(user);
         return true;
     }

@@ -125,11 +125,19 @@ public class UserController {
     @GetMapping("/resetPassword")
     public ResponseEntity<?> ResetPassWord(@RequestParam String email, @RequestParam String password, @RequestParam int otp) {
         try{
-            userService.ResetPassWord(email, password, otp);
-            return ResponseEntity.status(200).body("password changed successfully");
+            var result = userService.ResetPassWord(email, password, otp);
+            if(result){
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "saved");
+                return ResponseEntity.ok(response);
+
+            }
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "wrong otp");
+            return ResponseEntity.internalServerError().body(response);
         }
         catch (Exception e){
-            return ResponseEntity.status(500).body(e.getMessage());
+            return ResponseEntity.internalServerError().body("Password reset failed");
         }
     }
 }

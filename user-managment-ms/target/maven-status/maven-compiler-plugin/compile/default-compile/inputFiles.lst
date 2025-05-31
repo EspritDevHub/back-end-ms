@@ -1,3 +1,4 @@
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\controllers\ImageController.java
 C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\services\UserService.java
 C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\repository\IUseRepository.java
 C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\security\PassWordSalter.java
@@ -13,5 +14,6 @@ C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\
 C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\controllers\UserController.java
 C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\security\JwtUtil.java
 C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\Entities\Roles.java
+C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\services\EmailService.java
 C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\Dtos\UserResponseDTO.java
 C:\Users\job_j\Desktop\PI\back-end-ms\user-managment-ms\src\main\java\tn\esprit\pi\usermanagement\suermanagementmicroservice\Dtos\UserRequestDTO.java

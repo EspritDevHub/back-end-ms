@@ -32,4 +32,5 @@ public class UserRequestDTO {
     private String phone;
     private String espritId;
     private String className;
+    private String active;
 }
