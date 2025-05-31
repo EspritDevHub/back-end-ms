@@ -1,17 +1,23 @@
 package tn.esprit.pi.notemanagement.notemanagementmicroservice.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.CoursDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.CritereEvaluationDTO;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.NoteDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.SeanceDTO;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities.CritereEvaluation;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities.Note;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Enum.TypeNote;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Feign.SeanceClient;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Mappers.CritereEvaluationMapper;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.repository.CoursRepository;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.repository.INoteRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -20,7 +26,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NoteService {
     private final INoteRepository noteRepo;
-     SeanceClient seanceClient; // Injection du FeignClient
+    @Autowired
+    private final CoursRepository coursRepository;
+    SeanceClient seanceClient; // Injection du FeignClient
 
     // Récupère les notes d'un étudiant par ID
     public List<Note> getNotesParEtudiant(String etudiantId) {
