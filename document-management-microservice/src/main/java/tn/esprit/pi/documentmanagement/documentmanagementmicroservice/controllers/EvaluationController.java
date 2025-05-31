@@ -46,4 +46,13 @@ public class EvaluationController {
         EvaluationDto suggestion = evaluationService.analyserTexteAutomatiquement(texteRendu);
         return ResponseEntity.ok(suggestion);
     }
+
+
+    @PostMapping("/analyser-git")
+    @PreAuthorize("hasRole('ENSEIGNANT')")
+    public ResponseEntity<EvaluationDto> analyserDepuisLienGit(@RequestBody String lienGit) {
+        EvaluationDto evaluation = evaluationService.analyserDepotGit(lienGit);
+        return ResponseEntity.ok(evaluation);
+    }
+
 }
