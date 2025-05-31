@@ -6,9 +6,13 @@ import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Dtos.Assig
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Entities.Assignment;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.repository.IAssignmentRepository;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AssignmentService {
@@ -24,7 +28,23 @@ public class AssignmentService {
             throw new RuntimeException("La date limite pour cet assignment est dépassée");
         }
     }
-    // CREATE
+    public List<Assignment> getAssignmentsDueInNextDays(int daysAhead) {
+        LocalDate now = LocalDate.now();
+        LocalDate targetDate = now.plusDays(daysAhead);
+
+        return assignmentRepository.findAll().stream()
+                .filter(a -> {
+                    Date dateLimite = a.getDateLimite();
+                    if (dateLimite == null) return false;
+
+                    LocalDate due = dateLimite.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    return !due.isBefore(now) && !due.isAfter(targetDate);
+                })
+                .sorted(Comparator.comparing(a -> a.getDateLimite()))
+                .collect(Collectors.toList());
+    }
+
+
     public Assignment createAssignment(AssignmentDto dto) {
         Assignment assignment = new Assignment();
         assignment.setTitre(dto.getTitre());
