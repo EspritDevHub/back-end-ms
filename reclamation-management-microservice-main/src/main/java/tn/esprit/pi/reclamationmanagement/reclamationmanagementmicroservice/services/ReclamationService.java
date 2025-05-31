@@ -85,7 +85,7 @@ public class ReclamationService {
         Reclamation existing = reclamrepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reclamation not found"));
 
-        // Update basic fields
+        // Update basic fieldsz
         existing.setTitle(dto.getTitle());
         existing.setDescription(dto.getDescription());
         existing.setImage(dto.getImage());
@@ -104,7 +104,6 @@ public class ReclamationService {
         notificationClient.createNotification(notification);
 
         notificationClient.sendWebSocketNotification(notification);
-        // Save and return
         return ReclamationMapper.toDTO(reclamrepository.save(existing));
     }
     public void saveJiraTicketId(String reclamationId, String jiraTicketId) {

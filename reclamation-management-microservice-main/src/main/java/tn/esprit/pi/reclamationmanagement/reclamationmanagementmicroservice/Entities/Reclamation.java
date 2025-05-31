@@ -36,5 +36,6 @@ public class Reclamation {
     private LocalDateTime modifiedAt;
     private String image;
     private String jiraTicketId;
+    private String email;
 
 }

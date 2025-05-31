@@ -21,6 +21,7 @@ public class ReclamationMapper {
                 .createdAt(java.time.LocalDateTime.now())
                 .image(dto.getImage())
                 //.jiraTicketId(dto.getJiraTicketId())
+                .email(dto.getEmail())
                 .build();
     }
 
@@ -35,6 +36,7 @@ public class ReclamationMapper {
                 .modifiedAt(entity.getModifiedAt() != null ? entity.getModifiedAt().format(formatter) : null)
                 .image(entity.getImage())
                 .jiraTicketId(entity.getJiraTicketId())
+                .email(entity.getEmail())
                 .build();
     }
 }

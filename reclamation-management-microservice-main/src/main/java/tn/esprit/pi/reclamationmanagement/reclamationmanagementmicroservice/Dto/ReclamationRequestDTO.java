@@ -15,4 +15,5 @@ public class ReclamationRequestDTO {
     private String image;
     private String status;
     private String jiraTicketId;
+    private String email;
 }
