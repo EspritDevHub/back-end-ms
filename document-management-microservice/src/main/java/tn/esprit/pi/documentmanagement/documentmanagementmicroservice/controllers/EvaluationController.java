@@ -51,6 +51,10 @@ public class EvaluationController {
     @PostMapping("/analyser-git")
     @PreAuthorize("hasRole('ENSEIGNANT')")
     public ResponseEntity<EvaluationDto> analyserDepuisLienGit(@RequestBody String lienGit) {
+
+        if (lienGit != null && lienGit.startsWith("\"") && lienGit.endsWith("\"")) {
+            lienGit = lienGit.substring(1, lienGit.length() - 1);
+        }
         EvaluationDto evaluation = evaluationService.analyserDepotGit(lienGit);
         return ResponseEntity.ok(evaluation);
     }

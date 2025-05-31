@@ -19,6 +19,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -219,147 +220,158 @@ public class EvaluationService  {
         StringBuilder suggestion = new StringBuilder();
 
         try {
-            // 1. Vérifier si le lien est accessible (on part du principe que le clone sera la vérification)
             File repoDir = Files.createTempDirectory("repo").toFile();
             Git.cloneRepository()
                     .setURI(lienGit)
                     .setDirectory(repoDir)
                     .call();
-            note += 2; // Lien accessible
-            commentaire.append("Lien accessible.\n");
 
-            // 2. Vérifier si le dépôt n’est pas vide (présence de fichiers/dossiers)
+            note += 2;
+            commentaire.append("✔️ Lien Git accessible.\n");
+
             File[] fichiersRacine = repoDir.listFiles();
-            if (fichiersRacine != null && fichiersRacine.length > 0) {
-                note += 3;
-                commentaire.append("Dépôt non vide.\n");
-            } else {
-                commentaire.append("Le dépôt est vide.\n");
+            if (fichiersRacine == null || fichiersRacine.length == 0) {
+                commentaire.append("❌ Le dépôt est vide.\n");
                 dto.setNote(note);
                 dto.setCommentaire(commentaire.toString());
+                suggestion.append("🔧 Ajouter du contenu au dépôt.\n");
+                dto.setSuggestion(suggestion.toString());
                 return dto;
+            } else {
+                note += 3;
+                commentaire.append("✔️ Dépôt non vide.\n");
             }
 
-
-            // 3. Vérifier les dossiers importants avec insensibilité à la casse
-            boolean hasDtos = dossierExisteIgnoreCase(repoDir, "dto") || dossierExisteIgnoreCase(repoDir, "dto");
-            boolean hasControllers = dossierExisteIgnoreCase(repoDir, "controller") || dossierExisteIgnoreCase(repoDir, "controller");
-            boolean hasServices = dossierExisteIgnoreCase(repoDir, "service") || dossierExisteIgnoreCase(repoDir, "service");
-            boolean hasRepositories = dossierExisteIgnoreCase(repoDir, "repositor") || dossierExisteIgnoreCase(repoDir, "repo");
-
-            if (hasDtos) {
-                commentaire.append("Dossier DTO(s) trouvé.\n");
-                note += 4;
-            } else {
-                commentaire.append("Dossier DTO(s) manquant.\n");
-                suggestion.append("Ajouter un dossier 'dtos' contenant les classes de transfert de données.\n");
-            }
-            if (hasControllers) {
-                commentaire.append("Dossier Controller(s) trouvé.\n");
-                note += 4;
-            } else {
-                commentaire.append("Dossier Controller(s) manquant.\n");
-                suggestion.append("Ajouter un dossier 'controllers' avec les classes REST.\n");
-            }
-            if (hasServices) {
-                commentaire.append("Dossier Service(s) trouvé.\n");
-                note += 4;
-            } else {
-                commentaire.append("Dossier Service(s) manquant.\n");
-                suggestion.append("Ajouter un dossier 'services' pour la logique métier.\n");
-            }
-            if (hasRepositories) {
-                commentaire.append("Dossier Repository trouvé.\n");
-                note += 4;
-            } else {
-                commentaire.append("Dossier Repository manquant.\n");
-                suggestion.append("Ajouter un dossier 'repository' contenant les interfaces d'accès aux données.\n");
-            }
-
-            // 4. Vérifier présence de plusieurs fichiers pom.xml et *.properties pour détecter microservices
-            int pomCount = 0;
-            int propertiesCount = 0;
             List<File> allFiles = new ArrayList<>();
-            // Récupérer tous les fichiers récursivement
             getAllFilesRecursively(repoDir, allFiles);
 
-            for (File f : allFiles) {
-                if (f.getName().equalsIgnoreCase("pom.xml")) pomCount++;
-                if (f.getName().toLowerCase().endsWith(".properties")) propertiesCount++;
-            }
-            if (pomCount > 1 || propertiesCount > 1) {
-                commentaire.append("Plusieurs fichiers pom.xml ou .properties détectés, suggérant une architecture microservices.\n");
-                note += 3;
-                suggestion.append("Travailler sur une architecture microservices bien organisée.\n");
-            }
+            int dtoCount = 0, serviceCount = 0, repoCount = 0, ctrlCount = 0;
+            int javaFilesCount = 0, methodCount = 0, testCount = 0;
+            boolean hasSecurity = false, hasConfig = false;
+            HashSet<String> modules = new HashSet<>();
 
-            // 5. Analyse des fichiers Java et méthodes (extrait de ton code)
-            int totalFiles = 0, totalMethods = 0;
-            for (String dossierNom : new String[]{"dto", "controller", "service", "repository"}) {
-                File dossier = findDirectoryIgnoreCase(repoDir, dossierNom);
-                if (dossier != null && dossier.isDirectory()) {
-                    File[] files = dossier.listFiles((dir, name) -> name.endsWith(".java"));
-                    if (files != null) {
-                        totalFiles += files.length;
-                        for (File file : files) {
-                            List<String> lines = Files.readAllLines(file.toPath());
-                            for (String line : lines) {
-                                if (line.trim().startsWith("public") && line.contains("(")) totalMethods++;
-                            }
+            for (File file : allFiles) {
+                String nameLower = file.getName().toLowerCase();
+                String pathLower = file.getAbsolutePath().toLowerCase();
+
+                if (nameLower.equals("pom.xml")) {
+                    modules.add(file.getParentFile().getAbsolutePath());
+                }
+
+                if (nameLower.equals("application.properties") || nameLower.equals("application.yml")) {
+                    hasConfig = true;
+                }
+
+                if (file.getName().endsWith(".java")) {
+                    javaFilesCount++;
+
+                    if (pathLower.contains("dto")) dtoCount++;
+                    if (pathLower.contains("service")) serviceCount++;
+                    if (pathLower.contains("repo")) repoCount++;
+                    if (pathLower.contains("controller")) ctrlCount++;
+
+                    List<String> lines = Files.readAllLines(file.toPath());
+                    for (String line : lines) {
+                        String trimmed = line.trim().toLowerCase();
+                        if (trimmed.startsWith("public") && line.contains("(")) {
+                            methodCount++;
+                        }
+                        if (trimmed.contains("@test")) {
+                            testCount++;
+                        }
+                        if (trimmed.contains("websecurityconfigureradapter") || trimmed.contains("springsecurity")) {
+                            hasSecurity = true;
                         }
                     }
                 }
             }
-            commentaire.append("Fichiers Java analysés : ").append(totalFiles).append("\n");
-            commentaire.append("Méthodes publiques détectées : ").append(totalMethods).append("\n");
 
-            if (totalFiles < 4) {
-                suggestion.append("Ajouter plus de classes Java pour couvrir toutes les couches.\n");
-                note -= 2;
+            commentaire.append("📁 Modules détectés : ").append(modules.size()).append("\n");
+            commentaire.append("📄 Fichiers Java : ").append(javaFilesCount).append("\n");
+            commentaire.append("📌 DTOs : ").append(dtoCount)
+                    .append(", Services : ").append(serviceCount)
+                    .append(", Repositories : ").append(repoCount)
+                    .append(", Controllers : ").append(ctrlCount).append("\n");
+            commentaire.append("🔧 Méthodes publiques détectées : ").append(methodCount).append("\n");
+            commentaire.append("🧪 Tests unitaires : ").append(testCount).append("\n");
+
+            if (hasConfig) {
+                commentaire.append("⚙️ Fichier de configuration trouvé.\n");
+                note += 1;
             } else {
-                note += 2;
-            }
-            if (totalMethods < 10) {
-                suggestion.append("Ajouter plus de méthodes publiques, notamment CRUD et services.\n");
-                note -= 2;
-            } else {
-                note += 2;
+                suggestion.append("🔧 Ajouter un fichier de configuration `application.properties` ou `application.yml`.\n");
             }
 
-            if (note < 0) note = 0;
-            if (note > 20) note = 20;
+            if (hasSecurity) {
+                commentaire.append("🔒 Sécurité détectée dans le projet.\n");
+                note += 2;
+                suggestion.append("✅ Bon point : le projet intègre un module de sécurité.\n");
+            } else {
+                suggestion.append("🔐 Ajouter un module de sécurité avec Spring Security.\n");
+            }
+
+            if (testCount > 0) {
+                note += 2;
+                suggestion.append("✅ Tests unitaires présents. Vous pouvez compléter par des tests d’intégration.\n");
+            } else {
+                suggestion.append("🧪 Ajouter des tests unitaires avec JUnit.\n");
+            }
+
+            // Points par composant
+            if (dtoCount > 0) note += 2;
+            else suggestion.append("📦 Ajouter des classes DTO pour structurer les données.\n");
+
+            if (serviceCount > 0) note += 2;
+            else suggestion.append("🧠 Ajouter des services pour la logique métier.\n");
+
+            if (repoCount > 0) note += 2;
+            else suggestion.append("💾 Ajouter des repositories pour l'accès aux données.\n");
+
+            if (ctrlCount > 0) note += 2;
+            else suggestion.append("🌐 Ajouter des contrôleurs REST pour exposer les APIs.\n");
+
+            if (javaFilesCount < 4) {
+                note -= 1;
+                suggestion.append("📄 Ajouter plus de classes Java pour enrichir le projet.\n");
+            } else {
+                note += 1;
+                suggestion.append("👍 Bonne base de code. Pensez à modulariser si le projet grandit.\n");
+            }
+
+            if (methodCount < 10) {
+                note -= 1;
+                suggestion.append("🔧 Ajouter plus de méthodes publiques pour couvrir les fonctionnalités attendues.\n");
+            } else {
+                note += 1;
+            }
+
+            if (modules.size() > 1) {
+                commentaire.append("🏗️ Architecture multi-modules détectée.\n");
+                note += 2;
+                suggestion.append("✅ Bien joué pour l’approche modulaire. Veiller à bien découpler les responsabilités.\n");
+            } else {
+                suggestion.append("🧱 Envisager une structure multi-modules si le projet devient complexe.\n");
+            }
+
+            // Note finale
+            note = Math.max(0, Math.min(20, note));
 
             dto.setNote(note);
             dto.setCommentaire(commentaire.toString());
             dto.setSuggestion(suggestion.toString());
             dto.setDateEvaluation(new Date());
 
-            // Nettoyage : supprimer le repo temporaire
             deleteFolderRecursively(repoDir);
-
             return dto;
 
         } catch (Exception e) {
-            e.printStackTrace();
             dto.setNote(0.0);
-            dto.setCommentaire("Erreur lors de l’analyse du dépôt Git : " + e.getMessage());
+            dto.setCommentaire("❌ Erreur lors de l’analyse du dépôt Git : " + e.getMessage());
             dto.setSuggestion("Vérifier l'URL du dépôt et la connexion internet.");
             return dto;
         }
     }
 
-    // Fonction utilitaire pour trouver un dossier en ignorant la casse
-    boolean dossierExisteIgnoreCase(File parent, String nomDossier) {
-        File[] files = parent.listFiles(File::isDirectory);
-        if (files != null) {
-            for (File f : files) {
-                if (f.getName().equalsIgnoreCase(nomDossier)) return true;
-            }
-        }
-        return false;
-    }
-
-    // Méthode pour récupérer tous les fichiers récursivement
     private void getAllFilesRecursively(File dir, List<File> fileList) {
         File[] files = dir.listFiles();
         if (files != null) {
@@ -370,18 +382,6 @@ public class EvaluationService  {
         }
     }
 
-    // Méthode pour chercher un dossier en ignorant la casse
-    private File findDirectoryIgnoreCase(File parent, String name) {
-        File[] files = parent.listFiles(File::isDirectory);
-        if (files != null) {
-            for (File f : files) {
-                if (f.getName().equalsIgnoreCase(name)) return f;
-            }
-        }
-        return null;
-    }
-
-    // Méthode pour supprimer un dossier récursivement (nettoyage)
     private void deleteFolderRecursively(File folder) {
         File[] files = folder.listFiles();
         if (files != null) {
@@ -392,5 +392,10 @@ public class EvaluationService  {
         }
         folder.delete();
     }
+
+
+
+
+
 
 }

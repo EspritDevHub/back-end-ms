@@ -13,5 +13,5 @@ public class EvaluationDto {
     private String commentaire;
     private String suggestion;
     private Date dateEvaluation;
-    private String fichierEvaluationUrl;
+    private String lienGit;
 }
