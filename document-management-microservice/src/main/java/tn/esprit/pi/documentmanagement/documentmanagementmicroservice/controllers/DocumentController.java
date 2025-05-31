@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Dtos.DocumentDto;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Entities.Document;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.services.DocumentService;
@@ -52,4 +53,19 @@ public class DocumentController {
         documentService.deleteDocument(documentId, etudiantId);
         return ResponseEntity.noContent().build();
     }
+
+
+
+
+    @PostMapping("/{documentId}/evaluation-file")
+    @PreAuthorize("hasRole('ENSEIGNANT')")
+    public ResponseEntity<?> uploadEvaluationFile(
+            @PathVariable String documentId,
+            @RequestParam("file") MultipartFile file,
+            @RequestHeader("X-User-ID") String enseignantId) {
+
+        documentService.uploadEvaluationFile(documentId, file, enseignantId);
+        return ResponseEntity.ok().build();
+    }
+
 }
