@@ -59,4 +59,11 @@ public class EvaluationController {
         return ResponseEntity.ok(evaluation);
     }
 
+    @PostMapping("/analyse-pdf")
+    public ResponseEntity<EvaluationDto> analyserDepuisLienPdf(@RequestBody String pdfUrl) {
+        EvaluationDto evaluation = evaluationService.analyserCahierDesCharges("http://localhost:4200/assets/test.pdf");
+        return ResponseEntity.ok(evaluation);
+    }
+
+
 }

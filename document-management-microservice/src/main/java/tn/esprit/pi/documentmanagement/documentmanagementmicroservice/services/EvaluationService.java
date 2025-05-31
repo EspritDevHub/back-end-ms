@@ -6,14 +6,13 @@ import com.theokanning.openai.completion.CompletionResult;
 import com.theokanning.openai.service.OpenAiService;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.jgit.api.Git;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 import org.springframework.stereotype.Service;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Dtos.DocumentDto;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Dtos.EvaluationDto;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.Entities.Evaluation;
 import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.repository.EvaluationRepository;
-import tn.esprit.pi.documentmanagement.documentmanagementmicroservice.services.EvaluationService;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -68,6 +67,7 @@ public class EvaluationService  {
 
 
 
+
     @Value("${openai.api.key}")
     private String openaiApiKey;
 
@@ -107,6 +107,7 @@ public class EvaluationService  {
         dto.setDateEvaluation(new Date());
         return dto;
     }
+
 
     private static class AnalyseDetailleeResult {
         double note;
@@ -393,7 +394,27 @@ public class EvaluationService  {
         folder.delete();
     }
 
+    @Autowired
+    private pdfTextExtractor pdfTextExtractor;
 
+    public EvaluationDto analyserCahierDesCharges(String pdfUrl) {
+        String content = pdfTextExtractor.extractTextFromUrl("http://localhost:9096/test.pdf");
+        double note = 0;
+        List<String> missing = new ArrayList<>();
+
+        if (content.toLowerCase().contains("étude globale")) note += 2; else missing.add("Étude globale");
+        if (content.toLowerCase().contains("spécification") && content.contains("besoins")) note += 2; else missing.add("Spécifications");
+        if (content.toLowerCase().contains("architecture globale")) note += 2; else missing.add("Architecture");
+        if (content.toLowerCase().contains("répartition des fonctionnalités")) note += 2; else missing.add("Modules");
+        if (content.toLowerCase().contains("cas d’utilisation")) note += 1; else missing.add("Diagramme de cas d’utilisation");
+        if (content.toLowerCase().contains("diagramme de classes")) note += 1; else missing.add("Diagramme de classes");
+        if (content.toLowerCase().contains("fiches")) note += 2; else missing.add("Fiches");
+
+        String commentaire = missing.isEmpty() ? "✅ Toutes les sections sont présentes." : "❌ Manque : " + String.join(", ", missing);
+        String suggestion = "Complétez les sections manquantes pour un cahier des charges complet.";
+
+        return new EvaluationDto(note, commentaire, suggestion);
+    }
 
 
 
