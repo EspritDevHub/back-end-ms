@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.Normalizer;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -88,6 +89,14 @@ public class JiraService {
         }
     }
 
+
+    private String normalizeStatus(String status) {
+        if (status == null) return "";
+        String noAccents = Normalizer.normalize(status, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", ""); // Remove accents
+        return noAccents.toLowerCase().replaceAll("[()]", "").trim(); // Remove parentheses and lowercase
+    }
+
     public void checkAndUpdateResolvedTickets() {
         for (Reclamation rec : reclamationRepository.findAll()) {
             if (rec.getJiraTicketId() != null && rec.getStatus() != ReclamationStatus.RESOLVED) {
@@ -114,22 +123,28 @@ public class JiraService {
                             // 💡 Debug log to see status
                             log.info("Jira ticket {} current status: {}", rec.getJiraTicketId(), status);
 
-                            // ✅ Add "Terminé" support here
-                            if ("Done".equalsIgnoreCase(status)
-                                    || "Resolved".equalsIgnoreCase(status)
-                                    || "Terminé".equalsIgnoreCase(status)) {
+                            // ✅ Normalize and match status
+                            String normalizedStatus = normalizeStatus(status); // e.g., "terminee"
+
+                            if (normalizedStatus.equals("done")
+                                    || normalizedStatus.equals("resolved")
+                                    || normalizedStatus.equals("termine")
+                                    || normalizedStatus.equals("terminee")
+                                    || normalizedStatus.equals("closed")) {
                                 rec.setStatus(ReclamationStatus.RESOLVED);
                                 reclamationRepository.save(rec);
-                                log.info("Updated Reclamation {} to RESOLVED", rec.getId());
+                                log.info("✅ Updated Reclamation {} to RESOLVED based on Jira status '{}'", rec.getId(), status);
+                            } else {
+                                log.info("ℹ️ Jira status '{}' not considered resolved for ticket {}", status, rec.getJiraTicketId());
                             }
                         }
                     }
 
                 } catch (HttpClientErrorException e) {
-                    log.error("Error checking Jira issue {}: {}", rec.getJiraTicketId(), e.getResponseBodyAsString());
+                    log.error("❌ Error checking Jira issue {}: {}", rec.getJiraTicketId(), e.getResponseBodyAsString());
                 }
             }
         }
-    }
 
+    }
 }

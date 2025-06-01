@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class JiraStatusSyncScheduler {
     private final JiraService jiraService;
 
-    @Scheduled(fixedRate = 30 * 60 * 1000) // Every 30 min
+    @Scheduled(fixedRate = 30  * 1000)
     public void syncJiraTicketsStatus() {
         jiraService.checkAndUpdateResolvedTickets();
     }
