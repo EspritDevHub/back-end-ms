@@ -36,32 +36,46 @@ public class EvaluationService {
                 EvaluationMapper::toDto).toList() ;
     }
 
-
-
-
     public EvaluationDto addOrUpdateEvaluation(Evaluation newEvaluation) {
         // 1. Validate note
         if (newEvaluation.getNote() == null || newEvaluation.getNote() < 1 || newEvaluation.getNote() > 5) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Note must be between 1 and 5.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Note must be between 1 and 5.");
         }
 
-        // 2. Check if an evaluation already exists for this user, project, and critere
+        // 2. Check if evaluation already exists
         Optional<Evaluation> existingEvalOpt = repository.findByProjetAndUserAndCritere(
                 newEvaluation.getProjet(),
                 newEvaluation.getUser(),
                 newEvaluation.getCritere()
         );
 
+        Evaluation savedEvaluation;
         if (existingEvalOpt.isPresent()) {
             Evaluation existing = existingEvalOpt.get();
             existing.setNote(newEvaluation.getNote());
             existing.setDescription(newEvaluation.getDescription());
-            return EvaluationMapper.toDto(repository.save(existing));
+            savedEvaluation = repository.save(existing);
+        } else {
+            savedEvaluation = repository.save(newEvaluation);
         }
 
-        // 3. Else, create a new evaluation
-        return  EvaluationMapper.toDto(repository.save(newEvaluation));
+        // 3. Count evaluations for the project
+        Long projectId = savedEvaluation.getProjet();
+        long evalCount = repository.countByProjet(projectId);
+
+        // 4. If at least 10 evaluations, check the average note
+        if (evalCount >= 5) {
+            Double avgNote = repository.averageNoteByProjet(projectId);
+            if (avgNote != null && avgNote < 2.5) {
+                System.out.println("The given project should be reviewed ==> "+projectId);
+                //emailService.sendLowRatingAlertToAdmin(savedEvaluation.getProjet(), avgNote);
+            }
+        }
+
+        return EvaluationMapper.toDto(savedEvaluation);
     }
+
+
 
 
     public void deleteEvaluation(String id) {

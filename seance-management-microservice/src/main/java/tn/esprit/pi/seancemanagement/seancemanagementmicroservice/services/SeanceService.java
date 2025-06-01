@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import tn.esprit.pi.seancemanagement.seancemanagementmicroservice.Entities.Seance;
 import tn.esprit.pi.seancemanagement.seancemanagementmicroservice.repository.ISeanceRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,8 @@ public class SeanceService {
     // Créer une nouvelle séance
     public Seance createSeance(Seance seance) {
         seance.setId(null);
+        System.out.println("this is datefin"+seance.getHeureFin());
+        System.err.println("helo"+seance);
         return seanceRepository.save(seance);
     }
 
@@ -71,4 +74,7 @@ public class SeanceService {
     // Supprimer une séance
     public void deleteSeance(String id) { seanceRepository.deleteById(id);
     }
+
+    public List<Seance> getSeanceEmploi(LocalDate start, LocalDate end) {
+        return seanceRepository.findByDateBetween(start, end); }
 }

@@ -7,9 +7,10 @@ import tn.esprit.pi.evaluationfeedbackservice.entity.Evaluation;
 import java.util.List;
 import java.util.Optional;
 
-public interface EvaluationRepository extends MongoRepository<Evaluation, String> {
+public interface EvaluationRepository extends MongoRepository<Evaluation, String>, EvaluationRepositoryCustom {
     List<Evaluation> findByProjet(Long projet);
     List<Evaluation> findByProjetAndCritere(Long projet, Critere critere);
     boolean existsByProjet(Long projet);
     Optional<Evaluation> findByProjetAndUserAndCritere(Long projet, Long user, Critere critere);
+    long countByProjet(Long projet);
 }

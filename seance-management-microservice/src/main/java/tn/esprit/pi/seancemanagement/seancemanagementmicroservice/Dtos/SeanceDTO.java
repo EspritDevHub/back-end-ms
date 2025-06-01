@@ -1,6 +1,7 @@
 package tn.esprit.pi.seancemanagement.seancemanagementmicroservice.Dtos;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -27,4 +29,9 @@ public class SeanceDTO {
     private List<String> critereIds;
     private Date date;
     private tn.esprit.pi.seancemanagement.seancemanagementmicroservice.Enum.TypeNote typeNote;
+
+    private String heureDebut; // Heure de début
+
+    private String heureFin;
+
 }
