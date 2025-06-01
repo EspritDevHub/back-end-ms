@@ -1,13 +1,13 @@
 package tn.esprit.pi.seancenotemanagement.seancenotemanagementmicroservice.Mappers;
 
 
-import tn.esprit.pi.seancenotemanagement.seancenotemanagementmicroservice.Dtos.SeanceDTO;
-import tn.esprit.pi.seancenotemanagement.seancenotemanagementmicroservice.Entities.Seance;
+import tn.esprit.pi.seancenotemanagement.seancenotemanagementmicroservice.Dtos.SeanceNoteDTO;
+import tn.esprit.pi.seancenotemanagement.seancenotemanagementmicroservice.Entities.SeanceNote;
 
-public class SeanceMapper {
+public class SeanceNoteMapper {
 
-    public static SeanceDTO toDto(Seance s) {
-        return SeanceDTO.builder()
+    public static SeanceNoteDTO toDto(SeanceNote s) {
+        return SeanceNoteDTO.builder()
                 .id(s.getId())
                 .titre(s.getTitre())
                 .description(s.getDescription())
@@ -20,8 +20,8 @@ public class SeanceMapper {
                 .build();
     }
 
-    public static Seance toEntity(SeanceDTO dto) {
-        return Seance.builder()
+    public static SeanceNote toEntity(SeanceNoteDTO dto) {
+        return SeanceNote.builder()
                 .id(dto.getId())
                 .titre(dto.getTitre())
                 .description(dto.getDescription())

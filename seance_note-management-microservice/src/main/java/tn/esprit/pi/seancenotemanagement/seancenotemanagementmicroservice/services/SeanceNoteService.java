@@ -4,44 +4,44 @@ package tn.esprit.pi.seancenotemanagement.seancenotemanagementmicroservice.servi
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tn.esprit.pi.seancenotemanagement.seancenotemanagementmicroservice.Entities.Seance;
-import tn.esprit.pi.seancenotemanagement.seancenotemanagementmicroservice.repository.ISeanceRepository;
+import tn.esprit.pi.seancenotemanagement.seancenotemanagementmicroservice.Entities.SeanceNote;
+import tn.esprit.pi.seancenotemanagement.seancenotemanagementmicroservice.repository.ISeanceNoteRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SeanceService {
+public class SeanceNoteService {
 
     @Autowired
-    private ISeanceRepository seanceRepository;
+    private ISeanceNoteRepository seanceRepository;
 
     // Créer une nouvelle séance
-    public Seance createSeance(Seance seance) {
+    public SeanceNote createSeance(SeanceNote seance) {
         return seanceRepository.save(seance);
     }
 
     // Récupérer toutes les séances d'un sprint spécifique
-    public List<Seance> getSeancesBySprintId(String sprintId) {
+    public List<SeanceNote> getSeancesBySprintId(String sprintId) {
         return seanceRepository.findBySprintId(sprintId);
     }
 
-    public List<Seance> getAll() {
+    public List<SeanceNote> getAll() {
         return seanceRepository.findAll();
     }
 
     // Récupérer une séance par son ID
-    public Optional<Seance> getSeanceById(String id) {
+    public Optional<SeanceNote> getSeanceById(String id) {
         return Optional.ofNullable(seanceRepository.findById(id).orElseThrow(() -> new SeanceNotFoundException(id)));
 
     }
 
 
     // Modifier une séance
-    public Seance updateSeance(String id, Seance seanceDetails) {
-        Optional<Seance> seance = seanceRepository.findById(id);
+    public SeanceNote updateSeance(String id, SeanceNote seanceDetails) {
+        Optional<SeanceNote> seance = seanceRepository.findById(id);
         if (seance.isPresent()) {
-            Seance updatedSeance = seance.get();
+            SeanceNote updatedSeance = seance.get();
             updatedSeance.setTitre(seanceDetails.getTitre());
             updatedSeance.setDescription(seanceDetails.getDescription());
             updatedSeance.setNumero(seanceDetails.getNumero());
@@ -53,8 +53,8 @@ public class SeanceService {
         return null;
     }
 
-    public Seance affecterSprint(String seanceId, String sprintId) {
-        Seance seance = seanceRepository.findById(seanceId).orElseThrow();
+    public SeanceNote affecterSprint(String seanceId, String sprintId) {
+        SeanceNote seance = seanceRepository.findById(seanceId).orElseThrow();
         seance.setSprintId(sprintId);
         return seanceRepository.save(seance);
     }

@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SeanceDTO {
+public class SeanceNoteDTO {
     private String id;
     @NotBlank
     private String titre;

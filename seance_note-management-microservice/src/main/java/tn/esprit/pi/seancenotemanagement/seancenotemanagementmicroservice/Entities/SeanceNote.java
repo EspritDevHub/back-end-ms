@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Document("seances")
-public class Seance {
+public class SeanceNote {
     @Id
     private String id;
     private String titre;
