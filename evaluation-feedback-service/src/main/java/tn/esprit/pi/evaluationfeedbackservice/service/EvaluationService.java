@@ -24,8 +24,10 @@ public class EvaluationService {
     private final EvaluationRepository repository;
     private final MongoTemplate mongoTemplate;
     private final EvaluationMapper evaluationMapper;
+    private  final EmailService emailService;
 
-    public EvaluationService(EvaluationRepository repository, MongoTemplate mongoTemplate, EvaluationMapper evaluationMapper) {
+    public EvaluationService(EvaluationRepository repository, MongoTemplate mongoTemplate, EvaluationMapper evaluationMapper, EmailService emailService) {
+        this.emailService = emailService;
         this.repository = repository;
         this.mongoTemplate = mongoTemplate;
         this.evaluationMapper = evaluationMapper;
@@ -68,7 +70,7 @@ public class EvaluationService {
             Double avgNote = repository.averageNoteByProjet(projectId);
             if (avgNote != null && avgNote < 2.5) {
                 System.out.println("The given project should be reviewed ==> "+projectId);
-                //emailService.sendLowRatingAlertToAdmin(savedEvaluation.getProjet(), avgNote);
+                emailService.sendLowRatingAlertToAdmin(savedEvaluation.getProjet(), avgNote);
             }
         }
 

@@ -10,7 +10,32 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
         </processorPath>
+        <module name="note-management-microservice (1) (tn.esprit.pi.noteManagement)" />
         <module name="seance-management-microservice" />
+        <module name="seance_note-management-microservice" />
+        <module name="document-management-microservice" />
+        <module name="reclamation-management-microservice" />
+        <module name="notification-management-microservice" />
+      </profile>
+      <profile name="Annotation profile for suer-management-microservice" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.6.3/mapstruct-1.6.3.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
+        </processorPath>
+        <module name="suer-management-microservice" />
+      </profile>
+      <profile name="Annotation profile for evaluation-feedback-service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath>
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="group-managmenet-ms" />
         <module name="evaluation-feedback-service" />
       </profile>
     </annotationProcessing>
@@ -21,6 +46,7 @@
       <module name="evaluation-feedback-service" options="-parameters" />
       <module name="group-managmenet-ms" options="-parameters" />
       <module name="note-management-microservice" options="-parameters" />
+      <module name="note-management-microservice (1) (tn.esprit.pi.noteManagement)" options="-parameters" />
       <module name="notification-management-microservice" options="-parameters" />
       <module name="reclamation-management-microservice" options="-parameters" />
       <module name="seance-management-microservice" options="-parameters" />
