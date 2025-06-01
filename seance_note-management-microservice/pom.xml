@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>tn.esprit.pi.seanceManagement</groupId>
-    <artifactId>seance-management-microservice</artifactId>
+    <artifactId>seance_note-management-microservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>seance-management-microservice</name>
     <description>seance-management-microservice</description>

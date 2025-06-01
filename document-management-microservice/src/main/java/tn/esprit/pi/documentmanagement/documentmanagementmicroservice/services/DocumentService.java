@@ -114,8 +114,6 @@ public class DocumentService {
         evaluation.setDocumentId(documentId);
         evaluation.setEnseignantId(enseignantId);
         evaluation.setDateEvaluation(new Date());
-        evaluation.setFichierEvaluationUrl(path.toString());
-
         evaluationRepository.save(evaluation);
     }
 

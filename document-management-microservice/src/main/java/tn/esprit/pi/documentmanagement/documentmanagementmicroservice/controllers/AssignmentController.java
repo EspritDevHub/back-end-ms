@@ -24,6 +24,12 @@ public class AssignmentController {
         return assignmentService.createAssignment(dto);
     }
 
+    @GetMapping("/upcoming")
+    public List<Assignment> getUpcomingAssignments() {
+        return assignmentService.getAssignmentsDueInNextDays(5); // 5 jours à l’avance
+    }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<Assignment> getAssignment(@PathVariable String id) {
         Optional<Assignment> assignment = assignmentService.getAssignmentById(id);

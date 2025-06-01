@@ -6,26 +6,33 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.CritereEvaluationDTO;
-import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.NoteDTO;
-import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.SeanceDTO;
-import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.UserResponseDTO;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Dtos.*;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities.Cours;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Entities.Note;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Enum.TypeNote;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Feign.SeanceClient;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Feign.UserClient;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.Mappers.NoteMapper;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.repository.CoursRepository;
+import tn.esprit.pi.notemanagement.notemanagementmicroservice.services.CoursService;
 import tn.esprit.pi.notemanagement.notemanagementmicroservice.services.NoteService;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/notes")
 @RequiredArgsConstructor
 public class NoteController {
-
+@Autowired
+    CoursRepository coursRepository;
     private final NoteService service;
+
+    private final CoursService coursService;
+
     @Qualifier("seanceClient")
     @Autowired
       SeanceClient seanceClient;
@@ -43,8 +50,19 @@ public class NoteController {
             return "ADMIN"; // Retour d'un rôle par défaut en cas d'erreur
         }
     }
+    @GetMapping("/recommendations")
+    public List<Cours> getRecommendations(@RequestParam String matiere, @RequestParam double note) {
+        String niveau;
+        if (note < 10) {
+            niveau = "Débutant";
+        } else if (note < 14) {
+            niveau = "Intermédiaire";
+        } else {
+            niveau = "Avancé";
+        }
 
-
+        return coursRepository.findByMatiereContainingIgnoreCaseAndNiveau(matiere, niveau);
+    }
 
     // Enseignant (Teacher) : peut noter un étudiant
     @PostMapping

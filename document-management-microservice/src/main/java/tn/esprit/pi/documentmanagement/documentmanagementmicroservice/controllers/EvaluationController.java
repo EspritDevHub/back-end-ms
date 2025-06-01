@@ -46,4 +46,24 @@ public class EvaluationController {
         EvaluationDto suggestion = evaluationService.analyserTexteAutomatiquement(texteRendu);
         return ResponseEntity.ok(suggestion);
     }
+
+
+    @PostMapping("/analyser-git")
+    @PreAuthorize("hasRole('ENSEIGNANT')")
+    public ResponseEntity<EvaluationDto> analyserDepuisLienGit(@RequestBody String lienGit) {
+
+        if (lienGit != null && lienGit.startsWith("\"") && lienGit.endsWith("\"")) {
+            lienGit = lienGit.substring(1, lienGit.length() - 1);
+        }
+        EvaluationDto evaluation = evaluationService.analyserDepotGit(lienGit);
+        return ResponseEntity.ok(evaluation);
+    }
+
+    @PostMapping("/analyse-pdf")
+    public ResponseEntity<EvaluationDto> analyserDepuisLienPdf(@RequestBody String pdfUrl) {
+        EvaluationDto evaluation = evaluationService.analyserCahierDesCharges("http://localhost:4200/assets/test.pdf");
+        return ResponseEntity.ok(evaluation);
+    }
+
+
 }
