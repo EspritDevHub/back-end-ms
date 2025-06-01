@@ -61,7 +61,6 @@ public class NoteController {
             niveau = "Avancé";
         }
 
-        // Recherche par matière (seance) et niveau dans la base des cours
         return coursRepository.findByMatiereContainingIgnoreCaseAndNiveau(matiere, niveau);
     }
 
