@@ -16,7 +16,12 @@ import tn.esprit.pi.notificationmanagement.notificationmanagementmicroservice.se
 @Controller
 @RequestMapping("api/notifications")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(
+        origins = "http://localhost:4200", // ✅ correct origin
+        allowedHeaders = "*",
+        allowCredentials = "true", // ✅ if using cookies/tokens
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE}
+)
 
 public class WebSocketContoller {
     @Autowired

@@ -1,0 +1,9 @@
+id,title,description,status,userId,createdAt,modifiedAt,image,jiraTicketId,email
+683c830f68099a1618b62fb9,claim1,description of claim 1,RESOLVED,123testUser,2025-06-01T17:42:54.985,,,RECTRACK-802,sebteouii@gmail.com
+683c85c1d9ab4d2646e5ba1f,claim2,claim 2 desc,RESOLVED,123testUser,2025-06-01T17:54:25.711,2025-06-01T18:07:49.740,,RECTRACK-803,sebteouii@gmail.com
+683ca1119c848f1bbfca7024,claim test ws,claim desc,PENDING,123testUser,2025-06-01T19:50:57.952,,,RECTRACK-804,sebteouii@gmail.com
+683ca1619c848f1bbfca7025,"claim testtttttttttttt ws ",wsss,PENDING,123testUser,2025-06-01T19:52:17.205,,,RECTRACK-805,sebteouii@gmail.com
+683ca1829c848f1bbfca7026,ok,bb,PENDING,123testUser,2025-06-01T19:52:50.034,,,RECTRACK-806,sebteouii@gmail.com
+683ca1ba9c848f1bbfca7027,tyujk,yuj,PENDING,123testUser,2025-06-01T19:53:46.945,,,RECTRACK-807,sebteouii@gmail.com
+683ca1d79c848f1bbfca7028,ppppppppppp,pppppppppppppppppppppp,PENDING,123testUser,2025-06-01T19:54:15.717,,,RECTRACK-808,sebteouii@gmail.com
+683ca1f39c848f1bbfca7029,fghjkrty,"fgbn,;",PENDING,123testUser,2025-06-01T19:54:43.383,,,RECTRACK-809,sebteouii@gmail.com

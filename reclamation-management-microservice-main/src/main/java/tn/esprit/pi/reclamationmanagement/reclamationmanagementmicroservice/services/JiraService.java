@@ -24,6 +24,8 @@ import tn.esprit.pi.reclamationmanagement.reclamationmanagementmicroservice.repo
 public class JiraService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final IReclamationRepository reclamationRepository;
+    private final EmailService emailService;
+
 
     @Value("${jira.base-url}")
     private String jiraApiUrl;
@@ -132,6 +134,8 @@ public class JiraService {
                                     || normalizedStatus.equals("terminee")
                                     || normalizedStatus.equals("closed")) {
                                 rec.setStatus(ReclamationStatus.RESOLVED);
+                                emailService.sendReclamationResolvedEmail(rec.getEmail(), rec.getTitle() , null);
+
                                 reclamationRepository.save(rec);
                                 log.info("✅ Updated Reclamation {} to RESOLVED based on Jira status '{}'", rec.getId(), status);
                             } else {

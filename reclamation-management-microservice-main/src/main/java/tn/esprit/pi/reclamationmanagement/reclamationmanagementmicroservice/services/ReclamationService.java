@@ -2,6 +2,8 @@ package tn.esprit.pi.reclamationmanagement.reclamationmanagementmicroservice.ser
 
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pi.reclamationmanagement.reclamationmanagementmicroservice.Dto.NotificationRequestDTO;
@@ -13,6 +15,8 @@ import tn.esprit.pi.reclamationmanagement.reclamationmanagementmicroservice.Mapp
 import tn.esprit.pi.reclamationmanagement.reclamationmanagementmicroservice.repository.IReclamationRepository;
 import tn.esprit.pi.reclamationmanagement.reclamationmanagementmicroservice.FeignClient.NotificationClient;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +29,7 @@ public class ReclamationService {
     private final IReclamationRepository reclamrepository;
     private final NotificationClient notificationClient;
     private final JiraService jiraService;
+    private final EmailService emailService;
 
     public ReclamationResponseDTO createReclamation(String userId, ReclamationRequestDTO dto) {
         Reclamation reclamation = ReclamationMapper.toEntity(dto, userId);
@@ -49,7 +54,7 @@ public class ReclamationService {
 
         notificationClient.createNotification(notification);
         notificationClient.sendWebSocketNotification(notification);
-
+        exportReclamationsToCSV();
         return ReclamationMapper.toDTO(reclamation);
     }
 
@@ -81,30 +86,41 @@ public class ReclamationService {
     }
 
     public ReclamationResponseDTO update(String id, ReclamationRequestDTO dto) {
-        // Fetch the reclamation
         Reclamation existing = reclamrepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reclamation not found"));
 
-        // Update basic fieldsz
         existing.setTitle(dto.getTitle());
         existing.setDescription(dto.getDescription());
         existing.setImage(dto.getImage());
         existing.setModifiedAt(LocalDateTime.now());
 
-        // Admin can change the status if needed
+        boolean wasResolved = false;
         if (dto.getStatus() != null) {
-            existing.setStatus(ReclamationStatus.valueOf(dto.getStatus()));
+            ReclamationStatus newStatus = ReclamationStatus.valueOf(dto.getStatus());
+            if (newStatus == ReclamationStatus.RESOLVED && existing.getStatus() != ReclamationStatus.RESOLVED) {
+                wasResolved = true;
+            }
+            existing.setStatus(newStatus);
         }
+
+        Reclamation saved = reclamrepository.save(existing);
+
+        // Notify the user
         NotificationRequestDTO notification = NotificationRequestDTO.builder()
                 .title("Reclamation Updated")
                 .message("Your reclamation has been updated successfully.")
-                .userId("")
+                .userId(existing.getUserId())
                 .read(false)
                 .build();
         notificationClient.createNotification(notification);
-
         notificationClient.sendWebSocketNotification(notification);
-        return ReclamationMapper.toDTO(reclamrepository.save(existing));
+
+        // 🔔 Send email if resolved
+        if (wasResolved && existing.getEmail() != null) {
+            emailService.sendReclamationResolvedEmail(existing.getEmail(), existing.getTitle() , null);
+        }
+
+        return ReclamationMapper.toDTO(saved);
     }
     public void saveJiraTicketId(String reclamationId, String jiraTicketId) {
         Optional<Reclamation> optional = reclamrepository.findById(reclamationId);
@@ -117,5 +133,32 @@ public class ReclamationService {
             throw new RuntimeException("Reclamation not found with id: " + reclamationId);
         }
     }
+
+    private void exportReclamationsToCSV() {
+        List<Reclamation> reclamations = reclamrepository.findAll();
+        try (FileWriter out = new FileWriter("reclamations_export.csv");
+             CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(
+                     "id", "title", "description", "status", "userId", "createdAt", "modifiedAt", "image", "jiraTicketId", "email"))) {
+
+            for (Reclamation rec : reclamations) {
+                printer.printRecord(
+                        rec.getId(),
+                        rec.getTitle(),
+                        rec.getDescription(),
+                        rec.getStatus(),
+                        rec.getUserId(),
+                        rec.getCreatedAt(),
+                        rec.getModifiedAt(),
+                        rec.getImage(),
+                        rec.getJiraTicketId(),
+                        rec.getEmail()
+                );
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace(); // or log the error
+        }
+    }
+
 
 }
