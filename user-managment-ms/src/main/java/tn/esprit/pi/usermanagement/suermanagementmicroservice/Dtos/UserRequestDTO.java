@@ -33,4 +33,5 @@ public class UserRequestDTO {
     private String espritId;
     private String className;
     private String active;
+    private float oldNotePi;
 }

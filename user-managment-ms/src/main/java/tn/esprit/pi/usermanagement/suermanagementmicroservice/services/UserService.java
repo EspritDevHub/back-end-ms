@@ -11,10 +11,10 @@ import tn.esprit.pi.usermanagement.suermanagementmicroservice.Entities.User;
 import tn.esprit.pi.usermanagement.suermanagementmicroservice.repository.IUseRepository;
 import tn.esprit.pi.usermanagement.suermanagementmicroservice.security.*;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -202,5 +202,94 @@ public class UserService {
         Claims claims = jwtUtil.getClaims(token);
         return claims.get("roles", String.class);
     }
+    public List<User> generateMockUsers() {
+        List<User> users = new ArrayList<>();
+        String[] classes = { "SE-2A", "GL-3B" };
+        Random random = new Random();
+        int userCountPerClass = 30;
+
+        for (int i = 0; i < classes.length; i++) {
+            for (int j = 1; j <= userCountPerClass; j++) {
+                int index = i * userCountPerClass + j;
+                User user = new User();
+                user.setName("Student " + index);
+                user.setEmail("student" + index + "@esprit.tn");
+                user.setPassword("Password" + index + "!");
+                user.setRole(Roles.STUDENT);
+                user.setPhone("210000" + String.format("%02d", index));
+                user.setIs2FAEnabled(random.nextBoolean());
+                user.setToken("token-" + index);
+                user.setEspritId("ESP" + String.format("%03d", index));
+                user.setClassName(classes[i]);
+                user.set_2faExpiryDate(Date.from(LocalDate.of(2025, 7, 1 + (index % 10))
+                        .atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                user.setActive(random.nextBoolean());
+                user.setOldNotePi(10 + random.nextFloat() * 10); // between 10 and 20
+                users.add(user);
+            }
+        }
+        userRepository.saveAll(users);
+        return users;
+    }
+    public List<List<User>> divideInto6Groups(String className) {
+        List<User> allUsers = userRepository.getUsersByClassName(className);
+
+        List<User> highGrades = allUsers.stream()
+                .filter(u -> u.getOldNotePi() >= 17)
+                .collect(Collectors.toList());
+
+        List<User> midGrades = allUsers.stream()
+                .filter(u -> u.getOldNotePi() >= 10 && u.getOldNotePi() <= 15)
+                .collect(Collectors.toList());
+
+        List<User> others = allUsers.stream()
+                .filter(u -> u.getOldNotePi() < 10 || u.getOldNotePi() > 15 && u.getOldNotePi() < 17)
+                .collect(Collectors.toList());
+
+        // Shuffle all lists to randomize
+        Collections.shuffle(highGrades);
+        Collections.shuffle(midGrades);
+        Collections.shuffle(others);
+
+        List<List<User>> groups = new ArrayList<>();
+        int groupCount = 6;
+
+        for (int i = 0; i < groupCount; i++) {
+            List<User> group = new ArrayList<>();
+
+            // Try to get 3 high grade
+            for (int j = 0; j < 3 && !highGrades.isEmpty(); j++) {
+                group.add(highGrades.remove(0));
+            }
+
+            // Try to get 3 mid-grade
+            for (int j = group.size(); j < 6 && !midGrades.isEmpty(); j++) {
+                group.add(midGrades.remove(0));
+            }
+
+            // Fill remaining with others
+            while (group.size() < 6 && !others.isEmpty()) {
+                group.add(others.remove(0));
+            }
+
+            groups.add(group);
+        }
+
+        // Fill incomplete groups with leftovers
+        List<User> leftovers = new ArrayList<>();
+        leftovers.addAll(highGrades);
+        leftovers.addAll(midGrades);
+        leftovers.addAll(others);
+        Collections.shuffle(leftovers);
+
+        for (List<User> group : groups) {
+            while (group.size() < 6 && !leftovers.isEmpty()) {
+                group.add(leftovers.remove(0));
+            }
+        }
+
+        return groups;
+    }
+
 
 }

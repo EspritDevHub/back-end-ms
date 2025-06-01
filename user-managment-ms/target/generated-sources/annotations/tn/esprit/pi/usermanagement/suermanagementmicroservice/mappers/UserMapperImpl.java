@@ -10,7 +10,7 @@ import tn.esprit.pi.usermanagement.suermanagementmicroservice.Entities.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-31T17:20:10+0100",
+    date = "2025-05-31T23:43:05+0100",
     comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.14 (Amazon.com Inc.)"
 )
 @Component
@@ -35,6 +35,7 @@ public class UserMapperImpl implements UserMapper {
         if ( userRequestDTO.getActive() != null ) {
             user.setActive( Boolean.parseBoolean( userRequestDTO.getActive() ) );
         }
+        user.setOldNotePi( userRequestDTO.getOldNotePi() );
 
         return user;
     }
@@ -57,6 +58,7 @@ public class UserMapperImpl implements UserMapper {
         user.setEspritId( userResponseDTO.getEspritId() );
         user.setClassName( userResponseDTO.getClassName() );
         user.setActive( userResponseDTO.isActive() );
+        user.setOldNotePi( userResponseDTO.getOldNotePi() );
 
         return user;
     }
@@ -79,6 +81,7 @@ public class UserMapperImpl implements UserMapper {
         userResponseDTO.setToken( user.getToken() );
         userResponseDTO.setEspritId( user.getEspritId() );
         userResponseDTO.setActive( user.isActive() );
+        userResponseDTO.setOldNotePi( user.getOldNotePi() );
 
         return userResponseDTO;
     }

@@ -22,6 +22,7 @@ public interface UserMapper {
     @Mapping(source = "espritId", target = "espritId")
     @Mapping(source = "className", target = "className")
     @Mapping(source = "active", target = "active")
+    @Mapping(source = "oldNotePi", target = "oldNotePi")
     User userRequestDTOToUser(UserRequestDTO userRequestDTO);
     User userResposneDTOToUser(UserResponseDTO userResponseDTO);
     UserResponseDTO userToUserResponseDTO(User user);

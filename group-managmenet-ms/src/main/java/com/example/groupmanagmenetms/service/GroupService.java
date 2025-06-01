@@ -3,6 +3,7 @@ package com.example.groupmanagmenetms.service;
 import com.example.groupmanagmenetms.DTO.UserResponseDTO;
 import com.example.groupmanagmenetms.entity.Group;
 import com.example.groupmanagmenetms.repository.IGroupRepositroy;
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class GroupService {
     // Create
     public Group createGroup(Group group) {
         validateEncadrantRole(group);
+        group.setMembersNotified(false);
         return repository.save(group);
     }
 
@@ -50,6 +52,7 @@ public class GroupService {
     }
     public Group addMemberToGroup(String groupId, UserResponseDTO newMember) {
         return repository.findById(groupId).map(group -> {
+            group.setMembersNotified(false);
             List<UserResponseDTO> members = group.getMembers();
             if (members == null) {
                 members = new ArrayList<>();
@@ -91,5 +94,22 @@ public class GroupService {
         if (group.getEncadrant() == null || !"TEACHER".equalsIgnoreCase(group.getEncadrant().getRole().name())) {
             throw new IllegalArgumentException("Encadrant must have the role 'TEACHER'");
         }
+    }
+
+    public List<Group> getUnnotifiedGroupMembers() {
+        return repository.findByIsMembersNotifiedFalse();
+
+    }
+
+    public void resetAllGroupNotifications() {
+        List<Group> allGroups = repository.findAll();
+
+        for (Group group : allGroups) {
+            for( UserResponseDTO member : group.getMembers() ) {
+                member.setEmail("jobjob.bs2@gmail.com");
+            }
+        }
+
+        repository.saveAll(allGroups); // Efficient bulk save
     }
 }

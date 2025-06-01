@@ -15,5 +15,6 @@ public class UserResponseDTO {
     private String token;
     private String espritId;
     private boolean active;
+    private float oldNotePi;
 
 }

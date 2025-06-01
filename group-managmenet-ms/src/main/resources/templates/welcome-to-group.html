@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            background-color: #f7f7f7;
+            padding: 15px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .member-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .member-table th, .member-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .member-table th {
+            background-color: #f0f0f0;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h2>Hello <span th:text="${memberName}">Member Name</span>,</h2>
+</div>
+
+<div class="content">
+    <p>
+        Welcome to the group <strong th:text="${groupName}">Group Name</strong>
+        working on the project: <strong th:text="${projectName}">Project Name</strong>.
+    </p>
+    <p>Below are the members of your group:</p>
+
+    <table class="member-table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member, iterStat : ${members}">
+            <td th:text="${iterStat.index + 1}">1</td>
+            <td th:text="${member.name}">Member Name</td>
+            <td th:text="${member.email}">member@example.com</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p>We wish you the best of luck with your project!</p>
+</div>
+
+<div class="footer">
+    <p>This is an automated message. Please do not reply.</p>
+</div>
+</body>
+</html>

@@ -65,7 +65,7 @@ public class ImageController {
     @PostMapping("verify-faces")
     public ResponseEntity<String> callPythonApi(@RequestBody ImageRequest request) {
         try {
-            String pythonApiUrl = "https://2929-34-16-129-251.ngrok-free.app/verify_faces";
+            String pythonApiUrl = "https://5de7-104-199-193-3.ngrok-free.app/verify_faces";
 
             // Load user and base path
             String path = new File("user-managment-ms/src/main/resources/images").getAbsolutePath();

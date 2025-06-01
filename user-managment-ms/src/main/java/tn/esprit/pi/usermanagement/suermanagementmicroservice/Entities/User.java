@@ -52,6 +52,7 @@ public class User {
     private int TempPasswordCode;
     private Date _2faExpiryDate;
     private boolean active;
+    private float oldNotePi;
     @PrePersist
     public void prePersist() {
         if (id == null) {

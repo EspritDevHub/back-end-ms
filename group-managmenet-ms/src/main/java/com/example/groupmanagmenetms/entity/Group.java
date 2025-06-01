@@ -4,6 +4,7 @@ import com.example.groupmanagmenetms.DTO.UserResponseDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Group {
     @Id
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -24,7 +26,7 @@ public class Group {
     private String projectName;
     private UserResponseDTO encadrant;
     private List<UserResponseDTO> members;
-
+    private boolean isMembersNotified;
     @PrePersist
     public void prePersist() {
         if (id == null) {

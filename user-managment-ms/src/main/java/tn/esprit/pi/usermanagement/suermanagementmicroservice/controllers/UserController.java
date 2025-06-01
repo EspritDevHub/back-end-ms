@@ -140,4 +140,13 @@ public class UserController {
             return ResponseEntity.internalServerError().body("Password reset failed");
         }
     }
+
+    @GetMapping("/genrateusers")
+    public void genrteUsers() {
+       userService.generateMockUsers();
+    }
+    @GetMapping("/getGroupRepartition")
+    public List<List<User>> getGroupRepartition(@RequestParam String groupName) {
+        return userService.divideInto6Groups(groupName);
+    }
 }
