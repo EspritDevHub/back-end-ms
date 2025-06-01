@@ -3,6 +3,7 @@ package tn.esprit.pi.evaluationfeedbackservice.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.pi.evaluationfeedbackservice.dto.EvaluationDto;
 import tn.esprit.pi.evaluationfeedbackservice.entity.Critere;
 import tn.esprit.pi.evaluationfeedbackservice.entity.Evaluation;
 import tn.esprit.pi.evaluationfeedbackservice.service.EvaluationService;
@@ -20,16 +21,15 @@ public class EvaluationController {
         this.service = service;
     }
 
-    @GetMapping
-    public List<Evaluation> getAll() {
-        List<Evaluation> list = service.getAll();
-        return list;
+    @GetMapping("/findbyproject/{id}")
+    public List<EvaluationDto> getAll(@PathVariable Long id) {
+        return service.getAll(id);
     }
 
     @PostMapping
-    public ResponseEntity<Evaluation> addEvaluation(@RequestBody Evaluation evaluation) {
+    public ResponseEntity<EvaluationDto> addEvaluation(@RequestBody Evaluation evaluation) {
 
-        Evaluation saved = service.addOrUpdateEvaluation(evaluation);
+        EvaluationDto saved = service.addOrUpdateEvaluation(evaluation);
         return ResponseEntity.ok(saved);
     }
 
@@ -44,7 +44,7 @@ public class EvaluationController {
             @RequestParam(required = false) Critere critere) {
 
         try {
-            List<Evaluation> evaluations = service.getEvaluationsByProject(projectId, critere);
+            List<EvaluationDto> evaluations = service.getEvaluationsByProject(projectId, critere);
             return ResponseEntity.ok(evaluations);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

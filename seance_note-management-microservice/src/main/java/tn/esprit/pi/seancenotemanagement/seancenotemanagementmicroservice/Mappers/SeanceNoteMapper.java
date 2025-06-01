@@ -11,12 +11,14 @@ public class SeanceNoteMapper {
                 .id(s.getId())
                 .titre(s.getTitre())
                 .description(s.getDescription())
-                .Numero(s.getNumero())
-                .Note(s.getNote())
+                .numero(s.getNumero())
+                .note(s.getNote())
                 .sprintId(s.getSprintId())
                 .critereIds(s.getCritereIds())
                 .date(s.getDate())
                 .typeNote(s.getTypeNote())
+                .heureDebut(s.getHeureDebut())
+                .heureFin(s.getHeureFin())
                 .build();
     }
 
@@ -25,12 +27,14 @@ public class SeanceNoteMapper {
                 .id(dto.getId())
                 .titre(dto.getTitre())
                 .description(dto.getDescription())
-                .Numero(dto.getNumero())
-                .Note(dto.getNote())
+                .numero(dto.getNumero())
+                .note(dto.getNote())
                 .sprintId(dto.getSprintId())
                 .critereIds(dto.getCritereIds())
                 .date(dto.getDate())
                 .typeNote(dto.getTypeNote())
+                .heureDebut(dto.getHeureDebut())
+                .heureFin(dto.getHeureFin())
                 .build();
     }
 }
