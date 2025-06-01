@@ -10,6 +10,11 @@ public class UserResponseDTO {
     private String email;
     private Roles role;
     private String phone;
+    private String className;
     private Boolean is2FAEnabled;
     private String token;
+    private String espritId;
+    private boolean active;
+    private float oldNotePi;
+
 }
