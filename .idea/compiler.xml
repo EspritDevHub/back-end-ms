@@ -3,20 +3,6 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Annotation profile for seance-management-microservice" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
-        </processorPath>
-        <module name="note-management-microservice (1) (tn.esprit.pi.noteManagement)" />
-        <module name="seance-management-microservice" />
-        <module name="seance_note-management-microservice" />
-        <module name="document-management-microservice" />
-        <module name="reclamation-management-microservice" />
-        <module name="notification-management-microservice" />
-      </profile>
       <profile name="Annotation profile for suer-management-microservice" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -28,15 +14,30 @@
         </processorPath>
         <module name="suer-management-microservice" />
       </profile>
-      <profile name="Annotation profile for evaluation-feedback-service" enabled="true">
+      <profile name="Annotation profile for group-managmenet-ms" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <processorPath>
+        <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
         <module name="group-managmenet-ms" />
         <module name="evaluation-feedback-service" />
+      </profile>
+      <profile name="Annotation profile for seance-management-microservice" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
+        </processorPath>
+        <module name="note-management-microservice (1) (tn.esprit.pi.noteManagement)" />
+        <module name="document-management-microservice" />
+        <module name="seance_note-management-microservice" />
+        <module name="seance-management-microservice" />
+        <module name="note-management-microservice" />
+        <module name="reclamation-management-microservice" />
+        <module name="notification-management-microservice" />
       </profile>
     </annotationProcessing>
   </component>

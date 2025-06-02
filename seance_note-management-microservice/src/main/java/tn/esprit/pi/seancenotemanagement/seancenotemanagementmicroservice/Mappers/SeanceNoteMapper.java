@@ -17,8 +17,6 @@ public class SeanceNoteMapper {
                 .critereIds(s.getCritereIds())
                 .date(s.getDate())
                 .typeNote(s.getTypeNote())
-                .heureDebut(s.getHeureDebut())
-                .heureFin(s.getHeureFin())
                 .build();
     }
 
@@ -33,8 +31,6 @@ public class SeanceNoteMapper {
                 .critereIds(dto.getCritereIds())
                 .date(dto.getDate())
                 .typeNote(dto.getTypeNote())
-                .heureDebut(dto.getHeureDebut())
-                .heureFin(dto.getHeureFin())
                 .build();
     }
 }

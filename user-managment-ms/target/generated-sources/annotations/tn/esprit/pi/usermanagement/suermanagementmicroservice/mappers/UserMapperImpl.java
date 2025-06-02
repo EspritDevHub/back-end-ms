@@ -10,8 +10,8 @@ import tn.esprit.pi.usermanagement.suermanagementmicroservice.Entities.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-31T23:43:05+0100",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.14 (Amazon.com Inc.)"
+    date = "2025-06-02T12:56:35+0100",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.4 (Oracle Corporation)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
