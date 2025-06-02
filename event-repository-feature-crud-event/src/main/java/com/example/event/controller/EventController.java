@@ -50,6 +50,12 @@ public class EventController {
         return iEventService.update(event);
     }
 
+    @PutMapping("/update/{id}")
+    public Event updateEvent(@PathVariable String id, @RequestBody Event event) {
+        event.setId(id);
+        return iEventService.update(event);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteById(@PathVariable String id) {
         iEventService.deleteById(id);
