@@ -398,7 +398,7 @@ public class EvaluationService  {
     private pdfTextExtractor pdfTextExtractor;
 
     public EvaluationDto analyserCahierDesCharges(String pdfUrl) {
-        String content = pdfTextExtractor.extractTextFromUrl("http://localhost:9096/test.pdf");
+        String content = pdfTextExtractor.extractTextFromUrl("http://localhost:9096/test2.pdf");
         double note = 0;
         List<String> missing = new ArrayList<>();
 
@@ -410,7 +410,7 @@ public class EvaluationService  {
         if (content.toLowerCase().contains("diagramme de classes")) note += 1; else missing.add("Diagramme de classes");
         if (content.toLowerCase().contains("fiches")) note += 2; else missing.add("Fiches");
 
-        String commentaire = missing.isEmpty() ? "✅ Toutes les sections sont présentes." : "❌ Manque : " + String.join(", ", missing);
+        String commentaire = missing.isEmpty() ? "✅ Toutes les sections sont présentes." : " Manque : " + String.join(", ", missing);
         String suggestion = "Complétez les sections manquantes pour un cahier des charges complet.";
 
         return new EvaluationDto(note, commentaire, suggestion);
