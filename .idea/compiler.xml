@@ -23,7 +23,13 @@
         </processorPath>
         <module name="group-managmenet-ms" />
       </profile>
-      <profile name="Annotation profile for evaluation-feedback-service" enabled="true">
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="PROJECT-MANAGEMENT" />
+      </profile>
+      <profile name="Annotation profile for event" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -34,16 +40,11 @@
         <module name="document-management-microservice" />
         <module name="seance_note-management-microservice" />
         <module name="seance-management-microservice" />
+        <module name="event" />
         <module name="note-management-microservice" />
         <module name="reclamation-management-microservice" />
         <module name="evaluation-feedback-service" />
         <module name="notification-management-microservice" />
-      </profile>
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="PROJECT-MANAGEMENT" />
       </profile>
     </annotationProcessing>
   </component>
@@ -52,6 +53,7 @@
       <module name="PROJECT-MANAGEMENT" options="-parameters" />
       <module name="document-management-microservice" options="-parameters" />
       <module name="evaluation-feedback-service" options="-parameters" />
+      <module name="event" options="-parameters" />
       <module name="group-managmenet-ms" options="-parameters" />
       <module name="note-management-microservice" options="-parameters" />
       <module name="note-management-microservice (1) (tn.esprit.pi.noteManagement)" options="-parameters" />
