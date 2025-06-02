@@ -22,9 +22,8 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
         <module name="group-managmenet-ms" />
-        <module name="evaluation-feedback-service" />
       </profile>
-      <profile name="Annotation profile for seance-management-microservice" enabled="true">
+      <profile name="Annotation profile for evaluation-feedback-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -37,12 +36,20 @@
         <module name="seance-management-microservice" />
         <module name="note-management-microservice" />
         <module name="reclamation-management-microservice" />
+        <module name="evaluation-feedback-service" />
         <module name="notification-management-microservice" />
+      </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="PROJECT-MANAGEMENT" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="PROJECT-MANAGEMENT" options="-parameters" />
       <module name="document-management-microservice" options="-parameters" />
       <module name="evaluation-feedback-service" options="-parameters" />
       <module name="group-managmenet-ms" options="-parameters" />
