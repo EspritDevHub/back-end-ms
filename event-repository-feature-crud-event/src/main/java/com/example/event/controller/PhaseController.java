@@ -9,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/phases")
 @RequiredArgsConstructor
 public class PhaseController {
@@ -61,6 +63,12 @@ public class PhaseController {
     public ResponseEntity<Double> getPhaseProgress(@PathVariable String phaseId) {
         double progress = phaseService.getPhaseProgress(phaseId);
         return ResponseEntity.ok(progress);
+    }
+
+    @GetMapping("/dashboard-summary")
+    public ResponseEntity<Map<String, Object>> getDashboardSummary() {
+        Map<String, Object> summary = phaseService.getDashboardSummary();
+        return ResponseEntity.ok(summary);
     }
 
 }
