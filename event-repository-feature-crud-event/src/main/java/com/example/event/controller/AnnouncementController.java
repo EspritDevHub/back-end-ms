@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/announcements")
 @AllArgsConstructor
 public class AnnouncementController {
@@ -27,11 +28,11 @@ public class AnnouncementController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Announcement> update(
-        @PathVariable String id,
-        @RequestBody Announcement announcement) {
+            @PathVariable String id,
+            @RequestBody Announcement announcement) {
 
-    announcement.setId(id); // Assure que l'objet contient le bon ID
-    return ResponseEntity.ok(announcementService.update(announcement));
+        announcement.setId(id);
+        return ResponseEntity.ok(announcementService.update(announcement));
     }
 
 
