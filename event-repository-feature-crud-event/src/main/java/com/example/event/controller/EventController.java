@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/event")
@@ -45,16 +45,12 @@ public class EventController {
         return iEventService.selectById(id);
     }
 
-    @PutMapping("/update")
-    public Event updateEvent(@RequestBody Event event) {
-        return iEventService.update(event);
-    }
-
     @PutMapping("/update/{id}")
     public Event updateEvent(@PathVariable String id, @RequestBody Event event) {
         event.setId(id);
         return iEventService.update(event);
     }
+
 
     @DeleteMapping("/delete/{id}")
     public void deleteById(@PathVariable String id) {
