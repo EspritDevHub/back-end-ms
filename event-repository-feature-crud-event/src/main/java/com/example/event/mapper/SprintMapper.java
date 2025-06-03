@@ -2,13 +2,24 @@ package com.example.event.mapper;
 
 import com.example.event.dto.SprintDTO;
 import com.example.event.model.Sprint;
+import com.example.event.repository.PhaseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class SprintMapper {
 
-    public static SprintDTO toDTO(Sprint entity) {
+    private final PhaseRepository phaseRepository;
+
+    @Autowired
+    public SprintMapper(PhaseRepository phaseRepository) {
+        this.phaseRepository = phaseRepository;
+    }
+
+    public SprintDTO toDTO(Sprint entity) {
         if (entity == null) return null;
 
         SprintDTO dto = new SprintDTO();
@@ -20,10 +31,16 @@ public class SprintMapper {
         dto.setStatus(entity.getStatus());
         dto.setActive(entity.getIsActive());
 
+        // Récupérer le nom de la phase
+        if (entity.getPhaseId() != null) {
+            phaseRepository.findById(entity.getPhaseId())
+                    .ifPresent(phase -> dto.setPhaseName(phase.getName()));
+        }
+
         return dto;
     }
 
-    public static Sprint toEntity(SprintDTO dto) {
+    public Sprint toEntity(SprintDTO dto) {
         if (dto == null) return null;
 
         Sprint entity = new Sprint();
@@ -38,16 +55,15 @@ public class SprintMapper {
         return entity;
     }
 
-    public static List<SprintDTO> toDTOList(List<Sprint> entities) {
+    public List<SprintDTO> toDTOList(List<Sprint> entities) {
         return entities.stream()
-                .map(SprintMapper::toDTO)
+                .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public static List<Sprint> toEntityList(List<SprintDTO> dtos) {
+    public List<Sprint> toEntityList(List<SprintDTO> dtos) {
         return dtos.stream()
-                .map(SprintMapper::toEntity)
+                .map(this::toEntity)
                 .collect(Collectors.toList());
     }
 }
-
