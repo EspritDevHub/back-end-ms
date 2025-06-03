@@ -25,6 +25,16 @@ public class AnnouncementController {
         return ResponseEntity.ok(announcementService.update(announcement));
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Announcement> update(
+        @PathVariable String id,
+        @RequestBody Announcement announcement) {
+
+    announcement.setId(id); // Assure que l'objet contient le bon ID
+    return ResponseEntity.ok(announcementService.update(announcement));
+    }
+
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         announcementService.delete(id);
