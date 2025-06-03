@@ -5,34 +5,36 @@ import com.example.event.mapper.SprintMapper;
 import com.example.event.model.Sprint;
 import com.example.event.service.ISprintService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/sprints")
 @RequiredArgsConstructor
 public class SprintController {
 
     private final ISprintService sprintService;
-
-    @PostMapping
-    public ResponseEntity<SprintDTO> createSprint(@RequestBody SprintDTO sprintDTO) {
-        Sprint saved = sprintService.create(SprintMapper.toEntity(sprintDTO));
-        return ResponseEntity.ok(SprintMapper.toDTO(saved));
-    }
+    private final SprintMapper sprintMapper;
 
     @GetMapping
     public ResponseEntity<List<SprintDTO>> getAllSprints() {
         List<Sprint> sprints = sprintService.getAll();
-        return ResponseEntity.ok(SprintMapper.toDTOList(sprints));
+        return ResponseEntity.ok(sprintMapper.toDTOList(sprints));
+    }
+    @PostMapping
+    public ResponseEntity<SprintDTO> createSprint(@RequestBody SprintDTO sprintDTO) {
+        Sprint saved = sprintService.create(sprintMapper.toEntity(sprintDTO));
+        return ResponseEntity.ok(sprintMapper.toDTO(saved));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<SprintDTO> getSprintById(@PathVariable String id) {
         return sprintService.getById(id)
-                .map(sprint -> ResponseEntity.ok(SprintMapper.toDTO(sprint)))
+                .map(sprint -> ResponseEntity.ok(sprintMapper.toDTO(sprint)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -49,7 +51,7 @@ public class SprintController {
         existing.setIsActive(sprintDTO.getActive());
 
         Sprint updated = sprintService.update(existing);
-        return ResponseEntity.ok(SprintMapper.toDTO(updated));
+        return ResponseEntity.ok(sprintMapper.toDTO(updated));
     }
 
     @DeleteMapping("/{id}")
@@ -61,7 +63,7 @@ public class SprintController {
     @GetMapping("/by-phase/{phaseId}")
     public ResponseEntity<List<SprintDTO>> getSprintsByPhaseId(@PathVariable String phaseId) {
         List<Sprint> sprints = sprintService.getByPhaseId(phaseId);
-        return ResponseEntity.ok(SprintMapper.toDTOList(sprints));
+        return ResponseEntity.ok(sprintMapper.toDTOList(sprints));
     }
 
     @GetMapping("/current")
