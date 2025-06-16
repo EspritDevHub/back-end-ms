@@ -11,12 +11,10 @@ on:
 
 jobs:
   build-and-test-user:
-    name: Build & Test User Microservice
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -34,10 +32,10 @@ jobs:
 
       - name: Build & run tests
         run: |
-          cd user-microservice
+          cd user-managment-ms
           mvn clean test -B
 
       - name: Package (optional)
         run: |
-          cd user-microservice
+          cd user-service
           mvn package -DskipTests -B
