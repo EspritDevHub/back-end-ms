@@ -1,16 +1,42 @@
-name: Test on Merge to devops
+name: Build & Test User Microservice
 
 on:
   push:
     branches:
       - jobrane-devops
+  pull_request:
+    branches:
+      - jobrane-devops
+  workflow_dispatch: # Enables manual trigger from GitHub UI
 
 jobs:
-  test:
+  build-and-test-user:
+    name: Build & Test User Microservice
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: user-microservice
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Run a simple command
-        run: echo "This runs only on pushes to main branch"
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build & run tests
+        run: mvn clean test -B
+
+      - name: Package (optional)
+        run: mvn package -DskipTests -B
