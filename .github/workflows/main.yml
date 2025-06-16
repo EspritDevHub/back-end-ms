@@ -7,15 +7,12 @@ on:
   pull_request:
     branches:
       - jobrane-devops
-  workflow_dispatch: # Enables manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   build-and-test-user:
     name: Build & Test User Microservice
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: user-microservice
 
     steps:
       - name: Checkout repository
@@ -36,7 +33,11 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Build & run tests
-        run: mvn clean test -B
+        run: |
+          cd user-microservice
+          mvn clean test -B
 
       - name: Package (optional)
-        run: mvn package -DskipTests -B
+        run: |
+          cd user-microservice
+          mvn package -DskipTests -B
