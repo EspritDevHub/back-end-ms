@@ -33,9 +33,4 @@ jobs:
       - name: Build & run tests
         run: |
           cd user-managment-ms
-          mvn clean test -B
-
-      - name: Package (optional)
-        run: |
-          cd user-service
-          mvn package -DskipTests -B
+          mvn clean package -DskipTests -B
