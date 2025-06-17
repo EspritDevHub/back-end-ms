@@ -13,8 +13,5 @@ import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfigurat
 })
 class SuerManagementMicroserviceApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
 
 }
