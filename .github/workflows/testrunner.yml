@@ -1,4 +1,4 @@
-name: CI/CD
+name: SonarQube User Microservice
 
 on:
   workflow_dispatch:
@@ -11,20 +11,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Print environment info
-        run: |
-          echo "Running on $(hostname)"
-          whoami
-          uname -a
+      - name: Build User Microservice
+        working-directory: user-management-ms
+        run: mvn clean install -DskipTests
 
       - name: Run SonarQube scan
+        working-directory: user-management-ms
         run: |
           sudo docker run --rm \
             -e SONAR_HOST_URL="http://192.168.79.128:9000" \
             -e SONAR_TOKEN="sqa_6b79d9e85ab7e2eea7f917872766b9e6af8bd6c0" \
             -v "$PWD:/usr/src" \
             sonarsource/sonar-scanner-cli \
-            -Dsonar.projectKey=my-project-key \
-            -Dsonar.sources=/usr/src \
+            -Dsonar.projectKey=user-management \
+            -Dsonar.sources=/usr/src/src \
+            -Dsonar.java.binaries=/usr/src/target/classes \
             -Dsonar.host.url=http://192.168.79.128:9000 \
             -Dsonar.login=$SONAR_TOKEN
