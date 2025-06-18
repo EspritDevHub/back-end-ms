@@ -54,7 +54,7 @@ jobs:
           password: PI23381121
       - name: Build Docker image
         working-directory: user-managment-ms
-        run: sudo docker build -t user-management-service:latest .
+        run: sudo docker build -t jobrane23/user-management-service:latest .
       - name: Push Docker image
         run: |
           sudo docker push jobrane23/user-management-service:latest
