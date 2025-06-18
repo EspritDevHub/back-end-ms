@@ -1,4 +1,4 @@
-name: Test Self-Hosted Runner
+name: CI/CD PI
 
 on:
   workflow_dispatch:
