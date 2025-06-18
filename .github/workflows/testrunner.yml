@@ -47,3 +47,6 @@ jobs:
       - name: Deploy to Nexus
         working-directory: user-managment-ms
         run: mvn deploy -DskipTests
+      - name: Build Docker image
+        working-directory: user-managment-ms
+        run: docker build -t user-management-service:latest .
