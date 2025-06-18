@@ -13,16 +13,6 @@ import java.util.List;
 @Mapper(componentModel = "spring") // "spring" = auto-register as bean
 public interface UserMapper {
 
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "email", target = "email")
-    @Mapping(source = "password", target = "password")
-    @Mapping(source = "role", target = "role")
-    @Mapping(source = "phone", target = "phone")
-    @Mapping(source = "espritId", target = "espritId")
-    @Mapping(source = "className", target = "className")
-    @Mapping(source = "active", target = "active")
-    @Mapping(source = "oldNotePi", target = "oldNotePi")
     User userRequestDTOToUser(UserRequestDTO userRequestDTO);
     User userResposneDTOToUser(UserResponseDTO userResponseDTO);
     UserResponseDTO userToUserResponseDTO(User user);
