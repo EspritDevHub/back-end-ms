@@ -19,8 +19,8 @@ jobs:
             <servers>
               <server>
                 <id>nexus</id>
-                <username>admin</username>
-                <password>1234</password>
+                <username>${{ secrets.NEXUS_USER }}</username>
+                <password>${{ secrets.NEXUS_PASSWORD }}</password>
               </server>
             </servers>
           </settings>
@@ -30,23 +30,25 @@ jobs:
         working-directory: note-managment-microservice
         run: mvn clean install -DskipTests
 
-      - name: Run SonarQube scan
-        working-directory: note-managment-microservice
+      - name: SonarQube Analysis
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          sudo docker run --rm \
-            -e SONAR_HOST_URL="http://192.168.79.128:9000" \
-            -e SONAR_TOKEN="sqa_6b79d9e85ab7e2eea7f917872766b9e6af8bd6c0" \
-            -v "$PWD:/usr/src" \
+          docker run --rm \
+            -e SONAR_HOST_URL="${SONAR_HOST_URL}" \
+            -e SONAR_TOKEN="${SONAR_TOKEN}" \
+            -v "${{ github.workspace }}/note-managment-microservice:/usr/src" \
             sonarsource/sonar-scanner-cli \
             -Dsonar.projectKey=note-management \
             -Dsonar.sources=/usr/src/src \
             -Dsonar.java.binaries=/usr/src/target/classes \
-            -Dsonar.host.url=http://192.168.79.128:9000 \
-            -Dsonar.login=sqa_6b79d9e85ab7e2eea7f917872766b9e6af8bd6c0
+            -Dsonar.login="${SONAR_TOKEN}"
 
       - name: Deploy to Nexus
         working-directory: note-managment-microservice
         run: mvn deploy -DskipTests
+
       - name: Build Docker image
         working-directory: note-managment-microservice
-        run: sudo docker build -t note-management-service:latest .
+        run: docker build -t note-management-service:latest .
