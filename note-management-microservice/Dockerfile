@@ -1,14 +1,23 @@
-# Étape 1 : Build de l'application
-FROM maven:3.9.6-eclipse-temurin-17 AS build
-WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
 
-# Étape 2 : Image d'exécution
-FROM eclipse-temurin:17-jdk-alpine
-VOLUME /tmp
 WORKDIR /app
-COPY --from=build /app/target/note-management-microservice-0.0.1-SNAPSHOT.jar app.jar
+
+COPY pom.xml mvnw .mvn/ ./
+RUN chmod +x mvnw && ./mvnw dependency:go-offline
+
+COPY src/ ./src/
+
+RUN ./mvnw clean package -DskipTests
+
+FROM eclipse-temurin:17-jre-alpine AS runtime
+
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+WORKDIR /app
+COPY --from=builder /app/target/*.jar app.jar
+
+RUN chown appuser:appgroup app.jar
+USER appuser
 
 EXPOSE 9097
 
