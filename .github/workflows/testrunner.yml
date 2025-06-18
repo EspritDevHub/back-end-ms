@@ -57,4 +57,4 @@ jobs:
         run: sudo docker build -t user-management-service:latest .
       - name: Push Docker image
         run: |
-          sudo docker push your-dockerhub-username/user-management-ms:latest
+          sudo docker push jobrane23/user-management-service:latest
