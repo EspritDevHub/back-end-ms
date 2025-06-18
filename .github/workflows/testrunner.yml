@@ -47,14 +47,11 @@ jobs:
       - name: Deploy to Nexus
         working-directory: user-managment-ms
         run: mvn deploy -DskipTests
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: jobrane23
-          password: PI23381121
+
       - name: Build Docker image
         working-directory: user-managment-ms
         run: sudo docker build -t jobrane23/user-management-service:latest .
       - name: Push Docker image
         run: |
+          sudo docker login -u jobrane23 -p PI23381121
           sudo docker push jobrane23/user-management-service:latest
