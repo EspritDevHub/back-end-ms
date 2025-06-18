@@ -27,11 +27,11 @@ jobs:
           EOF
 
       - name: Build Note Microservice
-        working-directory: note-managment-microservice
+        working-directory: note-management-microservice
         run: mvn clean install -DskipTests
 
       - name: Run SonarQube scan
-        working-directory: note-managment-microservice
+        working-directory: note-management-microservice
         run: |
           sudo docker run --rm \
             -e SONAR_HOST_URL="http://192.168.79.128:9000" \
@@ -45,11 +45,11 @@ jobs:
             -Dsonar.login=sqa_6b79d9e85ab7e2eea7f917872766b9e6af8bd6c0
 
       - name: Deploy to Nexus
-        working-directory: user-managment-ms
+        working-directory: note-management-microservice
         run: mvn deploy -DskipTests
 
       - name: Build Docker image
-        working-directory: note-managment-microservice
+        working-directory: note-management-microservice
         run: sudo docker build -t jobrane23/note-management-service:latest .
       - name: Push Docker image
         run: |
