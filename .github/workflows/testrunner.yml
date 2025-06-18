@@ -1,19 +1,28 @@
-name: CI/CD PI
+name: CI/CD
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:   # allows manual trigger
 
 jobs:
-  test-runner:
+  sonar-scan:
     runs-on: self-hosted
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Print greeting
-        run: echo "Hello from self-hosted runner on $(hostname)"
-
-      - name: Show current user and OS
+      - name: Print environment info
         run: |
+          echo "Running on $(hostname)"
           whoami
           uname -a
+
+      - name: Run SonarQube scan
+        run: |
+          sudo docker run --rm \
+            -e SONAR_HOST_URL="http://localhost:9000" \
+            -e SONAR_LOGIN=squ_e16791cf8f38f9795c16fcba3667ff69273de8a5 \
+            -v "$(pwd):/usr/src" \
+            sonarsource/sonar-scanner-cli \
+            -Dsonar.projectKey=my-project-key \
+            -Dsonar.sources=/usr/src
