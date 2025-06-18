@@ -21,7 +21,7 @@ jobs:
         run: |
           sudo docker run --rm \
             -e SONAR_HOST_URL="http://192.168.79.128:9000" \
-            -e SONAR_LOGIN=squ_98b26c892880e48561c5e986df6ce36b0e321098 \
+            -e SONAR_LOGIN=squ_c33fe41d2ad2bc9d4c0745192539537d49a50fe9 \
             -v "$(pwd):/usr/src" \
             sonarsource/sonar-scanner-cli \
             -Dsonar.projectKey=my-project-key \
