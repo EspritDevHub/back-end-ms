@@ -1,36 +1,21 @@
-name: Build & Test User Microservice
+name: Test Self-Hosted Runner
 
 on:
   push:
     branches:
-      - jobrane-devops
-  pull_request:
-    branches:
-      - jobrane-devops
-  workflow_dispatch:
+      - main   # or your default branch
 
 jobs:
-  build-and-test-user:
-    runs-on: ubuntu-latest
-
+  test-runner:
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      - name: Print greeting
+        run: echo "Hello from self-hosted runner on $(hostname)"
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
-      - name: Build & run tests
+      - name: Show current user and OS
         run: |
-          cd user-managment-ms
-          mvn clean package -DskipTests -B
+          whoami
+          uname -a
