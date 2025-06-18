@@ -11,6 +11,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Configure Maven settings for Nexus
+        run: |
+          mkdir -p ~/.m2
+          cat <<EOF > ~/.m2/settings.xml
+          <settings>
+            <servers>
+              <server>
+                <id>nexus</id>
+                <username>admin</username>
+                <password>1234</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
       - name: Build User Microservice
         working-directory: user-managment-ms
         run: mvn clean install -DskipTests
@@ -27,4 +42,8 @@ jobs:
             -Dsonar.sources=/usr/src/src \
             -Dsonar.java.binaries=/usr/src/target/classes \
             -Dsonar.host.url=http://192.168.79.128:9000 \
-            -Dsonar.login=$SONAR_TOKEN
+            -Dsonar.login=sqa_6b79d9e85ab7e2eea7f917872766b9e6af8bd6c0
+
+      - name: Deploy to Nexus
+        working-directory: user-managment-ms
+        run: mvn deploy -DskipTests
