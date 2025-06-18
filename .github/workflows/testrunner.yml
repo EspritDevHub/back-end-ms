@@ -12,11 +12,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build User Microservice
-        working-directory: user-management-ms
+        working-directory: user-managment-ms
         run: mvn clean install -DskipTests
 
       - name: Run SonarQube scan
-        working-directory: user-management-ms
+        working-directory: user-managment-ms
         run: |
           sudo docker run --rm \
             -e SONAR_HOST_URL="http://192.168.79.128:9000" \
