@@ -45,8 +45,13 @@ jobs:
             -Dsonar.login=sqa_6b79d9e85ab7e2eea7f917872766b9e6af8bd6c0
 
       - name: Deploy to Nexus
-        working-directory: note-managment-microservice
+        working-directory: user-managment-ms
         run: mvn deploy -DskipTests
+
       - name: Build Docker image
         working-directory: note-managment-microservice
-        run: sudo docker build -t note-management-service:latest .
+        run: sudo docker build -t jobrane23/note-management-service:latest .
+      - name: Push Docker image
+        run: |
+          sudo docker login -u jobrane23 -p PI23381121
+          sudo docker push jobrane23/note-management-service:latest
