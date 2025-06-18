@@ -6,6 +6,11 @@ WORKDIR /app
 # Copy Maven project files
 COPY pom.xml mvnw ./
 COPY .mvn .mvn
+
+# Make mvnw executable
+RUN chmod +x mvnw
+
+# Download dependencies
 RUN ./mvnw dependency:go-offline
 
 # Copy the source code
