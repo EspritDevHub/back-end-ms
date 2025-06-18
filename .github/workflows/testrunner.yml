@@ -1,0 +1,21 @@
+name: Test Self-Hosted Runner
+
+on:
+  push:
+    branches:
+      - main   # or your default branch
+
+jobs:
+  test-runner:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Print greeting
+        run: echo "Hello from self-hosted runner on $(hostname)"
+
+      - name: Show current user and OS
+        run: |
+          whoami
+          uname -a
