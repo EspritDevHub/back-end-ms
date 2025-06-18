@@ -1,16 +1,19 @@
-name: Test on Merge to Main
+name: Test Self-Hosted Runner
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
+  test-runner:
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Run a simple command
-        run: echo "This runs only on pushes to main branch"
+      - name: Print greeting
+        run: echo "Hello from self-hosted runner on $(hostname)"
+
+      - name: Show current user and OS
+        run: |
+          whoami
+          uname -a
