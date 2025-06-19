@@ -1,26 +1,30 @@
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\controllers\AssignmentController.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\controllers\DocumentController.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\controllers\EvaluationController.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\DocumentManagementMicroserviceApplication.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Dtos\AssignmentDto.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Dtos\DocumentDto.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Dtos\EvaluationDto.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Dtos\SeanceDTO.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Entities\Assignment.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Entities\Document.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Entities\Evaluation.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Enum\FileType.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Feign\SeanceClient.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Feign\SeanceClientFallback.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\repository\EvaluationRepository.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\repository\IAssignmentRepository.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\repository\IDocumentRepository.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\security\AuthenticatorService.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\security\PassWordSalter.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\security\SecurityConfig.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\security\TokenBlacklistService.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\services\AssignmentService.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\services\DocumentService.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\services\EvaluationService.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Tools\Swagger.java
-C:\Users\bhsan\OneDrive\Bureau\backend-pidev\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\WebConfig.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\controllers\AssignmentController.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\controllers\DocumentController.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\controllers\EvaluationController.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\controllers\EvaluationEmailController.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\DocumentManagementMicroserviceApplication.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Dtos\AssignmentDto.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Dtos\DocumentDto.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Dtos\EvaluationDto.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Dtos\EvaluationRequest.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Dtos\SeanceDTO.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Entities\Assignment.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Entities\Document.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Entities\Evaluation.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Enum\FileType.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Feign\SeanceClient.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Feign\SeanceClientFallback.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\repository\EvaluationRepository.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\repository\IAssignmentRepository.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\repository\IDocumentRepository.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\security\AuthenticatorService.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\security\PassWordSalter.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\security\SecurityConfig.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\security\TokenBlacklistService.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\services\AssignmentService.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\services\DocumentService.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\services\EmailService.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\services\EvaluationService.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\services\pdfTextExtractor.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\Tools\Swagger.java
+C:\Users\bhsan\OneDrive\Bureau\Partie Devops\back-end-ms\document-management-microservice\src\main\java\tn\esprit\pi\documentmanagement\documentmanagementmicroservice\WebConfig.java
