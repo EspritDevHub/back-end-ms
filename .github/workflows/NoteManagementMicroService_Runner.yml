@@ -31,7 +31,7 @@ jobs:
         run: mvn clean install -DskipTests
 
       - name: Run SonarQube scan
-        working-directory: user-managment-ms
+        working-directory: note-management-microservice
         run: |
           sudo docker run --rm \
             -e SONAR_HOST_URL="http://192.168.79.128:9000" \
