@@ -28,7 +28,7 @@ jobs:
 
       - name: Build Document  Microservice
         working-directory: document-management-microservice
-        run: mvn clean install -DskipTests
+        run: mvn clean install
 
       - name: Run SonarQube scan
         working-directory: document-management-microservice
@@ -46,7 +46,7 @@ jobs:
 
       - name: Deploy to Nexus
         working-directory: document-management-microservice
-        run: mvn deploy -DskipTests
+        run: mvn deploy
 
       - name: Build Docker image
         working-directory: document-management-microservice
