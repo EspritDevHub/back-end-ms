@@ -1,0 +1,87 @@
+name:  EspritDevHub-PROJECT-MANAGEMEN-projet-management  Microservice
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sonar-scan:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure Maven settings for Nexus
+        run: |
+          mkdir -p ~/.m2
+          cat <<EOF > ~/.m2/settings.xml
+          <settings>
+            <servers>
+              <server>
+                <id>nexus</id>
+                <username>admin</username>
+                <password>${{ secrets.NEXUS_PASSWORD }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
+      - name: Build EspritDevHub-PROJECT-MANAGEMEN-projet-management Microservice
+        working-directory: EspritDevHub-PROJECT-MANAGEMEN-projet-management
+        run: mvn clean install  -DskipTests
+        
+      - name: Run Unit Tests
+        working-directory: EspritDevHub-PROJECT-MANAGEMEN-projet-management
+        run: mvn test
+
+      - name: Run SonarQube 
+        working-directory: EspritDevHub-PROJECT-MANAGEMEN-projet-management
+        run: |
+          sudo docker run --rm \
+            -e SONAR_HOST_URL="http://192.168.79.128:9000" \
+            -e SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}" \
+            -v "$PWD:/usr/src" \
+            sonarsource/sonar-scanner-cli \
+            -Dsonar.projectKey=user-management \
+            -Dsonar.sources=/usr/src/src \
+            -Dsonar.java.binaries=/usr/src/target/classes \
+            -Dsonar.host.url=http://192.168.79.128:9000 \
+            -Dsonar.login="${{ secrets.SONAR_TOKEN }}"
+
+      - name: Deploy to Nexus
+        working-directory: EspritDevHub-PROJECT-MANAGEMEN-projet-management
+        run: mvn deploy  -DskipTests
+
+      - name: Build Docker image
+        working-directory: EspritDevHub-PROJECT-MANAGEMEN-projet-management
+        run: sudo docker build -t jobrane23/EspritDevHub-PROJECT-MANAGEMEN-projet-management:latest .
+
+      - name: Push Docker image
+        run: |
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u jobrane23 --password-stdin
+          sudo docker push jobrane23/EspritDevHub-PROJECT-MANAGEMEN-projet-management:latest
+      - name: Download Trivy HTML template
+        run: |
+          curl -sSL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o html.tpl
+      - name: Scan Docker image with Trivy and save report
+        run: |
+          trivy image \
+            --severity HIGH,CRITICAL \
+            --format template \
+            --template "@html.tpl" \
+            -o trivy-report.html \
+            --scanners vuln \
+            --skip-db-update \
+            --timeout 30m \
+            jobrane23/EspritDevHub-PROJECT-MANAGEMEN-projet-management:latest || true
+      - name: List report file
+        run: ls -lh trivy-report.html
+      - name: Setup Python and send email
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          python3 send_email.py
+
+          
