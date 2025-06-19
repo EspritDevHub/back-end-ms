@@ -12,7 +12,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>tn.esprit.pi.notificationmanagement.notificationmanagementmicroservice</groupId>
+    <groupId>tn.esprit.pi.notificationmanagement</groupId>
     <artifactId>notification-management-microservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>notification-management-microservice</name>
