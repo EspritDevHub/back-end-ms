@@ -70,4 +70,13 @@ jobs:
             --skip-db-update \
             --timeout 30m \
             jobrane23/user-management-service:latest || true
+      - name: List report file
+        run: ls -lh trivy-report.html
+      - name: Setup Python and send email
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_APP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          python3 send_email.py
 
