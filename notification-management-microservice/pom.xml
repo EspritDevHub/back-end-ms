@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    
+
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -15,25 +15,8 @@
     <groupId>tn.esprit.pi.noteManagement</groupId>
     <artifactId>notification-management-microservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>note-management-microservice</name>
-    <description>note-management-microservice</description>
-
-    <url/>
-
-    <licenses>
-        <license />
-    </licenses>
-
-    <developers>
-        <developer />
-    </developers>
-
-    <scm>
-        <connection />
-        <developerConnection />
-        <tag />
-        <url />
-    </scm>
+    <name>notification-management-microservice</name>
+    <description>Microservice for managing notifications</description>
 
     <properties>
         <java.version>17</java.version>
@@ -148,7 +131,6 @@
                         <exclude>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.36</version>
                         </exclude>
                     </excludes>
                 </configuration>
