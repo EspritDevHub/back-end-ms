@@ -64,7 +64,7 @@ jobs:
           trivy image \
             --severity HIGH,CRITICAL \
             --format template \
-            --template "@contrib/html.tpl" \
+            --template "@html.tpl" \
             -o trivy-report.html \
             --scanners vuln \
             --skip-db-update \
