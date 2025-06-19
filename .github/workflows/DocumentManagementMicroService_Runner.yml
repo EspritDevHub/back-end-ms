@@ -28,7 +28,7 @@ jobs:
 
       - name: Build Document  Microservice
         working-directory: document-management-microservice
-        run: mvn clean install
+        run: mvn clean install -DskipTests
 
       - name: Run Unit Tests
         working-directory: document-management-microservice
@@ -50,7 +50,7 @@ jobs:
 
       - name: Deploy to Nexus
         working-directory: document-management-microservice
-        run: mvn deploy
+        run: mvn deploy -DskipTests
 
       - name: Build Docker image
         working-directory: document-management-microservice
