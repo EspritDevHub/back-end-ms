@@ -41,7 +41,7 @@ jobs:
             -Dsonar.projectKey=user-management \
             -Dsonar.sources=/usr/src/src \
             -Dsonar.java.binaries=/usr/src/target/classes \
-            -Dsonar.host.url=http://192.168.79.128:9000 \
+            -Dsonar.host.url=http://192.168.79.129:9000 \
             -Dsonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Deploy to Nexus
