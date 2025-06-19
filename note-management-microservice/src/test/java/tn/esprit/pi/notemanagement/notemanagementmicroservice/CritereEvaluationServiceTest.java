@@ -49,8 +49,5 @@ class CritereEvaluationServiceTest {
         verify(repo).findBySprintId("S2");
     }
 
-    @Test
-    void shouldExplicitlyFailTest() {
-        fail("Test négatif simulé pour pipeline");
-    }
+
 }
