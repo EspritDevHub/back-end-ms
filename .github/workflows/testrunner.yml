@@ -56,6 +56,9 @@ jobs:
         run: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u jobrane23 --password-stdin
           sudo docker push jobrane23/user-management-service:latest
+      - name: Download Trivy HTML template
+        run: |
+          curl -sSL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o html.tpl
       - name: Scan Docker image with Trivy and save report
         run: |
           trivy image \
