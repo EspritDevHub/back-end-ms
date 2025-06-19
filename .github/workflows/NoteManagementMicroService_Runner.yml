@@ -28,7 +28,7 @@ jobs:
 
       - name: Build Note Microservice
         working-directory: note-management-microservice
-        run: mvn clean install 
+        run: mvn clean install  -DskipTests
         
       - name: Run Unit Tests
         working-directory: note-management-microservice
@@ -50,7 +50,7 @@ jobs:
 
       - name: Deploy to Nexus
         working-directory: note-management-microservice
-        run: mvn deploy 
+        run: mvn deploy  -DskipTests
 
       - name: Build Docker image
         working-directory: note-management-microservice
