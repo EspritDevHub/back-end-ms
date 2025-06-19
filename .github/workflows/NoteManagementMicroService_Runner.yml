@@ -1,4 +1,4 @@
-name: SonarQube Note Microservice
+name: SonarQube Note  Microservice
 
 on:
   workflow_dispatch:
@@ -20,7 +20,7 @@ jobs:
               <server>
                 <id>nexus</id>
                 <username>admin</username>
-                <password>1234</password>
+                <password>${{ secrets.NEXUS_PASSWORD }}</password>
               </server>
             </servers>
           </settings>
@@ -31,18 +31,18 @@ jobs:
         run: mvn clean install -DskipTests
 
       - name: Run SonarQube scan
-        working-directory: note-management-microservice
+        working-directory: user-managment-ms
         run: |
           sudo docker run --rm \
             -e SONAR_HOST_URL="http://192.168.79.128:9000" \
-            -e SONAR_TOKEN="sqa_6b79d9e85ab7e2eea7f917872766b9e6af8bd6c0" \
+            -e SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}" \
             -v "$PWD:/usr/src" \
             sonarsource/sonar-scanner-cli \
-            -Dsonar.projectKey=note-managment \
+            -Dsonar.projectKey=user-management \
             -Dsonar.sources=/usr/src/src \
             -Dsonar.java.binaries=/usr/src/target/classes \
             -Dsonar.host.url=http://192.168.79.128:9000 \
-            -Dsonar.login=sqa_6b79d9e85ab7e2eea7f917872766b9e6af8bd6c0
+            -Dsonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Deploy to Nexus
         working-directory: note-management-microservice
@@ -50,8 +50,45 @@ jobs:
 
       - name: Build Docker image
         working-directory: note-management-microservice
-        run: sudo docker build -t jobrane23/note-management-service:latest .
+        run: sudo docker build -t jobrane23/note-management-microservice:latest .
+
       - name: Push Docker image
         run: |
-          sudo docker login -u jobrane23 -p PI23381121
-          sudo docker push jobrane23/note-management-service:latest
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u jobrane23 --password-stdin
+          sudo docker push jobrane23/note-management-microservice:latest
+      - name: Download Trivy HTML template
+        run: |
+          curl -sSL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o html.tpl
+      - name: Scan Docker image with Trivy and save report
+        run: |
+          trivy image \
+            --severity HIGH,CRITICAL \
+            --format template \
+            --template "@html.tpl" \
+            -o trivy-report.html \
+            --scanners vuln \
+            --skip-db-update \
+            --timeout 30m \
+            jobrane23/note-management-microservice:latest || true
+      - name: List report file
+        run: ls -lh trivy-report.html
+      - name: Setup Python and send email
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          python3 send_email.py
+
+          
+
+
+
+
+
+
+
+
+
+
+
