@@ -1,4 +1,3 @@
-import os
 import smtplib
 from email.message import EmailMessage
 
@@ -6,13 +5,9 @@ def send_email():
     smtp_server = 'smtp.gmail.com'
     smtp_port = 587
 
-    smtp_user = os.getenv('SMTP_USER')    # Your Gmail email (e.g. your.email@gmail.com)
-    smtp_pass = os.getenv('SMTP_PASS')    # Your Gmail App Password
-    email_to = os.getenv('EMAIL_TO')      # Recipient email address
-
-    if not smtp_user or not smtp_pass or not email_to:
-        print("Error: SMTP_USER, SMTP_PASS, and EMAIL_TO environment variables must be set.")
-        return
+    smtp_user = 'jobjob.bs2@gmail.com'
+    smtp_pass = 'crzg nunr jtge'  # your actual app password here, no spaces!
+    email_to = 'jobjob.bs2@gmail.com'
 
     msg = EmailMessage()
     msg['Subject'] = 'Trivy Vulnerability Report (HTML)'
