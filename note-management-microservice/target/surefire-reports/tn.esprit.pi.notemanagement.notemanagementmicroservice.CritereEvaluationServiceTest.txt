@@ -1,0 +1,13 @@
+-------------------------------------------------------------------------------
+Test set: tn.esprit.pi.notemanagement.notemanagementmicroservice.CritereEvaluationServiceTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.622 s <<< FAILURE! -- in tn.esprit.pi.notemanagement.notemanagementmicroservice.CritereEvaluationServiceTest
+tn.esprit.pi.notemanagement.notemanagementmicroservice.CritereEvaluationServiceTest.shouldExplicitlyFailTest -- Time elapsed: 1.486 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Test négatif simulé pour pipeline
+	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:38)
+	at org.junit.jupiter.api.Assertions.fail(Assertions.java:138)
+	at tn.esprit.pi.notemanagement.notemanagementmicroservice.CritereEvaluationServiceTest.shouldExplicitlyFailTest(CritereEvaluationServiceTest.java:54)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
