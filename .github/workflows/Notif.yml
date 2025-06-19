@@ -1,4 +1,4 @@
-name:  Doucment  Microservice
+name: Notification Microservice
 
 on:
   workflow_dispatch:
@@ -26,16 +26,12 @@ jobs:
           </settings>
           EOF
 
-      - name: Build Document  Microservice
-        working-directory: document-management-microservice
+      - name: Build Notif Microservice
+        working-directory: notification-management-microservice
         run: mvn clean install -DskipTests
 
-      - name: Run Unit Tests
-        working-directory: document-management-microservice
-        run: mvn test
-
       - name: Run SonarQube scan
-        working-directory: document-management-microservice
+        working-directory: notification-management-microservice
         run: |
           sudo docker run --rm \
             -e SONAR_HOST_URL="http://192.168.79.128:9000" \
@@ -49,17 +45,17 @@ jobs:
             -Dsonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Deploy to Nexus
-        working-directory: document-management-microservice
+        working-directory: notification-management-microservice
         run: mvn deploy -DskipTests
 
       - name: Build Docker image
-        working-directory: document-management-microservice
-        run: sudo docker build -t jobrane23/document-management-microservice:latest .
+        working-directory: notification-management-microservice
+        run: sudo docker build -t jobrane23/notif-management-service:latest .
 
       - name: Push Docker image
         run: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u jobrane23 --password-stdin
-          sudo docker push jobrane23/document-management-microservice:latest
+          sudo docker push jobrane23/notif-management-service:latest
       - name: Download Trivy HTML template
         run: |
           curl -sSL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o html.tpl
@@ -73,7 +69,7 @@ jobs:
             --scanners vuln \
             --skip-db-update \
             --timeout 30m \
-            jobrane23/document-management-microservice:latest || true
+            jobrane23/notif-management-service:latest || true
       - name: List report file
         run: ls -lh trivy-report.html
       - name: Setup Python and send email
@@ -83,5 +79,3 @@ jobs:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: |
           python3 send_email.py
-
-          

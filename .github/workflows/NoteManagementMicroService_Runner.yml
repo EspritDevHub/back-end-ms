@@ -1,4 +1,4 @@
-name: SonarQube Note  Microservice
+name:  Note  Microservice
 
 on:
   workflow_dispatch:
@@ -28,9 +28,13 @@ jobs:
 
       - name: Build Note Microservice
         working-directory: note-management-microservice
-        run: mvn clean install -DskipTests
+        run: mvn clean install  -DskipTests
+        
+      - name: Run Unit Tests
+        working-directory: note-management-microservice
+        run: mvn test
 
-      - name: Run SonarQube scan
+      - name: Run SonarQube 
         working-directory: note-management-microservice
         run: |
           sudo docker run --rm \
@@ -46,7 +50,7 @@ jobs:
 
       - name: Deploy to Nexus
         working-directory: note-management-microservice
-        run: mvn deploy -DskipTests
+        run: mvn deploy  -DskipTests
 
       - name: Build Docker image
         working-directory: note-management-microservice

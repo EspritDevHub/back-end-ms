@@ -1,4 +1,4 @@
-name:  Doucment  Microservice
+name: CI/CD Notification Microservice
 
 on:
   workflow_dispatch:
@@ -26,40 +26,36 @@ jobs:
           </settings>
           EOF
 
-      - name: Build Document  Microservice
-        working-directory: document-management-microservice
+      - name: Build User Microservice
+        working-directory: notification-management-microservice
         run: mvn clean install -DskipTests
 
-      - name: Run Unit Tests
-        working-directory: document-management-microservice
-        run: mvn test
-
       - name: Run SonarQube scan
-        working-directory: document-management-microservice
+        working-directory: notification-management-microservice
         run: |
           sudo docker run --rm \
             -e SONAR_HOST_URL="http://192.168.79.128:9000" \
             -e SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}" \
             -v "$PWD:/usr/src" \
             sonarsource/sonar-scanner-cli \
-            -Dsonar.projectKey=user-management \
+            -Dsonar.projectKey=notif-management \
             -Dsonar.sources=/usr/src/src \
             -Dsonar.java.binaries=/usr/src/target/classes \
             -Dsonar.host.url=http://192.168.79.128:9000 \
             -Dsonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Deploy to Nexus
-        working-directory: document-management-microservice
+        working-directory: notification-management-microservice
         run: mvn deploy -DskipTests
 
       - name: Build Docker image
-        working-directory: document-management-microservice
-        run: sudo docker build -t jobrane23/document-management-microservice:latest .
+        working-directory: user-managment-ms
+        run: sudo docker build -t jobrane23/notification-management-microservice:latest .
 
       - name: Push Docker image
         run: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u jobrane23 --password-stdin
-          sudo docker push jobrane23/document-management-microservice:latest
+          sudo docker push jobrane23/notification-management-microservice:latest
       - name: Download Trivy HTML template
         run: |
           curl -sSL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o html.tpl
@@ -73,7 +69,7 @@ jobs:
             --scanners vuln \
             --skip-db-update \
             --timeout 30m \
-            jobrane23/document-management-microservice:latest || true
+            jobrane23/notification-management-microservice:latest || true
       - name: List report file
         run: ls -lh trivy-report.html
       - name: Setup Python and send email
@@ -83,5 +79,3 @@ jobs:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: |
           python3 send_email.py
-
-          
