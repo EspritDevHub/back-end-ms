@@ -10,14 +10,14 @@ def send_email():
     email_to = os.getenv('EMAIL_TO')         # recipient email address
 
     msg = EmailMessage()
-    msg['Subject'] = 'Trivy Vulnerability Report'
+    msg['Subject'] = 'Trivy Vulnerability Report (HTML)'
     msg['From'] = smtp_user
     msg['To'] = email_to
-    msg.set_content('Please find the attached Trivy vulnerability report.')
+    msg.set_content('Please find the attached Trivy vulnerability HTML report.')
 
-    # Attach the JSON report file
-    with open('trivy-report.json', 'rb') as f:
-        msg.add_attachment(f.read(), maintype='application', subtype='json', filename='trivy-report.json')
+    # Attach the HTML report file
+    with open('trivy-report.html', 'rb') as f:
+        msg.add_attachment(f.read(), maintype='text', subtype='html', filename='trivy-report.html')
 
     try:
         with smtplib.SMTP(smtp_server, smtp_port) as server:
