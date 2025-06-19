@@ -30,7 +30,7 @@
         <module name="group-managmenet-ms" />
         <module name="evaluation-feedback-service" />
       </profile>
-      <profile name="Annotation profile for document-management-microservice" enabled="true">
+      <profile name="Annotation profile for note-management-microservice" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
