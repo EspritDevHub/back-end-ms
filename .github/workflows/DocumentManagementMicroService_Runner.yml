@@ -30,6 +30,10 @@ jobs:
         working-directory: document-management-microservice
         run: mvn clean install
 
+      - name: Run Unit Tests
+        working-directory: document-management-microservice
+        run: mvn test
+
       - name: Run SonarQube scan
         working-directory: document-management-microservice
         run: |
