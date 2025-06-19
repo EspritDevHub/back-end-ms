@@ -29,8 +29,12 @@ jobs:
       - name: Build Note Microservice
         working-directory: note-management-microservice
         run: mvn clean install 
+        
+      - name: Run Unit Tests
+        working-directory: note-management-microservice
+        run: mvn test
 
-      - name: Run SonarQube scan
+      - name: Run SonarQube 
         working-directory: note-management-microservice
         run: |
           sudo docker run --rm \
