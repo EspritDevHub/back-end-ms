@@ -28,7 +28,7 @@ jobs:
 
       - name: Build Note Microservice
         working-directory: note-management-microservice
-        run: mvn clean install -DskipTests
+        run: mvn clean install 
 
       - name: Run SonarQube scan
         working-directory: note-management-microservice
@@ -46,7 +46,7 @@ jobs:
 
       - name: Deploy to Nexus
         working-directory: note-management-microservice
-        run: mvn deploy -DskipTests
+        run: mvn deploy 
 
       - name: Build Docker image
         working-directory: note-management-microservice
