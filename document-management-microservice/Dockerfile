@@ -1,15 +1,23 @@
-FROM maven:3.9.6-eclipse-temurin-17 AS build
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
+
 WORKDIR /app
-COPY pom.xml mvnw .mvn/ ./
-RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
-COPY src/ ./src/
+
+COPY pom.xml mvnw ./
+COPY .mvn .mvn
+
+RUN chmod +x mvnw
+
+RUN ./mvnw dependency:go-offline
+
+COPY src ./src
+
 RUN ./mvnw clean package -DskipTests
 
-FROM eclipse-temurin:17-jre-alpine AS runtime
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+FROM eclipse-temurin:17-jre-alpine
+
 WORKDIR /app
-COPY --from=build /app/target/document-management-microservice-0.0.1-SNAPSHOT.jar app.jar
-RUN chown appuser:appgroup app.jar
-USER appuser
-EXPOSE 9096
-ENTRYPOINT ["java","-jar","app.jar"]
+
+COPY --from=builder /app/target/*.jar app.jar
+
+# Run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]
