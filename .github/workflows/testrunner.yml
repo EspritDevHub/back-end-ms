@@ -20,7 +20,7 @@ jobs:
               <server>
                 <id>nexus</id>
                 <username>admin</username>
-                <password>1234</password>
+                <password>${{ secrets.NEXUS_PASSWORD }}</password>
               </server>
             </servers>
           </settings>
@@ -35,14 +35,14 @@ jobs:
         run: |
           sudo docker run --rm \
             -e SONAR_HOST_URL="http://192.168.79.128:9000" \
-            -e SONAR_TOKEN="sqa_6b79d9e85ab7e2eea7f917872766b9e6af8bd6c0" \
+            -e SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}" \
             -v "$PWD:/usr/src" \
             sonarsource/sonar-scanner-cli \
             -Dsonar.projectKey=user-management \
             -Dsonar.sources=/usr/src/src \
             -Dsonar.java.binaries=/usr/src/target/classes \
             -Dsonar.host.url=http://192.168.79.128:9000 \
-            -Dsonar.login=sqa_6b79d9e85ab7e2eea7f917872766b9e6af8bd6c0
+            -Dsonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Deploy to Nexus
         working-directory: user-managment-ms
@@ -51,7 +51,8 @@ jobs:
       - name: Build Docker image
         working-directory: user-managment-ms
         run: sudo docker build -t jobrane23/user-management-service:latest .
+
       - name: Push Docker image
         run: |
-          sudo docker login -u jobrane23 -p PI23381121
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u jobrane23 --password-stdin
           sudo docker push jobrane23/user-management-service:latest
