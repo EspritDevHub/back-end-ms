@@ -38,7 +38,7 @@ jobs:
             -e SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}" \
             -v "$PWD:/usr/src" \
             sonarsource/sonar-scanner-cli \
-            -Dsonar.projectKey=user-management \
+            -Dsonar.projectKey=notification-management \
             -Dsonar.sources=/usr/src/src \
             -Dsonar.java.binaries=/usr/src/target/classes \
             -Dsonar.host.url=http://192.168.79.128:9000 \
@@ -55,7 +55,7 @@ jobs:
       - name: Push Docker image
         run: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u jobrane23 --password-stdin
-          sudo docker push jobrane23/notif-management-service:latest
+          sudo docker push jobrane23/notification-management-service:latest
       - name: Download Trivy HTML template
         run: |
           curl -sSL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o html.tpl
@@ -69,7 +69,7 @@ jobs:
             --scanners vuln \
             --skip-db-update \
             --timeout 30m \
-            jobrane23/notif-management-service:latest || true
+            jobrane23/notification-management-service:latest || true
       - name: List report file
         run: ls -lh trivy-report.html
       - name: Setup Python and send email
