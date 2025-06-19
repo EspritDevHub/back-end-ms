@@ -14,6 +14,12 @@
         </processorPath>
         <module name="suer-management-microservice" />
       </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="PROJECT-MANAGEMENT" />
+      </profile>
       <profile name="Annotation profile for group-managmenet-ms" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -22,14 +28,9 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
         <module name="group-managmenet-ms" />
+        <module name="evaluation-feedback-service" />
       </profile>
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="PROJECT-MANAGEMENT" />
-      </profile>
-      <profile name="Annotation profile for event" enabled="true">
+      <profile name="Annotation profile for note-management-microservice" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -43,7 +44,6 @@
         <module name="event" />
         <module name="note-management-microservice" />
         <module name="reclamation-management-microservice" />
-        <module name="evaluation-feedback-service" />
         <module name="notification-management-microservice" />
       </profile>
     </annotationProcessing>
