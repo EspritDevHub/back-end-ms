@@ -56,3 +56,6 @@ jobs:
         run: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u jobrane23 --password-stdin
           sudo docker push jobrane23/user-management-service:latest
+      - name: Scan Docker image with Trivy and save report
+        run: |
+          trivy image --severity HIGH,CRITICAL --format json -o trivy-report.json jobrane23/user-management-service:latest || true
