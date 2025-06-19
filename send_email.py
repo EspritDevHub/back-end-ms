@@ -6,7 +6,7 @@ def send_email():
     smtp_port = 587
 
     smtp_user = 'jobjob.bs2@gmail.com'
-    smtp_pass = 'crzg nunr jtge'  # your actual app password here, no spaces!
+    smtp_pass = 'kvdavwfwmeztixvl'  # your actual app password here, no spaces!
     email_to = 'jobjob.bs2@gmail.com'
 
     msg = EmailMessage()
