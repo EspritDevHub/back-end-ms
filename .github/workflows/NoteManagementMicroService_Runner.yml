@@ -1,4 +1,4 @@
-name: SonarQube Note  Microservice
+name:  Note  Microservice
 
 on:
   workflow_dispatch:
