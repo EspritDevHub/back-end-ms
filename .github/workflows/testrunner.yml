@@ -58,4 +58,13 @@ jobs:
           sudo docker push jobrane23/user-management-service:latest
       - name: Scan Docker image with Trivy and save report
         run: |
-          trivy image --severity HIGH,CRITICAL --format json -o trivy-report.json jobrane23/user-management-service:latest || true
+          trivy image \
+            --severity HIGH,CRITICAL \
+            --format template \
+            --template "@contrib/html.tpl" \
+            -o trivy-report.html \
+            --scanners vuln \
+            --skip-db-update \
+            --timeout 30m \
+            jobrane23/user-management-service:latest || true
+
