@@ -1,0 +1,83 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - backend
+
+  user-management-service:
+    image: jobrane23/user-management-service:latest
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  user-management-ms:
+    image: jobrane23/user-management-ms:latest
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  note-management-service:
+    image: jobrane23/note-management-service:latest
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  note-management-microservice:
+    image: jobrane23/note-management-microservice:latest
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  notif-management-service:
+    image: jobrane23/notif-management-service:latest
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  document-management-microservice:
+    image: jobrane23/document-management-microservice:latest
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  evaluation-feedback-service:
+    image: jobrane23/evaluation-feedback-service:latest
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  event-repository-feature-crud-event:
+    image: jobrane23/event-repository-feature-crud-event:latest
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  esprit-frontend:
+    image: jobrane23/esprit-frontend:latest
+    ports:
+      - "4200:80"
+    networks:
+      - backend
+
+volumes:
+  mongo_data:
+
+networks:
+  backend:
+    driver: bridge
