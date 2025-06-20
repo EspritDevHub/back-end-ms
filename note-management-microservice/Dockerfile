@@ -16,6 +16,7 @@ FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
+EXPOSE 9097
 COPY --from=builder /app/target/note-management-microservice-0.0.1-SNAPSHOT.jar note-service.jar
 
 ENTRYPOINT ["java", "-jar", "note-service.jar"]
