@@ -1,31 +1,23 @@
-# Step 1: Build the application using Maven
+# Étape 1 : construction du WAR (multi-stage build)
 FROM maven:3.9.6-eclipse-temurin-17 AS builder
-
 WORKDIR /app
 
-# Copy Maven project files
 COPY pom.xml mvnw ./
 COPY .mvn .mvn
+RUN chmod +x mvnw && ./mvnw dependency:go-offline
 
-# Make mvnw executable
-RUN chmod +x mvnw
-
-# Download dependencies
-RUN ./mvnw dependency:go-offline
-
-# Copy the source code
 COPY src ./src
-
-# Build the JAR file
 RUN ./mvnw clean package -DskipTests
 
-# Step 2: Run the app with a lightweight JRE
-FROM eclipse-temurin:17-jre-alpine
+# Étape 2 : runtime avec Tomcat
+FROM tomcat:10.1-jdk17-corretto-alpine
+WORKDIR /usr/local/tomcat/webapps
 
-WORKDIR /app
+# Supprime l'application par défaut et copie votre WAR
+RUN rm ROOT.war && rm -rf ROOT
+COPY --from=builder /app/target/evaluation-feedback-service-0.0.1-SNAPSHOT.war ROOT.war
 
-# Copy the built JAR from the builder
-COPY --from=builder /app/target/*.jar app.jar
+EXPOSE 8080
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Le Tomcat embarqué lancera automatiquement ROOT.war
+CMD ["catalina.sh", "run"]
