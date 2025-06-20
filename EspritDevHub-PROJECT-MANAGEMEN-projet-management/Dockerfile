@@ -24,8 +24,11 @@ FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-# Copy the built JAR from the builder
-COPY --from=builder /app/target/*.jar app.jar
+
+EXPOSE 8086
+COPY --from=builder /app/target/PROJECT-MANAGEMENT-0.0.1-SNAPSHOT.jar project-management-service.jar
+
+
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "project-management-service.jar"]
