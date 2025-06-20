@@ -10,8 +10,9 @@ RUN chmod +x mvnw \
 
 COPY src ./src
 
-RUN ./mvnw clean package -DskipTests
-
+RUN ./mvnw clean package -DskipTests \
+ && ls -lh target/*.jar 
+ 
 FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
