@@ -15,9 +15,8 @@ WORKDIR /usr/local/tomcat/webapps
 
 # Supprime l'application par défaut et copie votre WAR
 RUN rm ROOT.war && rm -rf ROOT
-COPY --from=builder /app/target/evaluation-feedback-service-0.0.1-SNAPSHOT.war ROOT.war
+COPY --from=builder /app/target/evaluation-feedback-service-0.0.1-SNAPSHOT.war feedback-service.war
 
 EXPOSE 8080
 
-# Le Tomcat embarqué lancera automatiquement ROOT.war
 CMD ["catalina.sh", "run"]
