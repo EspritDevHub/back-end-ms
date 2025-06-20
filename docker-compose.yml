@@ -17,6 +17,14 @@ services:
     depends_on:
       - mongodb
     ports:
+      - "8086:8086"
+    networks:
+      - backend
+  espritdevhub-projet-management:
+    image: jobrane23/espritdevhub-projet-management
+    depends_on:
+      - mongodb
+    ports:
       - "9090:9090"
     networks:
       - backend
