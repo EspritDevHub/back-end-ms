@@ -69,7 +69,7 @@ jobs:
             --scanners vuln \
             --skip-db-update \
             --timeout 30m \
-            jobrane23/notification-management-service:latest || true
+            jobrane23/notif-management-service:latest || true
       - name: List report file
         run: ls -lh trivy-report.html
       - name: Setup Python and send email
