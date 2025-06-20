@@ -5,12 +5,9 @@ WORKDIR /app
 COPY pom.xml mvnw ./
 COPY .mvn .mvn
 
-RUN chmod +x mvnw
+RUN chmod +x mvnw \
+ && ./mvnw dependency:go-offline
 
-# Download dependencies
-RUN ./mvnw dependency:go-offline
-
-# Copy the source code
 COPY src ./src
 
 RUN ./mvnw clean package -DskipTests
@@ -19,6 +16,6 @@ FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-COPY --from=builder /app/target/*.jar app.jar
+COPY --from=builder /app/target/note-management-microservice-0.0.1-SNAPSHOT.jar note-service.jar
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "note-service.jar"]
