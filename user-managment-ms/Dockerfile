@@ -25,7 +25,9 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
 # Copy the built JAR from the builder
-COPY --from=builder /app/target/*.jar user-service.jar
+EXPOSE 9090
+COPY --from=builder /app/target/suer-management-microservice-0.0.1-SNAPSHOT.jar 
+
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "user-service.jar"]
