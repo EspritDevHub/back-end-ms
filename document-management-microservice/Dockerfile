@@ -12,11 +12,10 @@ COPY src ./src
 
 RUN ./mvnw clean package -DskipTests
 
-# Étape 2 : Runtime
 FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-COPY --from=builder /app/target/document-management-microservice-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /app/target/document-management-microservice-0.0.1-SNAPSHOT.jar document-service.jar
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "document-service.jar"]
