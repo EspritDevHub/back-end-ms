@@ -17,6 +17,6 @@ WORKDIR /usr/local/tomcat/webapps
 RUN rm ROOT.war && rm -rf ROOT
 COPY --from=builder /app/target/evaluation-feedback-service-0.0.1-SNAPSHOT.war feedback-service.war
 
-EXPOSE 8080
+EXPOSE 9099
 
 CMD ["catalina.sh", "run"]
