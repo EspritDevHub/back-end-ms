@@ -1,4 +1,4 @@
-# Étape 1 : construction du WAR (multi-stage build)
+# Step 1: Build WAR
 FROM maven:3.9.6-eclipse-temurin-17 AS builder
 WORKDIR /app
 
@@ -9,11 +9,11 @@ RUN chmod +x mvnw && ./mvnw dependency:go-offline
 COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
-# Étape 2 : runtime avec Tomcat
-FROM tomcat:10.1-jdk17-corretto-alpine
+# Step 2: Runtime with Tomcat
+FROM tomcat:10.1-jdk17-temurin-alpine
 WORKDIR /usr/local/tomcat/webapps
 
-# Supprime l'application par défaut et copie votre WAR
+# Clean default app and deploy your WAR
 RUN rm ROOT.war && rm -rf ROOT
 COPY --from=builder /app/target/evaluation-feedback-service-0.0.1-SNAPSHOT.war feedback-service.war
 
