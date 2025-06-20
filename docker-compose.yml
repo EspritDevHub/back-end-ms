@@ -16,6 +16,8 @@ services:
     image: jobrane23/user-management-service
     depends_on:
       - mongodb
+    ports:
+      - "9090:9090"
     networks:
       - backend
 
@@ -23,6 +25,8 @@ services:
     image: jobrane23/note-management-service:latest
     depends_on:
       - mongodb
+    ports:
+      - "9091:9091"
     networks:
       - backend
 
@@ -30,6 +34,8 @@ services:
     image: jobrane23/note-management-microservice:latest
     depends_on:
       - mongodb
+    ports:
+      - "9092:9092"
     networks:
       - backend
 
@@ -37,6 +43,8 @@ services:
     image: jobrane23/notif-management-service:latest
     depends_on:
       - mongodb
+    ports:
+      - "9093:9093"
     networks:
       - backend
 
@@ -44,6 +52,8 @@ services:
     image: jobrane23/document-management-microservice:latest
     depends_on:
       - mongodb
+    ports:
+      - "9094:9094"
     networks:
       - backend
 
@@ -51,6 +61,8 @@ services:
     image: jobrane23/evaluation-feedback-service:latest
     depends_on:
       - mongodb
+    ports:
+      - "9095:9095"
     networks:
       - backend
 
@@ -58,6 +70,8 @@ services:
     image: jobrane23/event-repository-feature-crud-event:latest
     depends_on:
       - mongodb
+    ports:
+      - "9096:9096"
     networks:
       - backend
 
