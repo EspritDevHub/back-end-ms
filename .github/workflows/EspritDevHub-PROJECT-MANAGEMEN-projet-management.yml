@@ -54,12 +54,12 @@ jobs:
 
       - name: Build Docker image
         working-directory: EspritDevHub-PROJECT-MANAGEMEN-projet-management
-        run: sudo docker build -t jobrane23/EspritDevHub-PROJECT-MANAGEMEN-projet-management:latest .
+        run: sudo docker build -t jobrane23/EspritDevHub-projet-management:latest .
 
       - name: Push Docker image
         run: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u jobrane23 --password-stdin
-          sudo docker push jobrane23/EspritDevHub-PROJECT-MANAGEMEN-projet-management:latest
+          sudo docker push jobrane23/EspritDevHub-projet-management:latest
       - name: Download Trivy HTML template
         run: |
           curl -sSL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o html.tpl
@@ -73,7 +73,7 @@ jobs:
             --scanners vuln \
             --skip-db-update \
             --timeout 30m \
-            jobrane23/EspritDevHub-PROJECT-MANAGEMEN-projet-management:latest || true
+            jobrane23/EspritDevHub-projet-management:latest || true
       - name: List report file
         run: ls -lh trivy-report.html
       - name: Setup Python and send email
