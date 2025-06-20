@@ -1,22 +1,22 @@
-# Step 1: Build WAR
 FROM maven:3.9.6-eclipse-temurin-17 AS builder
+
 WORKDIR /app
 
 COPY pom.xml mvnw ./
 COPY .mvn .mvn
-RUN chmod +x mvnw && ./mvnw dependency:go-offline
+
+RUN chmod +x mvnw \
+ && ./mvnw dependency:go-offline
 
 COPY src ./src
-RUN ./mvnw clean package -DskipTests
 
-# Step 2: Runtime with Tomcat
-FROM tomcat:10.1-jdk17-temurin-alpine
-WORKDIR /usr/local/tomcat/webapps
+RUN ./mvnw clean package -DskipTests \
+ && ls -lh target/*.jar 
+ 
+FROM eclipse-temurin:17-jre-alpine
 
-# Clean default app and deploy your WAR
-RUN rm ROOT.war && rm -rf ROOT
-COPY --from=builder /app/target/evaluation-feedback-service-0.0.1-SNAPSHOT.war feedback-service.war
+WORKDIR /app
 
+COPY --from=builder /app/target/evaluation-feedback-service-0.0.1-SNAPSHOT.jar evaluation-feedback-service.jar
 EXPOSE 9099
-
-CMD ["catalina.sh", "run"]
+ENTRYPOINT ["java", "-jar", "evaluation-feedback-service.jar"]
