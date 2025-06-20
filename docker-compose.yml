@@ -13,14 +13,7 @@ services:
       - backend
 
   user-management-service:
-    image: jobrane23/user-management-service:latest
-    depends_on:
-      - mongodb
-    networks:
-      - backend
-
-  user-management-ms:
-    image: jobrane23/user-management-ms:latest
+    image: jobrane23/user-management-service
     depends_on:
       - mongodb
     networks:
