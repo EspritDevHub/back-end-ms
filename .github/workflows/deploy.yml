@@ -17,14 +17,14 @@ jobs:
 
           echo "Stopping and removing old containers..."
           sudo docker rm -f \
-            user-management-service \
-            note-management-service \
-            note-management-microservice \
-            notif-management-service \
-            document-management-microservice \
-            evaluation-feedback-service \
-            event-repository-feature-crud-event \
-            esprit-frontend
+            sudo docker rm -f \
+              back-end-ms-document-management-microservice-1 \
+              back-end-ms-notif-management-service-1 \
+              back-end-ms-user-management-service-1 \
+              back-end-ms-note-management-microservice-1 \
+              back-end-ms-note-management-service-1 \
+              back-end-ms-evaluation-feedback-service-1 \
+              back-end-ms-event-repository-feature-crud-event-1
 
           echo "Removing old images..."
           sudo docker rmi -f \
