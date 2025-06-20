@@ -29,21 +29,12 @@ services:
     networks:
       - backend
 
-  note-management-service:
-    image: jobrane23/note-management-service:latest
-    depends_on:
-      - mongodb
-    ports:
-      - "9097:9097"
-    networks:
-      - backend
-
   note-management-microservice:
     image: jobrane23/note-management-microservice:latest
     depends_on:
       - mongodb
     ports:
-      - "9092:9092"
+      - "9097:9097"
     networks:
       - backend
 
