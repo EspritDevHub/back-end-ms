@@ -16,7 +16,7 @@ jobs:
           set +e  # Don’t fail if some don’t exist
 
           echo "Stopping and removing old containers..."
-          docker rm -f \
+          sudo docker rm -f \
             user-management-service \
             note-management-service \
             note-management-microservice \
@@ -27,7 +27,7 @@ jobs:
             esprit-frontend
 
           echo "Removing old images..."
-          docker rmi -f \
+          sudo docker rmi -f \
             jobrane23/user-management-service \
             jobrane23/note-management-service:latest \
             jobrane23/note-management-microservice:latest \
