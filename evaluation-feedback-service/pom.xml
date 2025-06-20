@@ -11,7 +11,7 @@
     <groupId>tn.esprit.pi</groupId>
     <artifactId>evaluation-feedback-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>evaluation-feedback-service</name>
     <description>evaluation-feedback-service</description>
     <url/>
