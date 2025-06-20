@@ -26,7 +26,7 @@ WORKDIR /app
 
 # Copy the built JAR from the builder
 EXPOSE 9090
-COPY --from=builder /app/target/suer-management-microservice-0.0.1-SNAPSHOT.jar 
+COPY --from=builder /app/target/suer-management-microservice-0.0.1-SNAPSHOT.jar  user-service.jar
 
 
 # Run the application
