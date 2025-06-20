@@ -25,7 +25,7 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
 # Copy the built JAR from the builder
-COPY --from=builder /app/target/*.jar app.jar
+COPY --from=builder /app/target/*.jar user-service.jar
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "user-service.jar"]
