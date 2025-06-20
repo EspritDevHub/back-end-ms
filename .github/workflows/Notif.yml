@@ -55,7 +55,7 @@ jobs:
       - name: Push Docker image
         run: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u jobrane23 --password-stdin
-          sudo docker push jobrane23/notification-management-service:latest
+          sudo docker push jobrane23/notif-management-service:latest
       - name: Download Trivy HTML template
         run: |
           curl -sSL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o html.tpl
