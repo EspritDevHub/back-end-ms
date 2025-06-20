@@ -17,5 +17,5 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
 COPY --from=builder /app/target/document-management-microservice-0.0.1-SNAPSHOT.jar document-service.jar
-
+EXPOSE 9096
 ENTRYPOINT ["java", "-jar", "document-service.jar"]
