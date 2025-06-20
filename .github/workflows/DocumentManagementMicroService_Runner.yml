@@ -29,7 +29,11 @@ jobs:
       - name: Build Document  Microservice
         working-directory: document-management-microservice
         run: mvn clean install -DskipTests
-
+        
+      - name: List generated JAR files
+        working-directory: document-management-microservice/target
+        run: ls -lh *.jar
+        
       - name: Run Unit Tests
         working-directory: document-management-microservice
         run: mvn test
