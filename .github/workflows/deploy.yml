@@ -11,6 +11,34 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Cleanup old containers and images (excluding MongoDB)
+        run: |
+          set +e  # Don’t fail if some don’t exist
+
+          echo "Stopping and removing old containers..."
+          docker rm -f \
+            user-management-service \
+            note-management-service \
+            note-management-microservice \
+            notif-management-service \
+            document-management-microservice \
+            evaluation-feedback-service \
+            event-repository-feature-crud-event \
+            esprit-frontend
+
+          echo "Removing old images..."
+          docker rmi -f \
+            jobrane23/user-management-service \
+            jobrane23/note-management-service:latest \
+            jobrane23/note-management-microservice:latest \
+            jobrane23/notif-management-service:latest \
+            jobrane23/document-management-microservice:latest \
+            jobrane23/evaluation-feedback-service:latest \
+            jobrane23/event-repository-feature-crud-event:latest \
+            jobrane23/esprit-frontend:latest
+
+        continue-on-error: true
+
       - name: Ensure Docker Compose is installed
         run: sudo docker compose version
 
@@ -22,4 +50,3 @@ jobs:
 
       - name: Show running containers
         run: sudo docker ps
-
