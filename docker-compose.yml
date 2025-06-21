@@ -77,7 +77,7 @@ services:
   esprit-frontend:
     image: jobrane23/esprit-frontend:latest
     ports:
-      - "4200:80"
+      - "4300:80"
     networks:
       - backend
 
