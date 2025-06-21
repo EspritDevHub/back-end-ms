@@ -79,6 +79,15 @@ jobs:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: |
           python3 send_email.py
+          
+      - name: Set BUILD_STATUS env
+        if: always()
+        run: |
+          if [ "${{ env.BUILD_EXIT_CODE }}" -eq "0" ]; then
+            echo "BUILD_STATUS=success" >> $GITHUB_ENV
+          else
+            echo "BUILD_STATUS=fail" >> $GITHUB_ENV
+          fi
       - name: Send Email Notification
         if: always()
         env:
