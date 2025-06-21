@@ -1,6 +1,9 @@
 name: SonarQube User Microservice
 
 on:
+  push:
+    branches:
+      - develop
   workflow_dispatch:
 
 jobs:
