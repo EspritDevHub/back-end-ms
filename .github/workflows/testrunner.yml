@@ -8,6 +8,9 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - name: Init BUILD_FAILED flag
+        run: echo "BUILD_FAILED=0" >> $GITHUB_ENV
+
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -28,7 +31,8 @@ jobs:
 
       - name: Build User Microservice
         working-directory: user-managment-ms
-        run: mvn clean install -DskipTests
+        run: |
+          mvn clean install -DskipTests || echo "BUILD_FAILED=1" >> $GITHUB_ENV
 
       - name: Run SonarQube scan
         working-directory: user-managment-ms
@@ -42,23 +46,27 @@ jobs:
             -Dsonar.sources=/usr/src/src \
             -Dsonar.java.binaries=/usr/src/target/classes \
             -Dsonar.host.url=http://192.168.79.129:9000 \
-            -Dsonar.login="${{ secrets.SONAR_TOKEN }}"
+            -Dsonar.login="${{ secrets.SONAR_TOKEN }}" || echo "BUILD_FAILED=1" >> $GITHUB_ENV
 
       - name: Deploy to Nexus
         working-directory: user-managment-ms
-        run: mvn deploy -DskipTests
+        run: |
+          mvn deploy -DskipTests || echo "BUILD_FAILED=1" >> $GITHUB_ENV
 
       - name: Build Docker image
         working-directory: user-managment-ms
-        run: sudo docker build -t jobrane23/user-management-service:latest .
+        run: |
+          sudo docker build -t jobrane23/user-management-service:latest . || echo "BUILD_FAILED=1" >> $GITHUB_ENV
 
       - name: Push Docker image
         run: |
-          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u jobrane23 --password-stdin
-          sudo docker push jobrane23/user-management-service:latest
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u jobrane23 --password-stdin || echo "BUILD_FAILED=1" >> $GITHUB_ENV
+          sudo docker push jobrane23/user-management-service:latest || echo "BUILD_FAILED=1" >> $GITHUB_ENV
+
       - name: Download Trivy HTML template
         run: |
-          curl -sSL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o html.tpl
+          curl -sSL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o html.tpl || echo "BUILD_FAILED=1" >> $GITHUB_ENV
+
       - name: Scan Docker image with Trivy and save report
         run: |
           trivy image \
@@ -70,24 +78,27 @@ jobs:
             --skip-db-update \
             --timeout 30m \
             jobrane23/user-management-service:latest || true
+
       - name: List report file
         run: ls -lh trivy-report.html
-      - name: Setup Python and send email
+
+      - name: Setup Python and send email (if needed)
         env:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: |
-          python3 send_email.py
-          
+          python3 send_email.py || echo "BUILD_FAILED=1" >> $GITHUB_ENV
+
       - name: Set BUILD_STATUS env
         if: always()
         run: |
-          if [ "${{ env.BUILD_EXIT_CODE }}" -eq "0" ]; then
-            echo "BUILD_STATUS=success" >> $GITHUB_ENV
-          else
+          if [ "$BUILD_FAILED" -eq "1" ]; then
             echo "BUILD_STATUS=fail" >> $GITHUB_ENV
+          else
+            echo "BUILD_STATUS=success" >> $GITHUB_ENV
           fi
+
       - name: Send Email Notification
         if: always()
         continue-on-error: true
@@ -97,4 +108,3 @@ jobs:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
           BUILD_STATUS: ${{ env.BUILD_STATUS }}
         run: python3 sendBuildMail.py
-
