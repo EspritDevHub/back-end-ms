@@ -90,6 +90,7 @@ jobs:
           fi
       - name: Send Email Notification
         if: always()
+        continue-on-error: true
         env:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
